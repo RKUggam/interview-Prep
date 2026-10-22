@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FastAPI &amp; PyTorch Interview Questions and Answers</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #1d1d1d; counter-reset: q; }
+  .cover { text-align: center; padding-top: 200px; page-break-after: always; }
+  .cover h1 { font-size: 30pt; color: #0b3d91; margin-bottom: 8px; }
+  .cover p { font-size: 12pt; color: #444; }
+  h1.part { text-align: center; color: #0b3d91; font-size: 24pt; page-break-before: always; padding-top: 260px; page-break-after: always; }
+  h2 { color: #fff; background: #0b3d91; padding: 6px 10px; border-radius: 4px; page-break-before: always; font-size: 15pt; }
+  h2.pt { background: #c2410c; }
+  .toc h2 { page-break-before: avoid; }
+  .toc ol { font-size: 10.5pt; }
+  .toc a { color: #0b3d91; text-decoration: none; }
+  .toc h3 { color: #0b3d91; margin: 10px 0 2px 0; }
+  .q { margin: 8px 0 10px 0; page-break-inside: avoid; }
+  .qq { font-weight: 600; color: #8a1c1c; margin: 0 0 3px 0; }
+  .qq::before { counter-increment: q; content: "Q" counter(q) ". "; }
+  .q p { margin: 2px 0; }
+  .q ul, .q ol { margin: 2px 0 2px 18px; padding-left: 10px; }
+  code { font-family: Consolas, "Courier New", monospace; background: #f2f4f8; padding: 0 3px; border-radius: 3px; font-size: 9.5pt; }
+  pre { font-family: Consolas, "Courier New", monospace; font-size: 8.8pt; background: #f5f7fb; border: 1px solid #d6deeb; border-left: 3px solid #0b3d91; padding: 6px 8px; margin: 4px 0; white-space: pre-wrap; line-height: 1.3; }
+  table { border-collapse: collapse; margin: 4px 0; font-size: 9.5pt; }
+  th, td { border: 1px solid #b9c4d8; padding: 3px 6px; text-align: left; vertical-align: top; }
+  th { background: #e8eef9; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>FastAPI &amp; PyTorch</h1>
+  <h1 style="font-size:22pt;color:#333">Interview Questions and Answers</h1>
+  <p><b>FastAPI:</b> Fundamentals &bull; Routing &bull; Pydantic &bull; Dependency Injection &bull; Async &bull; Security &bull; Middleware &bull; Databases &bull; WebSockets &bull; Testing &bull; Deployment &bull; ML Serving</p>
+  <p><b>PyTorch:</b> Tensors &bull; Autograd &bull; nn.Module &bull; Losses &amp; Optimizers &bull; Data Loading &bull; Training Loops &bull; GPU &amp; AMP &bull; Distributed &bull; torch.compile &bull; Export &amp; Quantization &bull; Debugging &bull; Ecosystem</p>
+</div>
+
+<div class="toc">
+<h2>Table of Contents</h2>
+<h3>Part I &ndash; FastAPI</h3>
+<ol>
+  <li><a href="#f1">HTTP/REST Basics, FastAPI Fundamentals &amp; Architecture</a></li>
+  <li><a href="#f2">Routing, Path, Query, Header &amp; Body Parameters</a></li>
+  <li><a href="#f3">Pydantic Models &amp; Data Validation</a></li>
+  <li><a href="#f4">Responses, Status Codes &amp; Error Handling</a></li>
+  <li><a href="#f5">Dependency Injection</a></li>
+  <li><a href="#f6">Async, Concurrency &amp; Performance</a></li>
+  <li><a href="#f7">Security: Authentication, Authorization &amp; CORS</a></li>
+  <li><a href="#f8">Middleware, Lifespan Events &amp; Background Tasks</a></li>
+  <li><a href="#f9">Databases, ORMs &amp; Migrations</a></li>
+  <li><a href="#f10">Project Structure, APIRouter &amp; OpenAPI</a></li>
+  <li><a href="#f11">WebSockets, Streaming, Files &amp; Forms</a></li>
+  <li><a href="#f12">Testing FastAPI Applications</a></li>
+  <li><a href="#f13">Configuration, Deployment &amp; Production</a></li>
+  <li><a href="#f14">Serving ML Models with FastAPI</a></li>
+</ol>
+<h3>Part II &ndash; PyTorch</h3>
+<ol start="15">
+  <li><a href="#p1">PyTorch Fundamentals &amp; Tensors</a></li>
+  <li><a href="#p2">Autograd &amp; Computational Graphs</a></li>
+  <li><a href="#p3">nn.Module &amp; Building Models</a></li>
+  <li><a href="#p4">Loss Functions, Optimizers &amp; LR Schedulers</a></li>
+  <li><a href="#p5">Datasets, DataLoaders &amp; Transforms</a></li>
+  <li><a href="#p6">Training Loop, Evaluation &amp; Checkpointing</a></li>
+  <li><a href="#p7">GPU, Mixed Precision &amp; Performance</a></li>
+  <li><a href="#p8">Distributed &amp; Large-Scale Training</a></li>
+  <li><a href="#p9">Advanced: Custom Autograd, Hooks, torch.compile &amp; TorchScript</a></li>
+  <li><a href="#p10">Model Export, Quantization, Pruning &amp; Deployment</a></li>
+  <li><a href="#p11">Common Architectures in PyTorch (CNN, RNN, Transformer)</a></li>
+  <li><a href="#p12">Transfer Learning &amp; Ecosystem</a></li>
+  <li><a href="#p13">Debugging &amp; Common Pitfalls</a></li>
+  <li><a href="#p14">Coding &amp; Scenario-Based Questions</a></li>
+</ol>
+</div>
+
+<h1 class="part">Part I<br>FastAPI</h1>
+
+<!-- ===================================================== -->
+<h2 id="f1">1. HTTP/REST Basics, FastAPI Fundamentals &amp; Architecture</h2>
+
+<div class="q"><p class="qq">What is an API? What is a REST API?</p>
+<p>An <b>API</b> (Application Programming Interface) is a contract that lets one program use another program's functionality or data. A <b>web API</b> exposes it over HTTP. <b>REST</b> (Representational State Transfer) is an architectural style for web APIs with these principles:</p>
+<ul><li><b>Resources</b> are identified by URLs (<code>/users/42</code>), and you act on them with HTTP methods.</li>
+<li>Each request is <b>stateless</b>: it carries everything needed, such as an auth token, and the server keeps no client session between requests.</li>
+<li>A <b>client-server</b> split, a <b>uniform interface</b>, <b>cacheable</b> responses and a <b>layered system</b> (proxies and gateways in between).</li>
+<li>Representations are usually JSON.</li></ul>
+<p>Good REST design uses nouns in plural (<code>/orders</code>, not <code>/getOrders</code>), nests sub-resources (<code>/users/42/orders</code>), uses proper status codes, and adds versioning, filtering, pagination and consistent error bodies.</p></div>
+
+<div class="q"><p class="qq">What does an HTTP request and response consist of?</p>
+<p><b>Request</b>:</p>
+<ul><li>The method (<code>GET</code>, <code>POST</code>, ...)</li>
+<li>The URL: scheme, host, port, path and query string, e.g., <code>/items/5?details=true</code></li>
+<li>Headers (<code>Content-Type</code>, <code>Authorization</code>, <code>Accept</code>, cookies)</li>
+<li>An optional body (JSON, form data, files)</li></ul>
+<p><b>Response</b>:</p>
+<ul><li>A status code and reason phrase (<code>200 OK</code>)</li>
+<li>Headers (<code>Content-Type</code>, <code>Set-Cookie</code>, <code>Cache-Control</code>)</li>
+<li>An optional body</li></ul>
+<p>In FastAPI, these parts map to path/query/header/cookie/body parameters and to <code>Response</code> objects.</p></div>
+
+<div class="q"><p class="qq">What are safe and idempotent HTTP methods?</p>
+<table><tr><th>Method</th><th>Purpose</th><th>Safe</th><th>Idempotent</th></tr>
+<tr><td>GET</td><td>Read a resource</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>HEAD / OPTIONS</td><td>Headers only / capabilities</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>POST</td><td>Create / trigger an action</td><td>No</td><td>No</td></tr>
+<tr><td>PUT</td><td>Replace the entire resource</td><td>No</td><td>Yes</td></tr>
+<tr><td>PATCH</td><td>Partial update</td><td>No</td><td>Not guaranteed</td></tr>
+<tr><td>DELETE</td><td>Remove a resource</td><td>No</td><td>Yes</td></tr></table>
+<p>A <b>safe</b> method doesn't modify state. An <b>idempotent</b> method has the same effect whether it is called once or many times, so it can be retried safely. To make POST retries safe, use an <code>Idempotency-Key</code> header.</p></div>
+
+<div class="q"><p class="qq">What do the HTTP status code classes mean? Name the codes you use most.</p>
+<ul><li><b>1xx</b> Informational (101 Switching Protocols for WebSockets)</li>
+<li><b>2xx</b> Success: 200 OK, 201 Created, 202 Accepted (async job), 204 No Content</li>
+<li><b>3xx</b> Redirection: 301/308 permanent, 302/307 temporary, 304 Not Modified (cache)</li>
+<li><b>4xx</b> Client error: 400, 401, 403, 404, 405 Method Not Allowed, 409, 413 Payload Too Large, 415 Unsupported Media Type, 422, 429</li>
+<li><b>5xx</b> Server error: 500, 502 Bad Gateway, 503 Service Unavailable, 504 Gateway Timeout</li></ul>
+<p>FastAPI provides named constants such as <code>status.HTTP_201_CREATED</code>.</p></div>
+
+<div class="q"><p class="qq">What is the difference between REST, GraphQL, gRPC and WebSockets?</p>
+<p><b>REST</b>: resource URLs plus HTTP verbs; simple and cacheable, but can over-fetch or under-fetch data. <b>GraphQL</b>: a single endpoint where the client specifies exactly which fields it wants; flexible for frontends, but caching is harder and N+1 queries are a risk. In Python, Strawberry integrates with FastAPI via <code>GraphQLRouter</code>. <b>gRPC</b>: binary Protobuf over HTTP/2 with strongly typed contracts and streaming; fast for service-to-service calls, but not browser-native. <b>WebSockets</b>: persistent bidirectional real-time channel.</p></div>
+
+<div class="q"><p class="qq">How do you install FastAPI and what does <code>fastapi[standard]</code> include?</p>
+<p>Run <code>pip install "fastapi[standard]"</code> inside a virtual environment (<code>python -m venv .venv</code>, or <code>uv venv</code>). The <code>standard</code> extra adds:</p>
+<ul><li><code>uvicorn[standard]</code> (server)</li>
+<li><code>fastapi-cli</code></li>
+<li><code>httpx</code> (TestClient)</li>
+<li><code>jinja2</code></li>
+<li><code>python-multipart</code> (forms and files)</li>
+<li><code>email-validator</code></li></ul>
+<p>Plain <code>pip install fastapi</code> installs only the core: Starlette and Pydantic.</p></div>
+
+<div class="q"><p class="qq">What is a "path operation" and a "path operation function"?</p>
+<p>In FastAPI terminology, a <b>path</b> is the URL route (<code>/items/{id}</code>) and an <b>operation</b> is the HTTP method. A <b>path operation decorator</b> (<code>@app.get("/items/{id}")</code>) binds them to a <b>path operation function</b>: the Python function that handles the request. The function's return value (dict, list, Pydantic model, str, int, None, ORM object) is automatically converted to JSON.</p></div>
+
+<div class="q"><p class="qq">What is the difference between OpenAPI, Swagger and JSON Schema?</p>
+<p><b>OpenAPI</b> is the specification: a machine-readable description of an API's endpoints, parameters, schemas and auth, formerly called the Swagger Specification. <b>Swagger UI</b> is a tool that renders an OpenAPI document as interactive docs where you can try requests. <b>JSON Schema</b> describes the shape of JSON data; OpenAPI uses it for request and response bodies, which FastAPI generates from Pydantic models.</p></div>
+
+<div class="q"><p class="qq">What is FastAPI and what are its key features?</p>
+<p>FastAPI is a modern, high-performance Python web framework for building APIs, based on standard Python type hints. Key features:</p>
+<ul><li><b>Fast</b>: built on Starlette (ASGI) and Pydantic; performance comparable to Node.js/Go frameworks.</li>
+<li><b>Type-hint driven</b>: request parsing, validation, serialization and docs derived from annotations.</li>
+<li><b>Automatic interactive docs</b>: OpenAPI schema, Swagger UI (<code>/docs</code>) and ReDoc (<code>/redoc</code>).</li>
+<li><b>Dependency injection</b> system that is simple yet powerful.</li>
+<li><b>Native async</b> support (<code>async def</code>) plus sync endpoints run in a threadpool.</li>
+<li>Standards-based: OpenAPI, JSON Schema, OAuth2, JWT.</li>
+<li>Excellent editor support (autocomplete, type checks), fewer bugs.</li></ul></div>
+
+<div class="q"><p class="qq">What are Starlette and Pydantic, and what role does each play in FastAPI?</p>
+<p><b>Starlette</b> is a lightweight ASGI toolkit that provides the web layer: routing, requests/responses, middleware, WebSockets, background tasks, test client, static files. FastAPI subclasses <code>Starlette</code>. <b>Pydantic</b> provides the data layer: parsing, validation, serialization and JSON Schema generation from type-annotated models. FastAPI glues them together and adds dependency injection and OpenAPI generation.</p></div>
+
+<div class="q"><p class="qq">What is ASGI and how does it differ from WSGI?</p>
+<p><b>WSGI</b> (Web Server Gateway Interface) is a synchronous standard: one request occupies one worker thread/process until done; no native WebSockets or long-lived connections (Flask, Django classic). <b>ASGI</b> (Asynchronous Server Gateway Interface) is its async successor: an app is an <code>async</code> callable <code>app(scope, receive, send)</code>; it supports HTTP, HTTP/2, WebSockets, lifespan events, and many concurrent connections on a single event loop. FastAPI is an ASGI app served by ASGI servers like Uvicorn, Hypercorn or Granian.</p></div>
+
+<div class="q"><p class="qq">What is Uvicorn? How do Uvicorn and Gunicorn relate?</p>
+<p>Uvicorn is a lightning-fast ASGI server built on <code>uvloop</code> and <code>httptools</code>. Gunicorn is a mature process manager (WSGI server). In production you can run Gunicorn with Uvicorn workers (<code>gunicorn -k uvicorn.workers.UvicornWorker -w 4 app:app</code>) to get multiple processes with supervision, or simply use <code>uvicorn app:app --workers 4</code> (or <code>fastapi run</code>). In Kubernetes, one Uvicorn process per container with replicas is often preferred.</p></div>
+
+<div class="q"><p class="qq">Write a minimal FastAPI application and explain how to run it.</p>
+<pre>from fastapi import FastAPI
+
+app = FastAPI(title="Demo API", version="1.0.0")
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: int, q: str | None = None):
+    return {"item_id": item_id, "q": q}</pre>
+<p>Run with <code>uvicorn main:app --reload</code> (dev) or <code>fastapi dev main.py</code> / <code>fastapi run main.py</code> (FastAPI CLI). Visit <code>/docs</code> for Swagger UI.</p></div>
+
+<div class="q"><p class="qq">Compare FastAPI with Flask and Django.</p>
+<table><tr><th>Aspect</th><th>FastAPI</th><th>Flask</th><th>Django / DRF</th></tr>
+<tr><td>Protocol</td><td>ASGI (async-first)</td><td>WSGI (async partial)</td><td>WSGI/ASGI</td></tr>
+<tr><td>Validation</td><td>Built-in via Pydantic</td><td>Extensions (Marshmallow)</td><td>DRF serializers</td></tr>
+<tr><td>API docs</td><td>Automatic OpenAPI</td><td>Extensions</td><td>Extensions (drf-spectacular)</td></tr>
+<tr><td>ORM / Admin</td><td>None built-in (bring your own)</td><td>None</td><td>Built-in ORM, admin, auth</td></tr>
+<tr><td>Performance</td><td>Very high</td><td>Moderate</td><td>Moderate</td></tr>
+<tr><td>Best for</td><td>APIs, microservices, ML serving</td><td>Small apps, flexibility</td><td>Full-stack, batteries-included apps</td></tr></table></div>
+
+<div class="q"><p class="qq">How does FastAPI generate API documentation automatically?</p>
+<p>At startup FastAPI inspects every route: path, method, parameter annotations, Pydantic models for body/response, status codes, dependencies, security schemes, tags and docstrings. It builds an <b>OpenAPI 3.1</b> schema (served at <code>/openapi.json</code>) using Pydantic's JSON Schema generation. Swagger UI (<code>/docs</code>) and ReDoc (<code>/redoc</code>) render that schema. You can customize with <code>title</code>, <code>description</code>, <code>tags</code>, <code>summary</code>, <code>response_description</code>, <code>openapi_url=None</code> (disable), or override <code>app.openapi()</code>.</p></div>
+
+<div class="q"><p class="qq">What happens internally when a request hits a FastAPI endpoint?</p>
+<ol><li>ASGI server (Uvicorn) parses the HTTP request and calls the app with <code>scope/receive/send</code>.</li>
+<li>Middleware stack runs (outermost first): e.g., CORS, GZip, custom middleware.</li>
+<li>Starlette router matches path + method to a route.</li>
+<li>FastAPI resolves the dependency graph: extracts path/query/header/cookie/body params, runs dependencies (cached per request), validates with Pydantic.</li>
+<li>On validation failure &rarr; <code>RequestValidationError</code> &rarr; 422 response.</li>
+<li>Endpoint runs (awaited if <code>async def</code>, else in a threadpool).</li>
+<li>Return value is filtered/validated against <code>response_model</code>, serialized via <code>jsonable_encoder</code>/Pydantic to JSON, wrapped in a <code>Response</code>.</li>
+<li>Dependencies with <code>yield</code> run their teardown; background tasks run after the response is sent.</li></ol></div>
+
+<div class="q"><p class="qq">What are type hints and why are they central to FastAPI?</p>
+<p>Type hints (PEP 484) annotate expected types: <code>def f(x: int) -&gt; str</code>. Python ignores them at runtime, but FastAPI reads them via introspection to decide where a parameter comes from (path/query/body), how to convert it (string &rarr; int), how to validate it, and how to document it. <code>Annotated[T, metadata]</code> (PEP 593) lets you attach extra info like <code>Query(max_length=50)</code> or <code>Depends(...)</code> while keeping the real type.</p></div>
+
+<div class="q"><p class="qq">What is the FastAPI CLI?</p>
+<p>Installed with <code>pip install "fastapi[standard]"</code>. <code>fastapi dev main.py</code> runs Uvicorn with auto-reload on localhost for development; <code>fastapi run main.py</code> runs in production mode (listening on 0.0.0.0, no reload). It auto-detects the <code>app</code> object.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f2">2. Routing, Path, Query, Header &amp; Body Parameters</h2>
+
+<div class="q"><p class="qq">How does FastAPI decide whether a function parameter is a path, query or body parameter?</p>
+<ul><li>If the name appears in the path template (<code>/items/{item_id}</code>) &rarr; <b>path parameter</b>.</li>
+<li>If it is a singular type (<code>int</code>, <code>str</code>, <code>float</code>, <code>bool</code>, <code>Enum</code>, <code>UUID</code>, <code>datetime</code>, list of these with <code>Query</code>) &rarr; <b>query parameter</b>.</li>
+<li>If it is a Pydantic model (or declared with <code>Body()</code>) &rarr; <b>request body</b>.</li>
+<li>Explicit markers override: <code>Path()</code>, <code>Query()</code>, <code>Header()</code>, <code>Cookie()</code>, <code>Body()</code>, <code>Form()</code>, <code>File()</code>.</li></ul></div>
+
+<div class="q"><p class="qq">How do you make query parameters optional, required, or with defaults? How do you add validation?</p>
+<pre>from typing import Annotated
+from fastapi import Query
+
+@app.get("/search")
+async def search(
+    q: Annotated[str, Query(min_length=3, max_length=50, pattern="^[a-z]+$")],  # required
+    page: int = 1,                          # optional with default
+    tag: str | None = None,                 # optional, may be None
+    ids: Annotated[list[int], Query()] = [],  # ?ids=1&amp;ids=2
+):
+    ...</pre>
+<p>A parameter with no default is required. <code>Query</code> supports <code>alias</code>, <code>title</code>, <code>description</code>, <code>deprecated</code>, <code>include_in_schema</code>, numeric constraints (<code>gt</code>, <code>ge</code>, <code>lt</code>, <code>le</code>).</p></div>
+
+<div class="q"><p class="qq">Why does route declaration order matter?</p>
+<p>Routes are matched in the order they are declared. If <code>/users/{user_id}</code> is declared before <code>/users/me</code>, the request <code>/users/me</code> matches the first route and tries to parse "me" as <code>user_id</code>. Declare fixed paths before parameterized ones.</p></div>
+
+<div class="q"><p class="qq">How do you restrict a path parameter to a set of predefined values?</p>
+<pre>from enum import Enum
+class ModelName(str, Enum):
+    resnet = "resnet"
+    vit = "vit"
+
+@app.get("/models/{name}")
+async def get_model(name: ModelName):
+    return {"model": name.value}</pre>
+<p>Alternatively use <code>Literal["resnet", "vit"]</code>. Invalid values give a 422 and the options appear in docs.</p></div>
+
+<div class="q"><p class="qq">How do you capture a path containing slashes (e.g., a file path)?</p>
+<p>Use the Starlette path convertor: <code>@app.get("/files/{file_path:path}")</code>. Other convertors: <code>int</code>, <code>float</code>, <code>uuid</code>, <code>str</code>.</p></div>
+
+<div class="q"><p class="qq">How do you read headers and cookies?</p>
+<pre>from fastapi import Header, Cookie
+@app.get("/info")
+async def info(user_agent: Annotated[str | None, Header()] = None,
+               x_token: Annotated[list[str] | None, Header()] = None,
+               session_id: Annotated[str | None, Cookie()] = None):
+    ...</pre>
+<p><code>Header</code> converts underscores to hyphens automatically (<code>user_agent</code> &rarr; <code>User-Agent</code>); headers are case-insensitive. Disable with <code>convert_underscores=False</code>.</p></div>
+
+<div class="q"><p class="qq">How do you accept multiple body parameters or a singular value in the body?</p>
+<pre>@app.put("/items/{item_id}")
+async def update(item_id: int, item: Item, user: User,
+                 importance: Annotated[int, Body(gt=0)]):
+    ...</pre>
+<p>With multiple body params, FastAPI expects a JSON object keyed by parameter names: <code>{"item": {...}, "user": {...}, "importance": 5}</code>. For a single model, use <code>Body(embed=True)</code> to require <code>{"item": {...}}</code> instead of the bare object.</p></div>
+
+<div class="q"><p class="qq">Can you use Pydantic models for query parameters?</p>
+<p>Yes (FastAPI &ge; 0.115): <code>filters: Annotated[FilterParams, Query()]</code> where <code>FilterParams</code> is a <code>BaseModel</code>. Set <code>model_config = {"extra": "forbid"}</code> to reject unknown query params. Same works for <code>Header()</code> and <code>Cookie()</code>.</p></div>
+
+<div class="q"><p class="qq">What HTTP methods does FastAPI support and when do you use each?</p>
+<p><code>@app.get</code> (read), <code>post</code> (create / non-idempotent actions), <code>put</code> (full replace, idempotent), <code>patch</code> (partial update), <code>delete</code> (remove), plus <code>options</code>, <code>head</code>, <code>trace</code>. Use <code>@app.api_route(path, methods=[...])</code> for multiple. For PATCH, use <code>item.model_dump(exclude_unset=True)</code> to update only provided fields.</p></div>
+
+<div class="q"><p class="qq">How do you access the raw Request object?</p>
+<p>Declare a parameter of type <code>Request</code>: <code>async def f(request: Request)</code>. Gives access to <code>request.headers</code>, <code>request.client.host</code>, <code>request.url</code>, <code>await request.body()</code>, <code>await request.json()</code>, <code>request.state</code>, <code>request.app</code>. Data read this way bypasses validation and docs.</p></div>
+
+<!-- ===================================================== -->
+<div class="q"><p class="qq">When should you use a path parameter vs a query parameter vs the request body?</p>
+<ul><li><b>Path</b>: identifies a specific resource, and is required (<code>/users/42</code>).</li>
+<li><b>Query</b>: optional modifiers such as filtering, sorting, pagination and search (<code>/users?role=admin&amp;page=2</code>).</li>
+<li><b>Body</b>: data being created or updated, or complex or large input, sent with POST/PUT/PATCH. Avoid bodies on GET.</li>
+<li><b>Headers</b>: metadata such as auth, content negotiation and correlation IDs.</li></ul></div>
+
+<div class="q"><p class="qq">How does FastAPI convert query parameter types, e.g., booleans?</p>
+<p>Query values arrive as strings, and Pydantic converts them to the annotated type. For <code>bool</code>, the values <code>1</code>, <code>true</code>, <code>on</code> and <code>yes</code> (case-insensitive) become <code>True</code>, and <code>0</code>, <code>false</code>, <code>off</code> and <code>no</code> become <code>False</code>. Invalid values such as <code>?page=abc</code> for an <code>int</code> produce a 422 error listing the location (<code>["query", "page"]</code>) and the message.</p></div>
+
+<div class="q"><p class="qq">What does a 422 validation error response look like?</p>
+<pre>{"detail": [{"type": "int_parsing", "loc": ["path", "item_id"],
+             "msg": "Input should be a valid integer, unable to parse string as an integer",
+             "input": "abc"}]}</pre>
+<p><code>loc</code> shows where the error is (path, query, body field path); <code>type</code> is a machine-readable error code. You can customize the format with a <code>RequestValidationError</code> handler.</p></div>
+
+<h2 id="f3">3. Pydantic Models &amp; Data Validation</h2>
+
+<div class="q"><p class="qq">What is Pydantic and how is it used in FastAPI?</p>
+<p>Pydantic is a data validation library that uses type hints to parse and validate data; v2 has a Rust core (<code>pydantic-core</code>) and is 5&ndash;50x faster than v1. In FastAPI, <code>BaseModel</code> subclasses define request bodies, response models, query/header models and settings. Invalid input raises <code>ValidationError</code>, which FastAPI turns into a 422 response with detailed error locations.</p>
+<pre>from pydantic import BaseModel, Field, EmailStr
+class UserCreate(BaseModel):
+    username: str = Field(min_length=3, max_length=30)
+    email: EmailStr
+    age: int = Field(ge=0, le=130)
+    tags: list[str] = []</pre></div>
+
+<div class="q"><p class="qq">What are the key differences between Pydantic v1 and v2?</p>
+<table><tr><th>v1</th><th>v2</th></tr>
+<tr><td><code>.dict()</code>, <code>.json()</code></td><td><code>.model_dump()</code>, <code>.model_dump_json()</code></td></tr>
+<tr><td><code>parse_obj()</code></td><td><code>model_validate()</code>, <code>model_validate_json()</code></td></tr>
+<tr><td><code>class Config:</code></td><td><code>model_config = ConfigDict(...)</code></td></tr>
+<tr><td><code>orm_mode = True</code></td><td><code>from_attributes = True</code></td></tr>
+<tr><td><code>@validator</code>, <code>@root_validator</code></td><td><code>@field_validator</code>, <code>@model_validator</code></td></tr>
+<tr><td><code>BaseSettings</code> in pydantic</td><td>Moved to <code>pydantic-settings</code> package</td></tr>
+<tr><td>Pure Python</td><td>Rust core, much faster; strict mode; <code>@computed_field</code>; <code>TypeAdapter</code></td></tr></table></div>
+
+<div class="q"><p class="qq">How do you write custom validators in Pydantic v2?</p>
+<pre>from pydantic import BaseModel, field_validator, model_validator
+
+class SignUp(BaseModel):
+    password: str
+    confirm: str
+
+    @field_validator("password")
+    @classmethod
+    def strong(cls, v: str) -&gt; str:
+        if len(v) &lt; 8 or v.isalpha():
+            raise ValueError("weak password")
+        return v
+
+    @model_validator(mode="after")
+    def match(self):
+        if self.password != self.confirm:
+            raise ValueError("passwords do not match")
+        return self</pre>
+<p><code>mode="before"</code> runs before type coercion (raw input); <code>"after"</code> on validated data; <code>"wrap"</code> wraps the inner validator. Also <code>Annotated[str, AfterValidator(fn)]</code> for reusable validators.</p></div>
+
+<div class="q"><p class="qq">What is <code>Field()</code> used for?</p>
+<p>To add constraints and metadata to model fields: <code>default</code>, <code>default_factory</code>, <code>alias</code>, <code>title</code>, <code>description</code>, <code>examples</code>, <code>gt/ge/lt/le</code>, <code>min_length/max_length</code>, <code>pattern</code>, <code>multiple_of</code>, <code>frozen</code>, <code>exclude</code>. Use <code>default_factory=list</code> for mutable defaults (though Pydantic copies defaults safely anyway).</p></div>
+
+<div class="q"><p class="qq">Why use separate input and output models (e.g., UserCreate, UserRead, UserInDB)?</p>
+<p>To avoid leaking sensitive fields (password hash), to control what clients can set (no <code>id</code>/<code>created_at</code> on input), and to document each contract precisely. Common pattern: <code>UserBase</code> (shared fields) &rarr; <code>UserCreate(UserBase)</code> adds <code>password</code>; <code>UserRead(UserBase)</code> adds <code>id</code>; <code>UserInDB</code> adds <code>hashed_password</code>. Use <code>UserUpdate</code> with all-optional fields for PATCH.</p></div>
+
+<div class="q"><p class="qq">What does <code>response_model</code> do?</p>
+<p>It declares the output schema. FastAPI will: validate the return value, <b>filter out</b> fields not in the model (security), serialize it, and document it in OpenAPI. You may also use the return type annotation (<code>-&gt; UserRead</code>). Options: <code>response_model_exclude_unset=True</code>, <code>response_model_exclude_none</code>, <code>response_model_include/exclude</code>. Set <code>response_model=None</code> to disable when returning a <code>Response</code> directly.</p></div>
+
+<div class="q"><p class="qq">How do you return ORM objects through Pydantic models?</p>
+<p>Set <code>model_config = ConfigDict(from_attributes=True)</code> on the response model (v1: <code>orm_mode = True</code>). Pydantic will read attributes (<code>obj.name</code>) instead of dict keys, so you can return a SQLAlchemy instance and FastAPI converts it via <code>UserRead.model_validate(db_user)</code>.</p></div>
+
+<div class="q"><p class="qq">How do you handle nested models, lists and unions?</p>
+<pre>class Image(BaseModel):
+    url: HttpUrl
+    name: str
+class Item(BaseModel):
+    name: str
+    images: list[Image] | None = None
+    meta: dict[str, int] = {}
+class Cat(BaseModel): kind: Literal["cat"]; meows: int
+class Dog(BaseModel): kind: Literal["dog"]; barks: int
+Pet = Annotated[Cat | Dog, Field(discriminator="kind")]</pre>
+<p>Discriminated unions validate faster and produce clearer errors than plain unions.</p></div>
+
+<div class="q"><p class="qq">What is strict mode vs lax mode in Pydantic?</p>
+<p>By default (lax) Pydantic coerces compatible types: <code>"42"</code> &rarr; <code>42</code>, <code>"true"</code> &rarr; <code>True</code>. Strict mode (<code>ConfigDict(strict=True)</code>, <code>Field(strict=True)</code>, or <code>StrictInt</code>) rejects mismatched types. Useful for financial or security-sensitive inputs.</p></div>
+
+<div class="q"><p class="qq">What are computed fields, aliases and <code>extra</code> config?</p>
+<ul><li><code>@computed_field</code> + <code>@property</code>: derived value included in serialization and schema.</li>
+<li><code>Field(alias="userName")</code>: external name differs from attribute; <code>populate_by_name=True</code> accepts both; <code>alias_generator=to_camel</code> for camelCase APIs; <code>serialization_alias</code> / <code>validation_alias</code> to differ by direction.</li>
+<li><code>extra="ignore"</code> (default) / <code>"forbid"</code> (reject unknown fields) / <code>"allow"</code> (keep them).</li></ul></div>
+
+<div class="q"><p class="qq">What is <code>jsonable_encoder</code>?</p>
+<p>A FastAPI utility that converts arbitrary objects (Pydantic models, <code>datetime</code>, <code>UUID</code>, <code>Decimal</code>, sets, ORM objects) into JSON-compatible Python types (dict, list, str, ...). Useful when storing to a NoSQL DB or building a <code>JSONResponse</code> manually.</p></div>
+
+<div class="q"><p class="qq">What is <code>TypeAdapter</code>?</p>
+<p>A Pydantic v2 tool to validate/serialize arbitrary types that are not <code>BaseModel</code>s, e.g. <code>TypeAdapter(list[Item]).validate_python(data)</code> or <code>.json_schema()</code>.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f4">4. Responses, Status Codes &amp; Error Handling</h2>
+
+<div class="q"><p class="qq">How do you set custom status codes?</p>
+<p>Via the decorator: <code>@app.post("/items", status_code=status.HTTP_201_CREATED)</code>. For dynamic codes, inject <code>response: Response</code> and set <code>response.status_code = 202</code>, or return a <code>JSONResponse(content=..., status_code=...)</code>. Use 204 with no body for deletes.</p></div>
+
+<div class="q"><p class="qq">What response classes are available?</p>
+<ul><li><code>JSONResponse</code> (default), <code>ORJSONResponse</code> / <code>UJSONResponse</code> (faster JSON).</li>
+<li><code>HTMLResponse</code>, <code>PlainTextResponse</code>, <code>RedirectResponse</code>.</li>
+<li><code>StreamingResponse</code> (generator/async generator), <code>FileResponse</code> (efficient file sending with headers).</li>
+<li>Generic <code>Response(content, media_type, headers)</code>.</li></ul>
+<p>Set app-wide default: <code>FastAPI(default_response_class=ORJSONResponse)</code>. Returning a Response directly skips <code>response_model</code> validation.</p></div>
+
+<div class="q"><p class="qq">How do you raise HTTP errors?</p>
+<pre>from fastapi import HTTPException
+@app.get("/items/{id}")
+async def get(id: int):
+    item = db.get(id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found",
+                            headers={"X-Error": "missing"})
+    return item</pre>
+<p>Raising (not returning) aborts the dependency chain and endpoint immediately; <code>detail</code> can be any JSON-serializable value.</p></div>
+
+<div class="q"><p class="qq">How do you implement custom exception handlers?</p>
+<pre>class DomainError(Exception):
+    def __init__(self, msg: str): self.msg = msg
+
+@app.exception_handler(DomainError)
+async def domain_handler(request: Request, exc: DomainError):
+    return JSONResponse(status_code=400, content={"error": exc.msg})
+
+@app.exception_handler(RequestValidationError)
+async def validation_handler(request, exc):
+    return JSONResponse(status_code=422, content={"errors": exc.errors()})</pre>
+<p>You can also override Starlette's <code>HTTPException</code> handler to unify the error format. Re-use defaults via <code>fastapi.exception_handlers.http_exception_handler</code>.</p></div>
+
+<div class="q"><p class="qq">What is the difference between 400, 401, 403, 404, 409, 422 and 500?</p>
+<p>400 Bad Request (malformed / business-rule violation); 401 Unauthorized (missing/invalid credentials &mdash; include <code>WWW-Authenticate</code>); 403 Forbidden (authenticated but not allowed); 404 Not Found; 409 Conflict (duplicate resource / version conflict); 422 Unprocessable Entity (FastAPI's validation errors); 429 Too Many Requests; 500 Internal Server Error (unhandled exception); 503 Service Unavailable (dependency down / overloaded).</p></div>
+
+<div class="q"><p class="qq">How do you document multiple possible responses?</p>
+<pre>@app.get("/items/{id}", response_model=Item,
+         responses={404: {"model": ErrorMsg, "description": "Not found"},
+                    200: {"content": {"image/png": {}}}})</pre></div>
+
+<div class="q"><p class="qq">How do you set headers and cookies on a response?</p>
+<p>Inject <code>response: Response</code> and call <code>response.headers["X-Cache"] = "HIT"</code> or <code>response.set_cookie("session", token, httponly=True, secure=True, samesite="lax")</code>; or set them on a returned <code>JSONResponse</code>.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f5">5. Dependency Injection</h2>
+
+<div class="q"><p class="qq">What is dependency injection in FastAPI and why is it useful?</p>
+<p>A dependency is any callable (function, class, async function, generator) declared via <code>Depends()</code>. FastAPI calls it, resolving its own parameters (path, query, other dependencies) recursively, and injects the result. Benefits: code reuse (pagination, auth, DB session), separation of concerns, easy testing via overrides, automatic documentation of the dependency's parameters, and resource lifecycle management with <code>yield</code>.</p>
+<pre>async def pagination(skip: int = 0, limit: int = Query(10, le=100)):
+    return {"skip": skip, "limit": limit}
+Pagination = Annotated[dict, Depends(pagination)]
+
+@app.get("/items")
+async def items(p: Pagination): ...</pre></div>
+
+<div class="q"><p class="qq">Explain dependencies with <code>yield</code>.</p>
+<p>Code before <code>yield</code> is setup; the yielded value is injected; code after <code>yield</code> runs as teardown after the response is produced (similar to a context manager). Typical for DB sessions:</p>
+<pre>def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()</pre>
+<p>Since FastAPI 0.106, exit code runs before the response is sent (so you cannot use the resource in background tasks; create a new session there). Exceptions raised in the endpoint propagate into the dependency's <code>except</code> block.</p></div>
+
+<div class="q"><p class="qq">What are sub-dependencies and dependency caching?</p>
+<p>Dependencies can depend on other dependencies, forming a DAG. Within a single request, if the same dependency is used multiple times, it is executed <b>once</b> and the result cached. Disable with <code>Depends(dep, use_cache=False)</code>.</p></div>
+
+<div class="q"><p class="qq">How do you use classes as dependencies?</p>
+<p>Any callable works; a class's <code>__init__</code> parameters become request parameters: <code>commons: Annotated[CommonParams, Depends()]</code> (shortcut: empty <code>Depends()</code> uses the annotated type). A <b>callable instance</b> (class with <code>__call__</code>) allows parameterized dependencies, e.g., <code>Depends(RoleChecker(["admin"]))</code>.</p></div>
+
+<div class="q"><p class="qq">How do you apply dependencies to a whole router or app without using their return values?</p>
+<p><code>@app.get("/x", dependencies=[Depends(verify_key)])</code>, <code>APIRouter(dependencies=[Depends(get_current_user)])</code>, or <code>FastAPI(dependencies=[Depends(log_request)])</code>. Useful for auth checks, rate limiting, logging.</p></div>
+
+<div class="q"><p class="qq">How do you override dependencies in tests?</p>
+<pre>def fake_user(): return User(id=1, name="test")
+app.dependency_overrides[get_current_user] = fake_user
+# ... run tests ...
+app.dependency_overrides.clear()</pre></div>
+
+<div class="q"><p class="qq">What is <code>Security()</code> vs <code>Depends()</code>?</p>
+<p><code>Security</code> is a subclass of <code>Depends</code> that additionally accepts <code>scopes=[...]</code>. Scopes are collected into <code>SecurityScopes</code> for OAuth2 scope-based authorization and documented in OpenAPI.</p></div>
+
+<div class="q"><p class="qq">Should dependencies be sync or async?</p>
+<p>Either; FastAPI awaits async ones and runs sync ones in the threadpool. Make it <code>async</code> if it awaits I/O (async DB, HTTP client); keep it sync if it does blocking I/O or is trivial CPU work. Mixing is fine.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f6">6. Async, Concurrency &amp; Performance</h2>
+
+<div class="q"><p class="qq">What are coroutines, the event loop and <code>async</code>/<code>await</code>?</p>
+<p>An <code>async def</code> function returns a <b>coroutine</b> object when called; it doesn't run until awaited or scheduled. <code>await</code> suspends the coroutine until the awaited operation (e.g., a network response) finishes, which gives control back to the <b>event loop</b>. The event loop is a single-threaded scheduler that runs whichever task is ready. While one request waits on the database, the loop serves other requests, so one process can handle thousands of concurrent I/O-bound connections.</p>
+<pre>async def fetch_user(id):
+    await asyncio.sleep(1)        # non-blocking: other tasks run meanwhile
+    return {"id": id}
+
+async def main():
+    users = await asyncio.gather(*(fetch_user(i) for i in range(100)))  # ~1 s, not 100 s</pre>
+<p>You can only <code>await</code> inside <code>async def</code>. Forgetting <code>await</code> returns an un-run coroutine (Python warns: "coroutine was never awaited").</p></div>
+
+<div class="q"><p class="qq">Threads vs processes vs asyncio: when to use each?</p>
+<table><tr><th></th><th>asyncio</th><th>Threads</th><th>Processes</th></tr>
+<tr><td>Best for</td><td>Many concurrent I/O waits</td><td>Blocking I/O libraries</td><td>CPU-bound work</td></tr>
+<tr><td>Parallel CPU</td><td>No</td><td>No (GIL)</td><td>Yes</td></tr>
+<tr><td>Overhead</td><td>Very low</td><td>Medium</td><td>High (memory, IPC)</td></tr>
+<tr><td>Switching</td><td>Cooperative (at <code>await</code>)</td><td>Preemptive by OS</td><td>Separate interpreters</td></tr></table></div>
+
+<div class="q"><p class="qq">When should you use <code>async def</code> vs <code>def</code> for path operations?</p>
+<ul><li><code>async def</code>: when calling libraries that support <code>await</code> (httpx.AsyncClient, asyncpg, SQLAlchemy async, aioredis, motor). Runs directly on the event loop.</li>
+<li><code>def</code>: when using blocking libraries (requests, psycopg2, sync SQLAlchemy, file I/O, most ML inference). FastAPI runs it in an external threadpool (AnyIO, default 40 threads) so it does not block the loop.</li>
+<li><b>Never</b> perform blocking calls (<code>time.sleep</code>, <code>requests.get</code>, heavy CPU) inside <code>async def</code> &mdash; this freezes the whole event loop and all concurrent requests.</li></ul></div>
+
+<div class="q"><p class="qq">Explain concurrency vs parallelism in the context of FastAPI.</p>
+<p><b>Concurrency</b>: many tasks make progress by interleaving while waiting on I/O (event loop, async/await, single thread). <b>Parallelism</b>: tasks run simultaneously on multiple CPU cores (multiple processes). FastAPI achieves concurrency with asyncio and threads; for CPU parallelism, run multiple worker processes (Uvicorn/Gunicorn workers) or offload to a process pool / task queue, because of Python's GIL.</p></div>
+
+<div class="q"><p class="qq">How do you run CPU-bound or blocking code from an async endpoint?</p>
+<pre>from fastapi.concurrency import run_in_threadpool
+result = await run_in_threadpool(blocking_fn, arg)          # I/O-bound blocking
+
+loop = asyncio.get_running_loop()
+result = await loop.run_in_executor(process_pool, cpu_fn, x)  # CPU-bound</pre>
+<p>For long jobs, use a task queue (Celery, RQ, Arq, Dramatiq) and return a job ID (202 Accepted) with a status endpoint.</p></div>
+
+<div class="q"><p class="qq">How do you make concurrent outbound HTTP calls?</p>
+<pre>async with httpx.AsyncClient(timeout=5) as client:
+    r1, r2 = await asyncio.gather(client.get(url1), client.get(url2))</pre>
+<p>Reuse a single client (created in lifespan) for connection pooling instead of creating one per request.</p></div>
+
+<div class="q"><p class="qq">What techniques improve FastAPI performance?</p>
+<ul><li>Use async drivers end-to-end; avoid blocking the loop.</li>
+<li>Multiple workers / replicas; tune threadpool size for sync endpoints.</li>
+<li><code>ORJSONResponse</code>; return Pydantic models directly; avoid double validation.</li>
+<li>Connection pooling (DB, HTTP, Redis); create clients in lifespan.</li>
+<li>Caching (Redis, <code>fastapi-cache</code>, HTTP cache headers, ETags); GZip middleware for large responses.</li>
+<li>Pagination, selecting only needed columns, avoiding N+1 queries.</li>
+<li><code>uvloop</code> + <code>httptools</code> (included in <code>uvicorn[standard]</code>).</li>
+<li>Profile with py-spy, pyinstrument; load test with Locust/k6.</li></ul></div>
+
+<div class="q"><p class="qq">What is the GIL and how does it affect FastAPI apps?</p>
+<p>The Global Interpreter Lock lets only one thread execute Python bytecode at a time per process. I/O-bound work is fine (the GIL is released during I/O), but CPU-bound Python code in threads does not run in parallel. Solutions: multiple processes, native libraries that release the GIL (NumPy, PyTorch), process pools, or free-threaded Python 3.13+ builds.</p></div>
+
+<div class="q"><p class="qq">How would you implement rate limiting?</p>
+<p>Use <code>slowapi</code> (limits-based, decorator per route) or a custom middleware/dependency using Redis (fixed window with <code>INCR</code>+<code>EXPIRE</code>, sliding window with sorted sets, or token bucket). Key on API key / user ID / IP; return 429 with <code>Retry-After</code>. In production often done at the API gateway (NGINX, Kong, Azure APIM).</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f7">7. Security: Authentication, Authorization &amp; CORS</h2>
+
+<div class="q"><p class="qq">What security utilities does FastAPI provide?</p>
+<p><code>fastapi.security</code> includes <code>OAuth2PasswordBearer</code>, <code>OAuth2PasswordRequestForm</code>, <code>OAuth2AuthorizationCodeBearer</code>, <code>HTTPBasic</code>, <code>HTTPBearer</code>, <code>APIKeyHeader</code>, <code>APIKeyQuery</code>, <code>APIKeyCookie</code>, <code>OpenIdConnect</code>, <code>SecurityScopes</code>. They extract credentials and register security schemes in OpenAPI (the "Authorize" button in Swagger).</p></div>
+
+<div class="q"><p class="qq">Implement JWT authentication with OAuth2 password flow.</p>
+<pre>oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+pwd = PasswordHash.recommended()          # pwdlib (argon2); or passlib bcrypt
+
+@app.post("/token")
+async def login(form: Annotated[OAuth2PasswordRequestForm, Depends()]):
+    user = authenticate(form.username, form.password)
+    if not user:
+        raise HTTPException(401, "Incorrect credentials",
+                            headers={"WWW-Authenticate": "Bearer"})
+    exp = datetime.now(timezone.utc) + timedelta(minutes=30)
+    token = jwt.encode({"sub": user.username, "exp": exp}, SECRET, algorithm="HS256")
+    return {"access_token": token, "token_type": "bearer"}
+
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+    try:
+        payload = jwt.decode(token, SECRET, algorithms=["HS256"])
+    except InvalidTokenError:
+        raise HTTPException(401, "Invalid token", headers={"WWW-Authenticate": "Bearer"})
+    user = get_user(payload.get("sub"))
+    if user is None: raise HTTPException(401)
+    return user</pre>
+<p>Keep the secret in env/secret store, use short-lived access tokens + refresh tokens, always pin the allowed <code>algorithms</code>, and hash passwords with argon2/bcrypt (never store plaintext).</p></div>
+
+<div class="q"><p class="qq">Authentication vs authorization? How do you implement role-based access control?</p>
+<p>Authentication verifies <i>who</i> you are; authorization decides <i>what</i> you may do. RBAC via a parameterized dependency:</p>
+<pre>class RequireRole:
+    def __init__(self, *roles): self.roles = roles
+    def __call__(self, user: User = Depends(get_current_user)):
+        if user.role not in self.roles:
+            raise HTTPException(403, "Forbidden")
+        return user
+
+@app.delete("/users/{id}", dependencies=[Depends(RequireRole("admin"))])</pre>
+<p>Alternatively OAuth2 scopes with <code>Security(get_current_user, scopes=["items:write"])</code>. Also enforce object-level checks (user owns the resource) to prevent IDOR.</p></div>
+
+<div class="q"><p class="qq">What is an "origin"? Which of these URLs share an origin?</p>
+<p>An origin is the triple <b>scheme + host + port</b>. Path, query and fragment don't matter.</p>
+<table><tr><th>Compared with <code>https://app.example.com</code></th><th>Same origin?</th><th>Reason</th></tr>
+<tr><td><code>https://app.example.com/api/users</code></td><td>Yes</td><td>Only the path differs</td></tr>
+<tr><td><code>http://app.example.com</code></td><td>No</td><td>Different scheme</td></tr>
+<tr><td><code>https://api.example.com</code></td><td>No</td><td>Different host (subdomains count)</td></tr>
+<tr><td><code>https://app.example.com:8443</code></td><td>No</td><td>Different port (default 443)</td></tr></table>
+<p>Common gotcha: <code>http://localhost:3000</code> and <code>http://127.0.0.1:3000</code> are <b>different</b> origins.</p></div>
+
+<div class="q"><p class="qq">What is the Same-Origin Policy (SOP)?</p>
+<p>A browser security rule: scripts on a page from one origin can't <b>read</b> responses from another origin. It stops a malicious site from using your logged-in session (cookies) to read your bank or email data. The SOP allows embedding cross-origin resources (<code>&lt;img&gt;</code>, <code>&lt;script&gt;</code>, <code>&lt;link&gt;</code>) and submitting forms, but it blocks JavaScript (<code>fetch</code>/XHR) from reading the responses. CORS is how a server deliberately <b>relaxes</b> the SOP for chosen origins.</p></div>
+
+<div class="q"><p class="qq">What is CORS and why do you need it?</p>
+<p>Cross-Origin Resource Sharing is an HTTP-header-based protocol. A server uses it to tell the browser which other origins may read its responses. It's needed whenever the frontend and API are on different origins, e.g., a React app on <code>https://app.example.com</code> or <code>http://localhost:5173</code> calling a FastAPI backend on <code>https://api.example.com</code> or <code>http://localhost:8000</code>. The browser sends an <code>Origin</code> header. If the response lacks a matching <code>Access-Control-Allow-Origin</code> header, the browser hides the response from JavaScript and reports a CORS error.</p></div>
+
+<div class="q"><p class="qq">Is CORS enforced by the server or the browser? Does CORS protect your API?</p>
+<p>The <b>browser</b> enforces it. The server only sends headers. So:</p>
+<ul><li>curl, Postman, Python <code>requests</code> and server-to-server calls ignore CORS completely. CORS is <b>not</b> authentication or access control, so always protect endpoints with auth.</li>
+<li>For simple requests, the server still <b>runs</b> the request. The browser only hides the response from JavaScript, so side effects still happen.</li>
+<li>CORS protects <b>users</b> (their cookies and data in the browser), not your server.</li></ul></div>
+
+<div class="q"><p class="qq">What are "simple" requests and "preflight" requests?</p>
+<p>A <b>simple request</b> is sent directly with an <code>Origin</code> header. It must meet all of these conditions:</p>
+<ul><li>The method is <code>GET</code>, <code>HEAD</code> or <code>POST</code>.</li>
+<li>Only CORS-safelisted headers are used (<code>Accept</code>, <code>Accept-Language</code>, <code>Content-Language</code>, <code>Content-Type</code>).</li>
+<li>The <code>Content-Type</code> is <code>text/plain</code>, <code>multipart/form-data</code> or <code>application/x-www-form-urlencoded</code>.</li></ul>
+<p>Anything else triggers a <b>preflight</b>: before the real request, the browser sends an <code>OPTIONS</code> request with <code>Origin</code>, <code>Access-Control-Request-Method</code> and <code>Access-Control-Request-Headers</code>. The real request is sent only if the server's reply allows it. In practice most API calls are preflighted, because <code>Content-Type: application/json</code>, an <code>Authorization</code> header, <code>PUT</code>/<code>PATCH</code>/<code>DELETE</code>, or any custom <code>X-*</code> header triggers one.</p>
+<pre>OPTIONS /items HTTP/1.1                     HTTP/1.1 200 OK
+Origin: https://app.example.com             Access-Control-Allow-Origin: https://app.example.com
+Access-Control-Request-Method: POST         Access-Control-Allow-Methods: GET, POST
+Access-Control-Request-Headers: content-type, authorization
+                                            Access-Control-Allow-Headers: content-type, authorization
+                                            Access-Control-Max-Age: 600
+                                            Vary: Origin</pre></div>
+
+<div class="q"><p class="qq">Explain the main CORS response headers.</p>
+<table><tr><th>Header</th><th>Meaning</th></tr>
+<tr><td><code>Access-Control-Allow-Origin</code></td><td>The single allowed origin, or <code>*</code>. It can't be a list.</td></tr>
+<tr><td><code>Access-Control-Allow-Methods</code></td><td>Methods allowed for the actual request (preflight reply)</td></tr>
+<tr><td><code>Access-Control-Allow-Headers</code></td><td>Request headers the client may send (preflight reply)</td></tr>
+<tr><td><code>Access-Control-Allow-Credentials</code></td><td><code>true</code> lets the browser send cookies or auth and expose the response</td></tr>
+<tr><td><code>Access-Control-Expose-Headers</code></td><td>Response headers JavaScript may read beyond the safelisted ones (e.g., <code>X-Total-Count</code>, <code>Content-Disposition</code>)</td></tr>
+<tr><td><code>Access-Control-Max-Age</code></td><td>How many seconds the browser may cache the preflight result. Browsers cap it, e.g., Chrome at 2 hours.</td></tr>
+<tr><td><code>Vary: Origin</code></td><td>Tells caches/CDNs that the response differs per Origin, so they don't serve one origin's headers to another</td></tr></table></div>
+
+<div class="q"><p class="qq">How do you configure CORS in FastAPI? Explain each <code>CORSMiddleware</code> parameter.</p>
+<pre>from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://app.example.com", "http://localhost:5173"],
+    allow_origin_regex=r"https://.*\.example\.com",   # optional
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
+    expose_headers=["X-Total-Count"],
+    max_age=600,
+)</pre>
+<ul><li><code>allow_origins</code>: exact origins, with no trailing slash or path. Default <code>[]</code>.</li>
+<li><code>allow_origin_regex</code>: regex that is full-matched against the origin, useful for subdomains or preview deployments. Escape dots, otherwise <code>.</code> matches any character.</li>
+<li><code>allow_methods</code>: default <code>["GET"]</code>.</li>
+<li><code>allow_headers</code>: default <code>[]</code>. Safelisted headers are always allowed.</li>
+<li><code>allow_credentials</code>: default <code>False</code>.</li>
+<li><code>expose_headers</code>: default <code>[]</code>.</li>
+<li><code>max_age</code>: preflight cache time in seconds. Default 600.</li></ul>
+<p>The middleware answers preflight <code>OPTIONS</code> requests itself; you don't need <code>@app.options</code> routes. It applies to the whole app, not per router. For different policies, mount a sub-application with its own middleware.</p></div>
+
+<div class="q"><p class="qq">Why can't you use <code>allow_origins=["*"]</code> with <code>allow_credentials=True</code>?</p>
+<p>By the CORS spec, browsers reject <code>Access-Control-Allow-Origin: *</code> on credentialed requests (cookies, HTTP auth, client certs). The FastAPI docs say that when credentials are allowed, origins, methods and headers must all be listed explicitly. Some Starlette versions handle this combination by reflecting whatever <code>Origin</code> the request sent. That effectively lets <b>every website</b> make authenticated requests as your users, which is a serious vulnerability. The same risk comes from code that blindly echoes the <code>Origin</code> header, or from a loose regex such as <code>.*example.com</code>, which also matches <code>evilexample.com</code>.</p></div>
+
+<div class="q"><p class="qq">What does the frontend need to do to send cookies cross-origin?</p>
+<ul><li>Client: <code>fetch(url, { credentials: "include" })</code> or axios <code>withCredentials: true</code>.</li>
+<li>Server: <code>allow_credentials=True</code> and an explicit origin.</li>
+<li>Cookie: <code>SameSite=None; Secure</code> (HTTPS required) for cross-<i>site</i> requests. With <code>Lax</code>/<code>Strict</code>, browsers won't send the cookie on cross-site fetches.</li>
+<li>Bearer tokens in the <code>Authorization</code> header don't need <code>credentials: "include"</code>, but the <code>Authorization</code> header must be in <code>allow_headers</code>.</li></ul></div>
+
+<div class="q"><p class="qq">What is the difference between CORS and CSRF? Does CORS prevent CSRF?</p>
+<p><b>CSRF</b> (Cross-Site Request Forgery) tricks a logged-in user's browser into <b>sending</b> a state-changing request, such as an auto-submitted form POST, that carries their cookies. <b>CORS</b> only controls whether a cross-origin script can <b>read</b> the response. Simple requests such as form POSTs aren't preflighted, so CORS does <b>not</b> prevent CSRF. Defenses against CSRF:</p>
+<ul><li><code>SameSite</code> cookies</li>
+<li>CSRF tokens (double-submit cookie)</li>
+<li>Requiring a custom header or JSON content type, which forces a preflight</li>
+<li>Checking <code>Origin</code>/<code>Referer</code> on unsafe methods</li>
+<li>Using bearer tokens instead of cookies</li></ul></div>
+
+<div class="q"><p class="qq">The browser shows a CORS error but the endpoint works in Postman. How do you debug it?</p>
+<ol><li>Open DevTools &rarr; Network. Check whether the <b>preflight</b> (<code>OPTIONS</code>) or the actual request failed, and inspect the request <code>Origin</code> and the response headers.</li>
+<li>Make sure the origin exactly matches <code>allow_origins</code>: scheme, port, no trailing slash, <code>localhost</code> vs <code>127.0.0.1</code>.</li>
+<li>Make sure the requested method and headers (e.g., <code>Authorization</code>, <code>Content-Type</code>, custom <code>X-*</code>) are allowed. Starlette returns <b>400 "Disallowed CORS ..."</b> to the preflight otherwise.</li>
+<li>Check whether the real error is a <b>500 or 404</b>. If an unhandled exception occurs, Starlette's <code>ServerErrorMiddleware</code> (outermost) returns a 500 <b>without</b> CORS headers, so the browser reports a misleading CORS error. Check the server logs.</li>
+<li>Check for redirects (e.g., a trailing-slash 307 redirect to <code>http://</code> behind a proxy). Preflights can't follow redirects.</li>
+<li>Check whether a reverse proxy, API gateway or CDN strips or duplicates CORS headers. Two <code>Access-Control-Allow-Origin</code> values are also invalid.</li>
+<li>For credentials: check that the origin isn't <code>*</code>, that <code>allow_credentials=True</code> is set, and that the cookie has <code>SameSite=None; Secure</code>.</li></ol></div>
+
+<div class="q"><p class="qq">Does the order of middleware matter for CORS?</p>
+<p>Yes. In Starlette, the middleware added <b>last</b> runs <b>first</b> (outermost). <code>CORSMiddleware</code> should wrap everything that can reject a request, such as auth, rate-limiting or custom middleware returning 401/429. Otherwise those responses lack CORS headers, and the frontend can't read the error status. It also has to answer the preflight before auth middleware rejects it: preflights never carry credentials, so auth checks shouldn't apply to <code>OPTIONS</code>. Add <code>CORSMiddleware</code> last, or handle auth in dependencies, which run after the middleware.</p></div>
+
+<div class="q"><p class="qq">Do CORS rules apply to WebSockets?</p>
+<p>No. Browsers send an <code>Origin</code> header during the WebSocket handshake but don't enforce CORS, and <code>CORSMiddleware</code> doesn't affect WebSocket routes. Validate <code>websocket.headers.get("origin")</code> against an allow-list yourself, and close with code 1008 if it isn't allowed. This prevents Cross-Site WebSocket Hijacking, especially with cookie auth.</p></div>
+
+<div class="q"><p class="qq">How can you avoid CORS entirely?</p>
+<p>Serve the frontend and API from the <b>same origin</b>:</p>
+<ul><li>A reverse proxy (NGINX, Traefik, Azure Front Door) routes <code>/</code> to the SPA and <code>/api</code> to FastAPI.</li>
+<li>Or FastAPI serves the built SPA via <code>StaticFiles</code>.</li>
+<li>In development, use the frontend dev-server proxy (Vite <code>server.proxy</code>, CRA <code>proxy</code>).</li></ul>
+<p>This removes preflight latency and simplifies cookie auth.</p></div>
+
+<div class="q"><p class="qq">How do you manage CORS origins per environment and test them?</p>
+<pre>class Settings(BaseSettings):
+    cors_origins: list[str] = []          # env: CORS_ORIGINS='["https://app.example.com"]'
+
+app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origins, ...)
+
+def test_preflight_allowed():
+    r = client.options("/items", headers={
+        "Origin": "https://app.example.com",
+        "Access-Control-Request-Method": "POST",
+        "Access-Control-Request-Headers": "content-type"})
+    assert r.status_code == 200
+    assert r.headers["access-control-allow-origin"] == "https://app.example.com"
+
+def test_preflight_blocked():
+    r = client.options("/items", headers={"Origin": "https://evil.com",
+                                          "Access-Control-Request-Method": "POST"})
+    assert r.status_code == 400</pre>
+<p>Allow <code>localhost</code> origins only in development, and never allow the <code>"null"</code> origin, which sandboxed iframes and <code>file://</code> pages send.</p></div>
+
+<div class="q"><p class="qq">How do you implement API key authentication?</p>
+<pre>api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+async def verify_key(key: str | None = Security(api_key_header)):
+    if key is None or not secrets.compare_digest(key, settings.api_key):
+        raise HTTPException(401, "Invalid API key")</pre>
+<p>Use <code>secrets.compare_digest</code> to avoid timing attacks; store hashed keys in DB for multi-tenant systems.</p></div>
+
+<div class="q"><p class="qq">What security best practices apply to FastAPI services?</p>
+<ul><li>HTTPS everywhere (TLS at proxy), HSTS; <code>TrustedHostMiddleware</code>, <code>HTTPSRedirectMiddleware</code>.</li>
+<li>Validate all input with Pydantic (lengths, patterns, <code>extra="forbid"</code>); use ORM parameterized queries (prevent SQL injection).</li>
+<li>Use <code>response_model</code> to avoid leaking sensitive fields.</li>
+<li>Secrets from env / Key Vault; never commit them. Rotate keys.</li>
+<li>Rate limiting, request size limits, timeouts.</li>
+<li>Disable docs in production if not needed (<code>docs_url=None</code>).</li>
+<li>Don't leak stack traces; generic 500 handler with logging.</li>
+<li>Secure cookies (<code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code>); CSRF protection for cookie-based auth.</li>
+<li>Dependency scanning (pip-audit), least-privilege DB users.</li></ul></div>
+
+<div class="q"><p class="qq">How do you integrate with an external identity provider (Azure AD / Entra ID, Auth0, Keycloak)?</p>
+<p>Use OAuth2 Authorization Code (+PKCE) flow for users; the API acts as a resource server validating bearer JWTs: fetch the provider's JWKS (cache it), verify signature (RS256), <code>iss</code>, <code>aud</code>, <code>exp</code>, <code>nbf</code>, and scopes/roles claims. Libraries: <code>fastapi-azure-auth</code>, <code>authlib</code>, <code>PyJWT</code> with <code>PyJWKClient</code>.</p></div>
+
+<!-- ===================================================== -->
+<div class="q"><p class="qq">Session-based vs token-based authentication?</p>
+<p><b>Session</b>: after login, the server stores session state (in a DB or Redis) and sends a session-ID cookie. Revocation is easy, but the server is stateful, sticky sessions or a shared store are needed, and you need CSRF protection. <b>Token (JWT)</b>: the server issues a signed, self-contained token that the client sends in <code>Authorization: Bearer</code>. It is stateless and scales across services, but is hard to revoke before it expires and makes payloads larger. Many apps use short-lived JWT access tokens plus refresh tokens stored in HttpOnly cookies.</p></div>
+
+<div class="q"><p class="qq">What is the structure of a JWT? Is its payload encrypted?</p>
+<p>A JWT is three Base64URL-encoded parts joined by dots: <code>header.payload.signature</code>.</p>
+<ul><li><b>Header</b>: algorithm and type, e.g., <code>{"alg": "HS256", "typ": "JWT"}</code>.</li>
+<li><b>Payload</b>: claims such as <code>sub</code>, <code>exp</code>, <code>iat</code>, <code>iss</code>, <code>aud</code>, roles and scopes.</li>
+<li><b>Signature</b>: HMAC (HS256, shared secret) or RSA/ECDSA (RS256/ES256, private key signs and public key verifies).</li></ul>
+<p>The payload is only <b>encoded</b>, not encrypted; anyone can read it, so never put secrets in it (use JWE if you need encryption). The signature guarantees integrity. Always verify the signature, pin the allowed algorithms (reject <code>alg: none</code>), and check <code>exp</code>, <code>aud</code> and <code>iss</code>.</p></div>
+
+<div class="q"><p class="qq">How do you implement refresh tokens, logout and token revocation with JWTs?</p>
+<ul><li>Issue a short-lived access token (5&ndash;15 minutes) and a long-lived refresh token (days). Store the refresh token in an HttpOnly, Secure cookie or in the DB.</li>
+<li><code>POST /refresh</code> validates the refresh token and issues new tokens. With <b>rotation</b>, each refresh token is single-use; if a used one is presented again, revoke the whole token family because it was likely stolen.</li>
+<li><b>Logout/revocation</b>: delete the refresh token server-side; keep a deny-list of access-token <code>jti</code> values in Redis until they expire; or include a <code>token_version</code> claim that you compare with the user record.</li></ul></div>
+
+<div class="q"><p class="qq">Name the OAuth2 flows (grant types) and when each is used.</p>
+<ul><li><b>Authorization Code + PKCE</b>: web, SPA and mobile apps where users log in with an identity provider. This is the recommended default.</li>
+<li><b>Client Credentials</b>: machine-to-machine calls with no user.</li>
+<li><b>Device Code</b>: TVs and CLIs with limited input.</li>
+<li><b>Refresh Token</b>: obtain new access tokens.</li>
+<li><b>Password (ROPC)</b>: the app collects the username and password directly. It is legacy, discouraged except for first-party or simple setups, and is what FastAPI's tutorial uses for simplicity.</li>
+<li><b>Implicit</b>: deprecated.</li></ul>
+<p><b>OpenID Connect</b> adds an identity layer on top of OAuth2: an ID token plus a userinfo endpoint.</p></div>
+
+<div class="q"><p class="qq">Why hash passwords with bcrypt/argon2 instead of SHA-256?</p>
+<p>General-purpose hashes like SHA-256 are designed to be fast, which lets attackers try billions of guesses per second on GPUs. Password hashing algorithms (argon2id, bcrypt, scrypt) are deliberately slow, include a per-password <b>salt</b> that defeats rainbow tables, and argon2 is also memory-hard. Never encrypt passwords reversibly. Compare hashes with a constant-time check (the library does this), and re-hash on login when you change parameters.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f8">8. Middleware, Lifespan Events &amp; Background Tasks</h2>
+
+<div class="q"><p class="qq">What is middleware and how do you write one?</p>
+<p>Middleware wraps every request/response, running code before the endpoint and after the response is generated.</p>
+<pre>@app.middleware("http")
+async def add_timing(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    response.headers["X-Process-Time"] = f"{time.perf_counter() - start:.4f}"
+    return response</pre>
+<p>Class-based: subclass <code>BaseHTTPMiddleware</code> or write a pure ASGI middleware (faster, works with streaming). Middleware added last runs first (outermost). Built-ins: <code>CORSMiddleware</code>, <code>GZipMiddleware</code>, <code>TrustedHostMiddleware</code>, <code>HTTPSRedirectMiddleware</code>, <code>SessionMiddleware</code>.</p></div>
+
+<div class="q"><p class="qq">Middleware vs dependencies &mdash; when to use which?</p>
+<p><b>Middleware</b>: cross-cutting concerns for <i>all</i> requests at the HTTP level (logging, timing, CORS, compression, request IDs, security headers); no access to parsed params, not in OpenAPI. <b>Dependencies</b>: per-route/router logic needing typed inputs (auth, DB session, pagination), documented, testable via overrides, can return values to endpoints.</p></div>
+
+<div class="q"><p class="qq">What are lifespan events and how do you use them?</p>
+<p>Code executed once at startup and shutdown &mdash; e.g., load an ML model, create DB/HTTP connection pools, warm caches, close resources.</p>
+<pre>from contextlib import asynccontextmanager
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.model = load_model()
+    app.state.http = httpx.AsyncClient()
+    yield
+    await app.state.http.aclose()
+
+app = FastAPI(lifespan=lifespan)</pre>
+<p><code>@app.on_event("startup"/"shutdown")</code> is deprecated in favor of <code>lifespan</code>. Note: lifespan runs per worker process.</p></div>
+
+<div class="q"><p class="qq">What are BackgroundTasks? When should you NOT use them?</p>
+<pre>def send_email(to: str, body: str): ...
+@app.post("/signup")
+async def signup(user: UserCreate, bg: BackgroundTasks):
+    bg.add_task(send_email, user.email, "Welcome!")
+    return {"ok": True}</pre>
+<p>They run in the same process after the response is sent &mdash; good for small fire-and-forget tasks (emails, logging, cache invalidation). Not suitable for heavy/long jobs, jobs needing retries, persistence, scheduling or distribution across machines &mdash; tasks are lost if the process dies. Use Celery/RQ/Arq/Azure Queue + worker instead.</p></div>
+
+<div class="q"><p class="qq">How would you add a correlation/request ID to all logs?</p>
+<p>Middleware reads <code>X-Request-ID</code> or generates a UUID, stores it in a <code>contextvars.ContextVar</code> (async-safe), adds it to the response header, and a logging filter injects it into each log record. Libraries: <code>asgi-correlation-id</code>. Combine with structured JSON logging and OpenTelemetry tracing.</p></div>
+
+<!-- ===================================================== -->
+<div class="q"><p class="qq">How do you write a pure ASGI middleware, and why prefer it over <code>BaseHTTPMiddleware</code>?</p>
+<pre>class SecurityHeadersMiddleware:
+    def __init__(self, app): self.app = app
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            return await self.app(scope, receive, send)
+        async def send_wrapper(message):
+            if message["type"] == "http.response.start":
+                message.setdefault("headers", []).append((b"x-content-type-options", b"nosniff"))
+            await send(message)
+        await self.app(scope, receive, send_wrapper)
+
+app.add_middleware(SecurityHeadersMiddleware)</pre>
+<p><code>BaseHTTPMiddleware</code> is easy to write but has overhead, can interfere with streaming responses and background tasks, and has had issues propagating <code>contextvars</code>. A pure ASGI middleware works directly on the <code>scope/receive/send</code> messages: it is faster, supports streaming and WebSockets, and is the right choice for libraries.</p></div>
+
+<div class="q"><p class="qq">How do you integrate Celery (or another task queue) with FastAPI?</p>
+<pre># tasks.py
+celery = Celery("app", broker="redis://redis:6379/0", backend="redis://redis:6379/1")
+@celery.task(bind=True, max_retries=3)
+def generate_report(self, user_id): ...
+
+# api
+@app.post("/reports", status_code=202)
+def create_report(user: CurrentUser):
+    task = generate_report.delay(user.id)
+    return {"task_id": task.id}
+
+@app.get("/reports/{task_id}")
+def status(task_id: str):
+    r = AsyncResult(task_id, app=celery)
+    return {"state": r.state, "result": r.result if r.ready() else None}</pre>
+<p>Workers run as separate processes or containers and scale independently. Pass IDs rather than large objects, make tasks idempotent, and configure retries and time limits. Async-native alternatives include Arq, Dramatiq, Taskiq and Azure Service Bus with Functions.</p></div>
+
+<div class="q"><p class="qq">How can you log or modify the raw request body for every route?</p>
+<p>Middleware that reads the body consumes the stream. Instead, use a custom <code>APIRoute</code> subclass that overrides <code>get_route_handler()</code>: it reads <code>await request.body()</code> (which caches it), logs or decompresses it, and calls the original handler. Then set <code>APIRouter(route_class=LoggingRoute)</code>. The same technique lets you catch exceptions per route with access to the body.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f9">9. Databases, ORMs &amp; Migrations</h2>
+
+<div class="q"><p class="qq">How do you integrate SQLAlchemy with FastAPI?</p>
+<pre>engine = create_async_engine("postgresql+asyncpg://...", pool_size=10, pool_pre_ping=True)
+SessionLocal = async_sessionmaker(engine, expire_on_commit=False)
+
+async def get_session():
+    async with SessionLocal() as session:
+        yield session
+SessionDep = Annotated[AsyncSession, Depends(get_session)]
+
+@app.get("/users/{id}", response_model=UserRead)
+async def get_user(id: int, db: SessionDep):
+    user = await db.get(User, id)
+    if not user: raise HTTPException(404)
+    return user</pre>
+<p>One session per request via a <code>yield</code> dependency; engine/pool created once per process.</p></div>
+
+<div class="q"><p class="qq">What is SQLModel?</p>
+<p>A library by FastAPI's author combining SQLAlchemy and Pydantic: one class can be both a table model (<code>table=True</code>) and a Pydantic model, reducing duplication. Still recommended to have separate Create/Read/Update models for API contracts.</p></div>
+
+<div class="q"><p class="qq">Sync vs async database access in FastAPI?</p>
+<p>Sync drivers (psycopg2, sync SQLAlchemy) should be used in <code>def</code> endpoints (threadpool). Async drivers (asyncpg, aiomysql, aiosqlite, motor for MongoDB) with <code>async def</code>. Async shines with many concurrent I/O-bound requests; beware lazy loading in async SQLAlchemy (use <code>selectinload</code>/<code>joinedload</code>, since implicit IO raises errors).</p></div>
+
+<div class="q"><p class="qq">How do you manage schema migrations?</p>
+<p>Use <b>Alembic</b>: <code>alembic init</code>, point <code>env.py</code> to your <code>Base.metadata</code>, <code>alembic revision --autogenerate -m "msg"</code>, review, <code>alembic upgrade head</code>. Run migrations as a separate deployment step/job, not at app startup with multiple workers (race conditions).</p></div>
+
+<div class="q"><p class="qq">What is the N+1 query problem and how do you avoid it?</p>
+<p>Fetching N parent rows and then issuing one query per row for related data (N+1 queries). Avoid with eager loading (<code>selectinload</code>, <code>joinedload</code>), joins, or batching (DataLoader pattern in GraphQL).</p></div>
+
+<div class="q"><p class="qq">How do you implement pagination?</p>
+<p><b>Offset/limit</b>: simple, supports jumping to pages, but slow for large offsets and inconsistent under inserts. <b>Cursor/keyset</b>: <code>WHERE id &gt; :last_id ORDER BY id LIMIT n</code>; stable and fast for large datasets. Return metadata (<code>total</code>, <code>next_cursor</code>). Library: <code>fastapi-pagination</code>.</p></div>
+
+<div class="q"><p class="qq">How do you handle transactions and concurrency conflicts?</p>
+<p>Use <code>async with session.begin():</code> for atomic units; roll back on exceptions. Handle concurrent updates with optimistic locking (version column; 409 on mismatch) or pessimistic locking (<code>SELECT ... FOR UPDATE</code>). Make POST endpoints idempotent with idempotency keys where needed.</p></div>
+
+<div class="q"><p class="qq">How do you use Redis or MongoDB with FastAPI?</p>
+<p>Create the client in lifespan (<code>redis.asyncio.Redis</code>, <code>motor.AsyncIOMotorClient</code> / <code>pymongo</code> async), store on <code>app.state</code>, and expose via dependency. Redis: caching, rate limiting, sessions, pub/sub, queues. MongoDB: use Pydantic models for validation; Beanie ODM integrates natively.</p></div>
+<!-- ===================================================== -->
+<div class="q"><p class="qq">How do you prevent SQL injection in FastAPI apps?</p>
+<p>Never build SQL with string formatting from user input (<code>f"SELECT * FROM users WHERE name = '{name}'"</code>). Use ORM queries (<code>select(User).where(User.name == name)</code>) or bound parameters (<code>text("... WHERE name = :name").bindparams(name=name)</code>), which send data separately from the SQL. Validate inputs with Pydantic. For dynamic sort columns, map them to an allow-list, because identifiers can't be bound as parameters. Connect with a least-privilege DB user.</p></div>
+
+<div class="q"><p class="qq">What caching strategies would you use in a FastAPI service?</p>
+<ul><li><b>Cache-aside</b>: check Redis first; on a miss, query the DB, store the result with a TTL, and invalidate it on writes.</li>
+<li><b>HTTP caching</b>: <code>Cache-Control</code>, <code>ETag</code>/<code>If-None-Match</code> &rarr; 304 responses, CDN caching for public GET responses.</li>
+<li><b>In-process</b>: <code>functools.lru_cache</code> or <code>cachetools.TTLCache</code> for config and small lookups. Note that each worker has its own copy.</li></ul>
+<p>Watch for stale data, cache stampedes (use locks or request coalescing), and leaking private data through shared caches. <code>fastapi-cache2</code> provides decorators.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f10">10. Project Structure, APIRouter &amp; OpenAPI</h2>
+
+<div class="q"><p class="qq">How do you structure a large FastAPI application?</p>
+<pre>app/
+  main.py            # create app, include routers, middleware, lifespan
+  core/config.py     # pydantic-settings
+  core/security.py
+  api/deps.py        # shared dependencies
+  api/v1/routes/users.py, items.py
+  models/            # SQLAlchemy ORM models
+  schemas/           # Pydantic request/response models
+  services/          # business logic
+  repositories/      # data access
+  db/session.py
+tests/
+alembic/</pre>
+<p>Keep routes thin; business logic in services; data access in repositories; organize by feature/domain for big projects.</p></div>
+
+<div class="q"><p class="qq">What is <code>APIRouter</code>?</p>
+<pre>router = APIRouter(prefix="/users", tags=["users"],
+                   dependencies=[Depends(get_current_user)],
+                   responses={404: {"description": "Not found"}})
+@router.get("/{id}")
+async def get_user(id: int): ...
+
+# main.py
+app.include_router(router, prefix="/api/v1")</pre>
+<p>Routers group related endpoints with shared prefix, tags, dependencies and responses; they can be nested (<code>router.include_router(...)</code>).</p></div>
+
+<div class="q"><p class="qq">How do you version an API?</p>
+<p>URL path versioning (<code>/api/v1</code>, <code>/api/v2</code>) via separate routers (most common); header versioning (<code>Accept: application/vnd.api.v2+json</code>); or mounting separate sub-apps per version. Mark old endpoints <code>deprecated=True</code> to flag them in docs.</p></div>
+
+<div class="q"><p class="qq">What is mounting a sub-application?</p>
+<p><code>app.mount("/v2", v2_app)</code> attaches an independent ASGI app (its own docs, middleware). Also used for static files (<code>app.mount("/static", StaticFiles(directory="static"))</code>) or mounting Flask/Django via WSGIMiddleware, or Gradio apps.</p></div>
+
+<div class="q"><p class="qq">How do you customize the OpenAPI schema and docs?</p>
+<ul><li><code>FastAPI(title, description, version, openapi_tags=[...], servers=[...], contact, license_info)</code>.</li>
+<li>Per-route: <code>summary</code>, <code>description</code> (or docstring), <code>tags</code>, <code>operation_id</code>, <code>include_in_schema=False</code>, <code>deprecated</code>, <code>openapi_extra</code>.</li>
+<li>Examples: <code>Field(examples=[...])</code>, <code>model_config = {"json_schema_extra": {...}}</code>, <code>Body(openapi_examples=...)</code>.</li>
+<li>Override <code>app.openapi</code> using <code>get_openapi()</code> for full control; change <code>docs_url</code>, <code>redoc_url</code>, <code>openapi_url</code>.</li>
+<li>Generate typed clients from the schema with openapi-generator / openapi-ts; set <code>generate_unique_id_function</code> for clean names.</li></ul></div>
+
+<!-- ===================================================== -->
+<div class="q"><p class="qq">How do you create a generic paginated response model?</p>
+<pre>from typing import Generic, TypeVar
+T = TypeVar("T")
+class Page(BaseModel, Generic[T]):
+    items: list[T]
+    total: int
+    page: int
+    size: int
+
+@app.get("/users", response_model=Page[UserRead])
+async def list_users(page: int = 1, size: int = 20): ...</pre>
+<p>Python 3.12+ also supports <code>class Page[T](BaseModel)</code>. OpenAPI then gets a concrete schema such as <code>Page[UserRead]</code>.</p></div>
+
+<div class="q"><p class="qq">How do you document webhooks and callbacks in FastAPI?</p>
+<p><b>Webhooks</b> are requests your API sends to subscribers' URLs. Declare them with <code>@app.webhooks.post("new-order")</code> so they appear in OpenAPI 3.1 docs. <b>Callbacks</b> document a request your API will make back to a URL the client provided, using the <code>callbacks=</code> parameter on a route. When sending webhooks, sign payloads with HMAC, retry with backoff, and include idempotency IDs.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f11">11. WebSockets, Streaming, Files &amp; Forms</h2>
+
+<div class="q"><p class="qq">How do you implement a WebSocket endpoint?</p>
+<pre>class Manager:
+    def __init__(self): self.active: list[WebSocket] = []
+    async def connect(self, ws): await ws.accept(); self.active.append(ws)
+    def disconnect(self, ws): self.active.remove(ws)
+    async def broadcast(self, msg):
+        for ws in self.active: await ws.send_text(msg)
+manager = Manager()
+
+@app.websocket("/ws/{room}")
+async def ws_endpoint(ws: WebSocket, room: str):
+    await manager.connect(ws)
+    try:
+        while True:
+            data = await ws.receive_text()
+            await manager.broadcast(f"{room}: {data}")
+    except WebSocketDisconnect:
+        manager.disconnect(ws)</pre>
+<p>In-memory managers only work in one process; for multiple workers/instances, use Redis pub/sub or a message broker. Authenticate via query token or cookie (browsers cannot set custom headers on WebSockets).</p></div>
+
+<div class="q"><p class="qq">WebSockets vs Server-Sent Events vs long polling?</p>
+<p><b>WebSockets</b>: full-duplex, bidirectional (chat, games, collaborative editing). <b>SSE</b>: one-way server&rarr;client over HTTP, automatic reconnect, simpler, proxies-friendly (LLM token streaming, notifications). <b>Long polling</b>: fallback, higher overhead. SSE in FastAPI: <code>StreamingResponse(gen(), media_type="text/event-stream")</code> or <code>sse-starlette</code>.</p></div>
+
+<div class="q"><p class="qq">How do you stream a response (e.g., LLM tokens or a large file)?</p>
+<pre>async def token_stream(prompt):
+    async for tok in llm.astream(prompt):
+        yield f"data: {tok}\n\n"
+
+@app.post("/chat")
+async def chat(req: ChatReq):
+    return StreamingResponse(token_stream(req.prompt), media_type="text/event-stream")</pre>
+<p>For large files from disk use <code>FileResponse</code>. Disable proxy buffering (NGINX <code>X-Accel-Buffering: no</code>) for real-time streaming.</p></div>
+
+<div class="q"><p class="qq">How do you handle file uploads? <code>bytes</code> vs <code>UploadFile</code>?</p>
+<pre>@app.post("/upload")
+async def upload(file: UploadFile, description: Annotated[str, Form()]):
+    contents = await file.read()
+    return {"name": file.filename, "type": file.content_type, "size": len(contents)}</pre>
+<p><code>bytes = File()</code> loads the whole file into memory (small files only). <code>UploadFile</code> uses a <code>SpooledTemporaryFile</code> (memory up to a limit then disk), exposes <code>filename</code>, <code>content_type</code>, async <code>read/write/seek/close</code> &mdash; better for large files. Use <code>list[UploadFile]</code> for multiple. Requires <code>python-multipart</code>. Validate type/size, sanitize filenames, never trust <code>content_type</code> alone, and store outside the web root (or in blob storage).</p></div>
+
+<div class="q"><p class="qq">Why can't you send JSON body and form/file fields in the same request?</p>
+<p>The request body has a single encoding: <code>application/json</code> or <code>multipart/form-data</code> / <code>application/x-www-form-urlencoded</code>. When files/forms are present, other fields must be <code>Form()</code> fields (you can send JSON as a string form field and parse it with <code>Model.model_validate_json</code>).</p></div>
+
+<div class="q"><p class="qq">How do you serve static files and templates?</p>
+<p><code>app.mount("/static", StaticFiles(directory="static"), name="static")</code>; for HTML use <code>Jinja2Templates(directory="templates")</code> and return <code>templates.TemplateResponse(request, "page.html", {"x": 1})</code>.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f12">12. Testing FastAPI Applications</h2>
+
+<div class="q"><p class="qq">How do you test FastAPI endpoints?</p>
+<pre>from fastapi.testclient import TestClient
+client = TestClient(app)
+
+def test_read_item():
+    r = client.get("/items/1", headers={"X-Token": "abc"})
+    assert r.status_code == 200
+    assert r.json() == {"item_id": 1, "q": None}</pre>
+<p><code>TestClient</code> (based on httpx) calls the ASGI app in-process without a running server. Use <code>with TestClient(app) as client:</code> to trigger lifespan events.</p></div>
+
+<div class="q"><p class="qq">How do you write async tests?</p>
+<pre>import pytest
+from httpx import AsyncClient, ASGITransport
+
+@pytest.mark.anyio
+async def test_root():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        r = await ac.get("/")
+    assert r.status_code == 200</pre>
+<p>Needed when the test itself must await async things (e.g., async DB setup).</p></div>
+
+<div class="q"><p class="qq">How do you test with a database?</p>
+<ul><li>Override the session dependency with one bound to a test DB (SQLite in-memory or a Postgres test container via <code>testcontainers</code>).</li>
+<li>Wrap each test in a transaction and roll back for isolation, or recreate tables per test session.</li>
+<li>Use pytest fixtures for client, DB, authenticated user, and factories (factory_boy).</li></ul></div>
+
+<div class="q"><p class="qq">How do you mock external services and authentication?</p>
+<p>Use <code>app.dependency_overrides</code> for dependencies (auth, clients); <code>respx</code> to mock httpx calls; <code>unittest.mock.patch</code>/<code>pytest-mock</code> for functions; <code>freezegun</code> for time. Test WebSockets with <code>client.websocket_connect("/ws")</code>.</p></div>
+
+<div class="q"><p class="qq">What types of tests should a FastAPI service have?</p>
+<p>Unit tests (services, validators), integration tests (endpoints + DB), contract tests (OpenAPI schema / consumer-driven, e.g., Schemathesis property-based testing against the schema), load tests (Locust, k6), and security tests (auth bypass, input fuzzing). Measure coverage with <code>pytest-cov</code>.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="f13">13. Configuration, Deployment &amp; Production</h2>
+
+<div class="q"><p class="qq">How do you manage configuration and settings?</p>
+<pre>from pydantic_settings import BaseSettings, SettingsConfigDict
+class Settings(BaseSettings):
+    database_url: str
+    secret_key: str
+    debug: bool = False
+    model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_")
+
+@lru_cache
+def get_settings() -&gt; Settings: return Settings()</pre>
+<p>Values come from environment variables / <code>.env</code>, are type-validated at startup, and can be injected via <code>Depends(get_settings)</code> (overridable in tests). <code>lru_cache</code> avoids re-reading on each request.</p></div>
+
+<div class="q"><p class="qq">How do you containerize a FastAPI app?</p>
+<pre>FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY ./app ./app
+RUN useradd -m appuser
+USER appuser
+EXPOSE 8000
+CMD ["fastapi", "run", "app/main.py", "--port", "8000", "--proxy-headers"]</pre>
+<p>Copy requirements first for layer caching; use slim/multi-stage images; run as non-root; use exec-form CMD so signals reach the process for graceful shutdown.</p></div>
+
+<div class="q"><p class="qq">Describe a production deployment architecture.</p>
+<p>Client &rarr; CDN/WAF &rarr; load balancer / reverse proxy (NGINX, Traefik, Azure Front Door / App Gateway) handling TLS &rarr; multiple containers each running Uvicorn (Kubernetes, ECS, Azure Container Apps, App Service) &rarr; DB with connection pooling (PgBouncer), Redis cache, message queue + workers. Add health checks (<code>/health</code> liveness, <code>/ready</code> readiness), autoscaling (HPA on CPU/RPS), centralized logging, metrics (Prometheus via <code>prometheus-fastapi-instrumentator</code>), tracing (OpenTelemetry), and CI/CD.</p></div>
+
+<div class="q"><p class="qq">How many workers should you run?</p>
+<p>A common starting point is <code>(2 &times; CPU cores) + 1</code> for I/O-bound apps; for CPU/ML-heavy apps, roughly one worker per core (or per GPU). In Kubernetes, prefer 1 worker per pod and scale pods. Each worker has its own memory (models loaded per worker!), so memory often limits worker count.</p></div>
+
+<div class="q"><p class="qq">What is <code>root_path</code> and why does it matter behind a proxy?</p>
+<p>When a proxy serves the app under a prefix (e.g., <code>/api</code>) and strips it, the app must know the prefix to generate correct URLs for docs/OpenAPI. Set <code>FastAPI(root_path="/api")</code> or <code>uvicorn --root-path /api</code>. Also use <code>--proxy-headers</code> / <code>--forwarded-allow-ips</code> so <code>X-Forwarded-*</code> headers determine client IP and scheme.</p></div>
+
+<div class="q"><p class="qq">How do you implement graceful shutdown and health checks?</p>
+<p>Uvicorn handles SIGTERM: stops accepting connections, finishes in-flight requests (<code>--timeout-graceful-shutdown</code>), then runs lifespan shutdown. Liveness endpoint returns quickly without dependencies; readiness checks DB/model loaded so the orchestrator only routes traffic when ready.</p></div>
+
+<div class="q"><p class="qq">How do you add logging and observability?</p>
+<p>Structured JSON logs (structlog / python-json-logger) with request IDs; configure Uvicorn loggers; avoid logging secrets/PII. Metrics: request rate, latency histograms, error rates (RED). Tracing with OpenTelemetry (<code>opentelemetry-instrumentation-fastapi</code>) exported to Jaeger / Azure Monitor / Datadog. Error tracking with Sentry.</p></div>
+
+<!-- ===================================================== -->
+<div class="q"><p class="qq">How do you make calls to downstream services resilient?</p>
+<ul><li><b>Timeouts</b> on every outbound call: <code>httpx.AsyncClient(timeout=httpx.Timeout(5.0, connect=2.0))</code>. Never rely on the default of waiting forever.</li>
+<li><b>Retries</b> with exponential backoff and jitter, only for idempotent operations and transient errors (5xx, timeouts); use <code>tenacity</code> or httpx transports.</li>
+<li><b>Circuit breaker</b>: after repeated failures, fail fast for a cool-down period so you don't overload a struggling dependency (<code>pybreaker</code>, <code>aiobreaker</code>).</li>
+<li><b>Bulkheads</b>: limit concurrency per dependency with <code>asyncio.Semaphore</code>.</li>
+<li><b>Fallbacks</b>: cached or default responses, and graceful degradation (503 + <code>Retry-After</code>).</li></ul></div>
+
+<div class="q"><p class="qq">How do FastAPI microservices communicate with each other?</p>
+<p><b>Synchronous</b>: REST over HTTP (a shared <code>httpx.AsyncClient</code>) or gRPC, which is simple but couples availability. <b>Asynchronous</b>: messaging (Kafka, RabbitMQ, Azure Service Bus, Redis Streams) with events and the outbox pattern for reliable publishing, which decouples services and absorbs spikes. Also needed: service discovery (Kubernetes DNS), an API gateway, distributed tracing (propagate <code>traceparent</code>), shared schemas and contract tests, and eventual consistency with sagas instead of distributed transactions.</p></div>
+
+<div class="q"><p class="qq">How would you scale a FastAPI service to handle 10x traffic?</p>
+<ol><li>Measure first: load test and find the bottleneck (CPU, DB, external calls, event loop blocking).</li>
+<li>Scale horizontally: keep the service stateless, add replicas behind a load balancer, and autoscale.</li>
+<li>Database: connection pooling (PgBouncer), indexes, read replicas, query optimization, caching.</li>
+<li>Move slow work to queues and workers; return 202.</li>
+<li>Use async I/O, tune workers and the threadpool, use faster serialization.</li>
+<li>Put a CDN and edge caching in front of public content; add rate limiting to protect the backend.</li>
+<li>Observability and SLOs, so you can see the effect of each change.</li></ol></div>
+
+<!-- ===================================================== -->
+<h2 id="f14">14. Serving ML Models with FastAPI</h2>
+
+<div class="q"><p class="qq">How do you serve a PyTorch model with FastAPI?</p>
+<pre>@asynccontextmanager
+async def lifespan(app):
+    model = MyNet()
+    model.load_state_dict(torch.load("model.pt", map_location="cpu", weights_only=True))
+    model.eval()
+    app.state.model = model
+    yield
+
+app = FastAPI(lifespan=lifespan)
+
+class PredictIn(BaseModel):
+    features: list[float] = Field(min_length=10, max_length=10)
+class PredictOut(BaseModel):
+    label: int
+    prob: float
+
+@app.post("/predict", response_model=PredictOut)
+def predict(inp: PredictIn, request: Request):          # sync def -&gt; threadpool
+    x = torch.tensor(inp.features).unsqueeze(0)
+    with torch.inference_mode():
+        probs = request.app.state.model(x).softmax(-1)[0]
+    p, idx = probs.max(0)
+    return PredictOut(label=idx.item(), prob=p.item())</pre>
+<p>Key points: load once at startup (not per request), <code>eval()</code> + <code>inference_mode()</code>, validate inputs with Pydantic, use a sync endpoint (or offload) because inference is blocking/CPU/GPU-bound, and set threads (<code>torch.set_num_threads</code>) to avoid oversubscription with multiple workers.</p></div>
+
+<div class="q"><p class="qq">How do you handle high-throughput inference? What is dynamic batching?</p>
+<p>Dynamic batching collects concurrent requests for a few milliseconds into one batch, runs a single forward pass (much better GPU utilization), then returns individual results via futures. Implement with an <code>asyncio.Queue</code> + background consumer task, or use dedicated servers (NVIDIA Triton, TorchServe, Ray Serve, BentoML, vLLM/TGI for LLMs) behind FastAPI. Other techniques: ONNX Runtime/TensorRT, quantization, half precision, model warm-up, GPU-per-worker allocation, caching repeated predictions.</p></div>
+
+<div class="q"><p class="qq">How do you handle long-running inference (e.g., video processing)?</p>
+<p>Async job pattern: POST returns <code>202 Accepted</code> + <code>job_id</code>; job pushed to a queue (Celery/Redis, Azure Service Bus); GPU workers process and store results (blob/DB); client polls <code>GET /jobs/{id}</code>, or receives a webhook / WebSocket / SSE notification.</p></div>
+
+<div class="q"><p class="qq">Why does loading a model in each worker matter, and how can you reduce memory?</p>
+<p>Each Uvicorn/Gunicorn worker is a separate process with its own copy of the model, so 4 workers = 4&times; memory (and GPU memory). Mitigations: fewer workers + threadpool/batching; Gunicorn <code>--preload</code> with copy-on-write (CPU only, fragile with PyTorch); move inference into a separate model server shared by API workers; quantize/compress models.</p></div>
+
+<div class="q"><p class="qq">How would you version models and do A/B or canary releases?</p>
+<p>Store models in a registry (MLflow, Azure ML) with versions; include model version in responses and logs; route traffic by header or percentage (gateway or in-app router) between model versions; shadow-deploy new models (log predictions without serving them); monitor latency, error rate, data drift and prediction drift before full rollout.</p></div>
+<h1 class="part">Part II<br>PyTorch</h1>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p1">15. PyTorch Fundamentals &amp; Tensors</h2>
+
+<div class="q"><p class="qq">How do you install PyTorch and verify that the GPU works?</p>
+<p>Use the selector on pytorch.org to get the right command for your OS, package manager and CUDA version, e.g., <code>pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124</code>. The pip wheels bundle the CUDA runtime, so you only need a compatible NVIDIA driver, not a full CUDA toolkit.</p>
+<pre>import torch
+print(torch.__version__, torch.version.cuda)
+print(torch.cuda.is_available(), torch.cuda.device_count(), torch.cuda.get_device_name(0))
+print(torch.backends.mps.is_available())      # Apple Silicon</pre></div>
+
+<div class="q"><p class="qq">What are the basic attributes of a tensor?</p>
+<pre>x = torch.randn(2, 3, 4)
+x.shape / x.size()   # torch.Size([2, 3, 4])
+x.ndim / x.dim()     # 3
+x.numel()            # 24 elements
+x.dtype              # torch.float32
+x.device             # cpu
+x.requires_grad      # False
+x.is_contiguous(); x.stride()   # (12, 4, 1)
+x.element_size()     # bytes per element (4)</pre></div>
+
+<div class="q"><p class="qq">How do PyTorch tensors differ from NumPy arrays?</p>
+<p>Their APIs are similar, but tensors also:</p>
+<ul><li>Run on GPUs and other accelerators</li>
+<li>Track gradients for autograd</li>
+<li>Support more dtypes (bf16, fp8)</li>
+<li>Integrate with <code>nn</code>, <code>torch.compile</code> and distributed training</li></ul>
+<p>Conversion: <code>torch.from_numpy(a)</code> and <code>t.numpy()</code> share memory on the CPU. A GPU tensor or one that requires grad needs <code>t.detach().cpu().numpy()</code> first. Note that NumPy defaults to float64 while PyTorch defaults to float32.</p></div>
+
+<div class="q"><p class="qq">What is the difference between <code>*</code>, <code>@</code>, <code>torch.mm</code>, <code>torch.matmul</code> and <code>torch.bmm</code>?</p>
+<p><code>*</code> (<code>torch.mul</code>) is <b>element-wise</b> multiplication with broadcasting. <code>@</code> / <code>torch.matmul</code> is matrix multiplication: dot product for 1-D, matrix product for 2-D, and batched with broadcasting for N-D. <code>torch.mm</code> handles strictly 2-D matrices with no broadcasting. <code>torch.bmm</code> handles strictly 3-D batches <code>(B, n, m) @ (B, m, p)</code>. Use <code>x.T</code> for 2-D transpose and <code>x.mT</code> for transposing the last two dims of a batch.</p></div>
+
+<div class="q"><p class="qq">How do you get Python values out of a tensor?</p>
+<p><code>t.item()</code> for a single-element tensor, <code>t.tolist()</code> for nested lists, <code>t.numpy()</code> for NumPy. Each call on a GPU tensor copies data to the host and synchronizes, so avoid them in hot loops.</p></div>
+
+<div class="q"><p class="qq">Explain tensor storage, strides and views.</p>
+<p>A tensor is a <b>view</b> over a 1-D contiguous <b>storage</b> buffer, defined by:</p>
+<ul><li>An offset</li>
+<li>A shape</li>
+<li><b>Strides</b>: how many elements to skip in storage to move one step along each dim</li></ul>
+<p>A contiguous <code>(3, 4)</code> tensor has strides <code>(4, 1)</code>; its transpose has shape <code>(4, 3)</code> and strides <code>(1, 4)</code>, using the same storage with no copy. Slicing, <code>view</code>, <code>transpose</code>, <code>expand</code> and indexing with slices create views, and modifying a view modifies the original. Advanced indexing (index tensors, boolean masks) creates copies. Check <code>a.untyped_storage().data_ptr() == b.untyped_storage().data_ptr()</code> to see whether two tensors share memory.</p></div>
+
+<div class="q"><p class="qq">What is PyTorch and what are its main components?</p>
+<p>PyTorch is an open-source deep learning framework (Meta / Linux Foundation) offering GPU-accelerated tensors and automatic differentiation with a Pythonic, eager-execution (define-by-run) style. Components: <code>torch</code> (tensors, ops), <code>torch.autograd</code>, <code>torch.nn</code> (layers, losses), <code>torch.optim</code>, <code>torch.utils.data</code> (Dataset/DataLoader), <code>torch.cuda</code>/<code>mps</code>, <code>torch.distributed</code>, <code>torch.compile</code>, <code>torch.export</code>/<code>torch.onnx</code>, <code>torch.ao.quantization</code>, plus domain libraries (torchvision, torchaudio, torchtext legacy).</p></div>
+
+<div class="q"><p class="qq">PyTorch vs TensorFlow/Keras vs JAX?</p>
+<table><tr><th>Aspect</th><th>PyTorch</th><th>TensorFlow 2 / Keras</th><th>JAX</th></tr>
+<tr><td>Execution</td><td>Eager by default; <code>torch.compile</code> for graphs</td><td>Eager + <code>tf.function</code> graphs</td><td>Functional, <code>jit</code>-compiled (XLA)</td></tr>
+<tr><td>Style</td><td>Pythonic, OOP (<code>nn.Module</code>)</td><td>High-level Keras API</td><td>Pure functions, explicit state</td></tr>
+<tr><td>Ecosystem</td><td>Dominant in research &amp; LLMs (HF)</td><td>Strong production (TF Serving, TFLite)</td><td>Google research, TPUs</td></tr>
+<tr><td>Deployment</td><td>TorchScript/export, ONNX, ExecuTorch</td><td>SavedModel, TFLite, TF.js</td><td>Via export to TF/ONNX</td></tr></table></div>
+
+<div class="q"><p class="qq">What is a tensor? How do you create tensors?</p>
+<p>A tensor is a multi-dimensional array with a <code>dtype</code>, <code>device</code>, <code>shape</code>, strides and optional gradient tracking.</p>
+<pre>torch.tensor([[1, 2], [3, 4]], dtype=torch.float32)    # copies data
+torch.zeros(2, 3); torch.ones(2, 3); torch.empty(2, 3)  # empty = uninitialized
+torch.rand(2, 3)      # U[0,1)      torch.randn(2, 3)  # N(0,1)
+torch.arange(0, 10, 2); torch.linspace(0, 1, 5); torch.eye(3)
+torch.full((2, 2), 7.0); torch.zeros_like(x); torch.randint(0, 10, (3,))
+torch.from_numpy(arr)  # shares memory with NumPy array
+torch.as_tensor(arr)   # avoids copy if possible</pre></div>
+
+<div class="q"><p class="qq"><code>torch.tensor</code> vs <code>torch.Tensor</code> vs <code>torch.from_numpy</code> vs <code>torch.as_tensor</code>?</p>
+<p><code>torch.tensor(data)</code> (factory function) always copies and infers dtype. <code>torch.Tensor(...)</code> is the class constructor; defaults to float32 and behaves inconsistently (<code>torch.Tensor(3)</code> creates an uninitialized length-3 tensor) &mdash; avoid. <code>torch.from_numpy</code> shares memory with the NumPy array (changes reflect in both; CPU only). <code>torch.as_tensor</code> shares memory when possible, otherwise copies.</p></div>
+
+<div class="q"><p class="qq">Explain <code>view</code>, <code>reshape</code>, <code>permute</code>, <code>transpose</code>, <code>contiguous</code>.</p>
+<ul><li><code>view(shape)</code>: returns a new view sharing storage; requires compatible (usually contiguous) memory layout, else error.</li>
+<li><code>reshape(shape)</code>: returns a view if possible, otherwise copies &mdash; always works.</li>
+<li><code>transpose(d0, d1)</code>: swaps two dims; <code>permute(*dims)</code>: arbitrary reordering. Both return non-contiguous views (only strides change).</li>
+<li><code>contiguous()</code>: returns a tensor with row-major memory layout (copies if needed); required before <code>view</code> after permute.</li>
+<li>Also: <code>squeeze</code>/<code>unsqueeze</code> (remove/add size-1 dims), <code>flatten</code>, <code>unflatten</code>, <code>expand</code> (broadcast view, no copy) vs <code>repeat</code> (copies).</li></ul></div>
+
+<div class="q"><p class="qq">What is broadcasting?</p>
+<p>Rules for operating on tensors of different shapes without copying: align shapes from the trailing dimension; dimensions are compatible if equal or one of them is 1 (or missing); size-1 dims are virtually expanded. E.g., <code>(32, 1, 5) + (4, 5)</code> &rarr; <code>(32, 4, 5)</code>. Pitfall: <code>(N,) - (N,1)</code> silently produces <code>(N,N)</code>, a common bug in loss computations.</p></div>
+
+<div class="q"><p class="qq">What are in-place operations? Why should you be careful with them?</p>
+<p>Ops with trailing underscore (<code>x.add_(1)</code>, <code>relu_</code>, <code>x[0] = 5</code>) modify data in place, saving memory. Risks: they can overwrite values autograd saved for backward &rarr; <code>RuntimeError: one of the variables needed for gradient computation has been modified by an inplace operation</code>; in-place on a leaf tensor that requires grad is disallowed; and they can create subtle aliasing bugs with views.</p></div>
+
+<div class="q"><p class="qq">What dtypes does PyTorch support and when do you use each?</p>
+<p><code>float32</code> (default training), <code>float16</code>/<code>bfloat16</code> (mixed precision; bf16 has float32's range, less precision, no loss scaling needed), <code>float64</code> (scientific precision), <code>int64</code>/<code>long</code> (class indices for <code>CrossEntropyLoss</code>, embedding indices), <code>int8</code>/<code>uint8</code> (quantization, images), <code>bool</code> (masks), <code>float8</code> (H100 training/inference), <code>complex64</code>. Convert with <code>x.float()</code>, <code>x.to(torch.bfloat16)</code>.</p></div>
+
+<div class="q"><p class="qq">How do you move tensors between devices? What is device-agnostic code?</p>
+<pre>device = torch.device("cuda" if torch.cuda.is_available()
+                      else "mps" if torch.backends.mps.is_available() else "cpu")
+model.to(device); x = x.to(device, non_blocking=True)</pre>
+<p>All tensors in an op must be on the same device. <code>model.to()</code> moves parameters in place; <code>tensor.to()</code> returns a new tensor (must reassign). <code>.cpu().numpy()</code> to convert back (requires <code>.detach()</code> if it requires grad).</p></div>
+
+<div class="q"><p class="qq">Explain indexing, slicing, masking and gather/scatter.</p>
+<pre>x[:, 0]; x[..., -1]; x[x &gt; 0]            # boolean mask -&gt; 1-D copy
+torch.where(cond, a, b)                    # elementwise select
+x.masked_fill(mask, float("-inf"))         # e.g., attention masks
+torch.gather(logits, 1, labels.unsqueeze(1))   # pick per-row values
+out.scatter_(1, idx, 1.0)                  # one-hot / write by index
+torch.index_select(x, 0, idx); x[idx]      # fancy indexing (copy)</pre></div>
+
+<div class="q"><p class="qq">What are common reduction and linear algebra ops?</p>
+<p><code>sum</code>, <code>mean</code>, <code>max</code> (returns values+indices with <code>dim</code>), <code>argmax</code>, <code>topk</code>, <code>std</code>, <code>cumsum</code>, <code>norm</code>, <code>logsumexp</code>; use <code>dim</code> and <code>keepdim=True</code>. Linear algebra: <code>@</code>/<code>torch.matmul</code> (broadcast batched), <code>bmm</code>, <code>mm</code>, <code>einsum</code> (e.g., <code>"bhqd,bhkd-&gt;bhqk"</code>), <code>torch.linalg.inv/svd/qr/eigh/solve</code>, <code>cat</code> (existing dim) vs <code>stack</code> (new dim), <code>split</code>, <code>chunk</code>.</p></div>
+
+<div class="q"><p class="qq">How do you ensure reproducibility in PyTorch?</p>
+<pre>torch.manual_seed(42); np.random.seed(42); random.seed(42)
+torch.cuda.manual_seed_all(42)
+torch.backends.cudnn.benchmark = False
+torch.use_deterministic_algorithms(True)   # may need CUBLAS_WORKSPACE_CONFIG=:4096:8</pre>
+<p>Also seed DataLoader workers (<code>worker_init_fn</code>, <code>generator</code>). Full determinism may be slower and is not guaranteed across hardware/versions.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p2">16. Autograd &amp; Computational Graphs</h2>
+
+<div class="q"><p class="qq">How does autograd work?</p>
+<p>Autograd implements reverse-mode automatic differentiation. When operations run on tensors with <code>requires_grad=True</code>, PyTorch records a dynamic computational graph (DAG) where each result has a <code>grad_fn</code> (e.g., <code>MulBackward0</code>) pointing to its inputs. Calling <code>loss.backward()</code> traverses the graph from the output to the leaves, applying the chain rule (vector-Jacobian products), and accumulates gradients into <code>.grad</code> of leaf tensors. The graph is freed after backward by default.</p>
+<pre>x = torch.tensor(2.0, requires_grad=True)
+y = x**3 + 2*x
+y.backward()
+print(x.grad)   # 3*x^2 + 2 = 14</pre></div>
+
+<div class="q"><p class="qq">What is a dynamic (define-by-run) graph and why is it useful?</p>
+<p>The graph is built on the fly during each forward pass, so it can differ per iteration. You can use native Python control flow (if/loops/recursion), variable-length inputs, and debug with print/pdb. Static graphs (TF1) are defined then executed, enabling global optimizations; PyTorch recovers these via <code>torch.compile</code>.</p></div>
+
+<div class="q"><p class="qq">What are leaf tensors? Why is <code>.grad</code> None for intermediate tensors?</p>
+<p>Leaf tensors are created by the user (not the result of a tracked op), e.g., model parameters. Only leaves with <code>requires_grad=True</code> retain <code>.grad</code> by default to save memory. For a non-leaf, call <code>t.retain_grad()</code> before backward, or use hooks.</p></div>
+
+<div class="q"><p class="qq">Why do gradients accumulate and why call <code>optimizer.zero_grad()</code>?</p>
+<p><code>backward()</code> <b>adds</b> to existing <code>.grad</code> values. This enables gradient accumulation across micro-batches and summing gradients from multiple losses, but means you must reset gradients each step. <code>zero_grad(set_to_none=True)</code> (default in PyTorch 2) sets them to None, saving memory and a kernel.</p></div>
+
+<div class="q"><p class="qq"><code>torch.no_grad()</code> vs <code>torch.inference_mode()</code> vs <code>model.eval()</code> vs <code>detach()</code>?</p>
+<ul><li><code>model.eval()</code>: switches module behavior (Dropout off, BatchNorm uses running stats). Does <b>not</b> disable gradient tracking.</li>
+<li><code>torch.no_grad()</code>: disables graph recording inside the block &mdash; saves memory/compute; tensors can still later be used in autograd.</li>
+<li><code>torch.inference_mode()</code>: stricter, faster version of no_grad (also skips version counters/view tracking); resulting tensors can't be used in autograd later. Best for pure inference.</li>
+<li><code>tensor.detach()</code>: returns a tensor sharing storage but cut off from the graph (e.g., for target networks, logging, stopping gradient flow).</li></ul>
+<p>For evaluation use both <code>model.eval()</code> and <code>no_grad</code>/<code>inference_mode</code>.</p></div>
+
+<div class="q"><p class="qq">What does <code>backward()</code> need for a non-scalar output?</p>
+<p>A <code>gradient</code> argument (the vector in the vector-Jacobian product) of the same shape: <code>y.backward(torch.ones_like(y))</code>. Usually you reduce to a scalar loss first.</p></div>
+
+<div class="q"><p class="qq">What is <code>retain_graph=True</code> and <code>create_graph=True</code>?</p>
+<p><code>retain_graph=True</code> keeps the graph's saved tensors so you can call backward again through it (e.g., multiple losses sharing parts; GAN tricks) &mdash; otherwise a second backward errors. <code>create_graph=True</code> builds a graph of the backward pass itself, enabling higher-order derivatives (gradient penalty in WGAN-GP, MAML, Hessian-vector products).</p></div>
+
+<div class="q"><p class="qq">How do you compute gradients without populating <code>.grad</code>?</p>
+<p><code>torch.autograd.grad(outputs, inputs, create_graph=False)</code> returns gradients as a tuple, useful for gradient penalties and meta-learning. <code>torch.func</code> (functorch) offers <code>grad</code>, <code>vmap</code>, <code>jacrev</code>, <code>jacfwd</code>, <code>hessian</code> for functional transforms, per-sample gradients, and forward-mode AD.</p></div>
+
+<div class="q"><p class="qq">How do you freeze parameters?</p>
+<pre>for p in model.backbone.parameters():
+    p.requires_grad_(False)
+optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=1e-3)</pre>
+<p>Frozen layers still need <code>eval()</code> if they contain BatchNorm and you want their running stats fixed.</p></div>
+
+<div class="q"><p class="qq">What is gradient checkpointing?</p>
+<p>A memory/compute trade-off: instead of storing all intermediate activations, store only some, and recompute the rest during backward. <code>torch.utils.checkpoint.checkpoint(block, x, use_reentrant=False)</code>. Reduces activation memory (roughly from O(n) to O(&radic;n) layers) at ~20&ndash;30% extra compute. Widely used for large transformers.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p3">17. nn.Module &amp; Building Models</h2>
+
+<div class="q"><p class="qq">What is <code>nn.Module</code>? Write a simple model.</p>
+<p>Base class for all layers and models. It registers parameters, buffers and submodules assigned as attributes; provides <code>parameters()</code>, <code>state_dict()</code>, <code>to()</code>, <code>train()/eval()</code>, hooks, etc.</p>
+<pre>class MLP(nn.Module):
+    def __init__(self, in_dim, hidden, out_dim, p=0.2):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(in_dim, hidden), nn.ReLU(), nn.Dropout(p),
+            nn.Linear(hidden, out_dim))
+    def forward(self, x):
+        return self.net(x)
+
+model = MLP(784, 256, 10)
+logits = model(x)       # call the module, not model.forward(x)</pre></div>
+
+<div class="q"><p class="qq">Why call <code>model(x)</code> instead of <code>model.forward(x)</code>?</p>
+<p><code>__call__</code> runs forward pre-hooks, <code>forward</code>, forward hooks and backward hook registration. Calling <code>forward</code> directly bypasses hooks (used by profilers, quantization, FSDP, etc.).</p></div>
+
+<div class="q"><p class="qq">Why must you call <code>super().__init__()</code>, and why do submodules in a Python list not get registered?</p>
+<p><code>nn.Module.__init__</code> sets up internal dicts (<code>_parameters</code>, <code>_modules</code>, <code>_buffers</code>); without it, assigning a layer raises an error. Modules stored in a plain <code>list</code>/<code>dict</code> are invisible to <code>parameters()</code>, <code>.to(device)</code> and <code>state_dict</code> &rarr; use <code>nn.ModuleList</code> / <code>nn.ModuleDict</code> (and <code>nn.ParameterList</code>).</p></div>
+
+<div class="q"><p class="qq"><code>nn.Sequential</code> vs <code>nn.ModuleList</code> vs <code>nn.ModuleDict</code>?</p>
+<p><code>Sequential</code>: ordered container with its own <code>forward</code> that chains modules. <code>ModuleList</code>: registered list; no forward &mdash; you iterate manually (e.g., transformer layers with skip connections). <code>ModuleDict</code>: registered dict keyed by name (multi-head models, task-specific heads).</p></div>
+
+<div class="q"><p class="qq">Parameters vs buffers?</p>
+<p><code>nn.Parameter</code>: learnable tensor (requires grad), returned by <code>parameters()</code>, updated by optimizer. Buffers (<code>self.register_buffer("running_mean", t, persistent=True)</code>): non-learnable state saved in <code>state_dict</code> and moved with <code>.to()</code> &mdash; e.g., BatchNorm running stats, positional encodings, masks. <code>persistent=False</code> excludes it from state_dict.</p></div>
+
+<div class="q"><p class="qq">What does <code>model.train()</code> vs <code>model.eval()</code> change?</p>
+<p>Sets the <code>training</code> flag recursively. Affects layers like <b>Dropout</b> (active in train, identity in eval) and <b>BatchNorm</b> (batch statistics + update running stats in train; running stats in eval). Forgetting <code>eval()</code> at inference gives noisy, batch-dependent predictions.</p></div>
+
+<div class="q"><p class="qq">What is a <code>state_dict</code>? How do you save and load models?</p>
+<p>An <code>OrderedDict</code> mapping parameter/buffer names to tensors. Recommended:</p>
+<pre>torch.save(model.state_dict(), "model.pt")
+model = MLP(784, 256, 10)
+model.load_state_dict(torch.load("model.pt", map_location="cpu", weights_only=True))
+model.eval()</pre>
+<p>Saving the whole model (<code>torch.save(model)</code>) pickles the class path &mdash; brittle when code moves. <code>weights_only=True</code> (default in 2.6+) prevents arbitrary code execution from untrusted pickles. Safetensors format is a safe, fast alternative. <code>load_state_dict(strict=False)</code> tolerates missing/unexpected keys (returns them).</p></div>
+
+<div class="q"><p class="qq">How are weights initialized? How do you customize initialization?</p>
+<p>Layers have defaults (e.g., <code>nn.Linear</code> uses Kaiming-uniform with a=&radic;5). Custom:</p>
+<pre>def init_weights(m):
+    if isinstance(m, nn.Linear):
+        nn.init.kaiming_normal_(m.weight, nonlinearity="relu")
+        nn.init.zeros_(m.bias)
+model.apply(init_weights)</pre>
+<p>Xavier/Glorot for tanh/sigmoid, Kaiming/He for ReLU, orthogonal for RNNs, small normal (std 0.02) for transformers.</p></div>
+
+<div class="q"><p class="qq">How do you count parameters and inspect a model?</p>
+<pre>total = sum(p.numel() for p in model.parameters())
+trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+for name, module in model.named_modules(): ...
+print(model)   # or torchinfo.summary(model, input_size=(1, 3, 224, 224))</pre></div>
+
+<div class="q"><p class="qq">What is the difference between <code>nn.ReLU</code> and <code>F.relu</code>?</p>
+<p><code>torch.nn.functional</code> provides stateless functions; <code>nn</code> classes wrap them as modules. For parameterless ops either works; modules show up in <code>print(model)</code>, can be put in <code>Sequential</code>, and are visible to hooks/quantization. Layers with parameters (Linear, Conv) should be modules. Note <code>F.dropout</code> needs <code>training=self.training</code>.</p></div>
+
+<div class="q"><p class="qq">What are common layers in <code>torch.nn</code>?</p>
+<p>Linear, Bilinear; Conv1d/2d/3d, ConvTranspose2d; MaxPool/AvgPool/AdaptiveAvgPool; BatchNorm, LayerNorm, GroupNorm, InstanceNorm, RMSNorm; Dropout; Embedding, EmbeddingBag; RNN, LSTM, GRU; MultiheadAttention, TransformerEncoderLayer/DecoderLayer, Transformer; activations (ReLU, GELU, SiLU, LeakyReLU, Softmax); Flatten, Unflatten, Identity, PixelShuffle, Upsample.</p></div>
+
+<div class="q"><p class="qq">Which activation functions does PyTorch provide and when would you use each?</p>
+<table><tr><th>Activation</th><th>Formula / property</th><th>Typical use</th></tr>
+<tr><td><code>nn.ReLU</code></td><td>max(0, x); cheap; risk of "dying ReLU"</td><td>Default for CNNs / MLPs</td></tr>
+<tr><td><code>nn.LeakyReLU</code>, <code>nn.PReLU</code></td><td>Small slope for x &lt; 0 (learnable in PReLU)</td><td>Avoid dead units, GANs</td></tr>
+<tr><td><code>nn.GELU</code></td><td>x&middot;&Phi;(x), smooth</td><td>Transformers (BERT, GPT, ViT)</td></tr>
+<tr><td><code>nn.SiLU</code> (Swish)</td><td>x&middot;&sigma;(x)</td><td>EfficientNet, LLaMA (SwiGLU)</td></tr>
+<tr><td><code>nn.Sigmoid</code></td><td>(0, 1); saturates &rarr; vanishing gradients</td><td>Binary / multi-label outputs, gates</td></tr>
+<tr><td><code>nn.Tanh</code></td><td>(-1, 1), zero-centered</td><td>RNN states, GAN generator output</td></tr>
+<tr><td><code>nn.Softmax(dim)</code></td><td>Normalizes to a probability distribution</td><td>Inference outputs, attention (not before CE loss)</td></tr></table></div>
+
+<div class="q"><p class="qq">Compare BatchNorm, LayerNorm, GroupNorm, InstanceNorm and RMSNorm.</p>
+<ul><li><b>BatchNorm</b>: normalizes each channel across the batch (and spatial dims). Needs reasonably large batches, and behaves differently in train and eval (running stats). Standard in CNNs.</li>
+<li><b>LayerNorm</b>: normalizes across the features of each sample. Independent of batch size and identical in train and eval. Standard in transformers and RNNs.</li>
+<li><b>GroupNorm</b>: normalizes groups of channels per sample. Good for small batches, e.g., detection and segmentation.</li>
+<li><b>InstanceNorm</b>: normalizes per sample per channel. Used for style transfer.</li>
+<li><b>RMSNorm</b>: LayerNorm without mean-centering, scaling by root-mean-square only. Cheaper; used in LLaMA and other modern LLMs.</li></ul></div>
+
+<div class="q"><p class="qq">Explain the parameters of <code>nn.Conv2d</code>.</p>
+<p><code>nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True, padding_mode="zeros")</code></p>
+<ul><li>Weight shape: <code>(out, in/groups, kH, kW)</code>. Input shape: <code>(N, C, H, W)</code>.</li>
+<li><code>padding="same"</code> keeps the spatial size when <code>stride=1</code>.</li>
+<li><code>stride=2</code> downsamples.</li>
+<li><code>dilation</code> enlarges the receptive field without adding parameters.</li>
+<li><code>groups=in_channels</code> gives a <b>depthwise</b> convolution; follow it with a 1&times;1 (pointwise) conv for a depthwise-separable convolution (MobileNet).</li>
+<li>A 1&times;1 conv mixes channels and changes channel count cheaply.</li></ul>
+<p>Parameter count: <code>out &times; (in/groups) &times; kH &times; kW (+ out for bias)</code>.</p></div>
+
+<div class="q"><p class="qq">How do you replace or modify layers in an existing model (model surgery)?</p>
+<pre>model.fc = nn.Linear(model.fc.in_features, 5)                 # replace head
+model.conv1 = nn.Conv2d(1, 64, 7, 2, 3, bias=False)          # grayscale input
+for name, m in model.named_children():                       # swap all ReLU -&gt; SiLU
+    if isinstance(m, nn.ReLU): setattr(model, name, nn.SiLU())
+backbone = nn.Sequential(*list(model.children())[:-1])     # drop the classifier</pre>
+<p>To swap modules deep in the model, recurse with <code>named_modules()</code> and <code>setattr</code> on the parent module. For multi-layer feature extraction, use <code>torchvision.models.feature_extraction.create_feature_extractor</code>. Create the optimizer <b>after</b> the surgery, so it holds the new parameters.</p></div>
+
+<div class="q"><p class="qq">What are weight tying and parametrizations (weight norm, spectral norm)?</p>
+<p><b>Weight tying</b> shares one parameter between layers, e.g., a language model's input embedding and its output projection: <code>self.lm_head.weight = self.embed.weight</code>. This saves memory and often improves quality. <b>Parametrizations</b> (<code>torch.nn.utils.parametrize</code>) compute a weight from underlying parameters on every access: <code>parametrizations.weight_norm</code>, <code>spectral_norm</code> (constrains the Lipschitz constant, used in GAN discriminators) and <code>orthogonal</code>. You can register custom ones, e.g., to force symmetric matrices.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p4">18. Loss Functions, Optimizers &amp; LR Schedulers</h2>
+
+<div class="q"><p class="qq">What inputs does <code>nn.CrossEntropyLoss</code> expect?</p>
+<p>Raw, unnormalized <b>logits</b> of shape <code>(N, C)</code> (or <code>(N, C, d1, ...)</code> for segmentation) and targets as class indices <code>(N,)</code> of dtype <code>long</code> (or class probabilities of shape <code>(N, C)</code>). It internally combines <code>LogSoftmax</code> + <code>NLLLoss</code> for numerical stability &mdash; do <b>not</b> apply softmax before it. Options: <code>weight</code> (class imbalance), <code>ignore_index</code> (padding, default -100), <code>label_smoothing</code>, <code>reduction</code>.</p></div>
+
+<div class="q"><p class="qq"><code>BCELoss</code> vs <code>BCEWithLogitsLoss</code>?</p>
+<p><code>BCELoss</code> expects probabilities (after sigmoid); numerically unstable. <code>BCEWithLogitsLoss</code> takes logits and fuses sigmoid + BCE using the log-sum-exp trick &mdash; preferred. Supports <code>pos_weight</code> for imbalance. Used for binary and multi-label classification (targets float, same shape as logits).</p></div>
+
+<div class="q"><p class="qq">List common loss functions and their use cases.</p>
+<table><tr><th>Loss</th><th>Use</th></tr>
+<tr><td><code>MSELoss</code> (L2)</td><td>Regression; sensitive to outliers</td></tr>
+<tr><td><code>L1Loss</code>, <code>SmoothL1Loss</code>, <code>HuberLoss</code></td><td>Robust regression, bounding boxes</td></tr>
+<tr><td><code>CrossEntropyLoss</code>, <code>NLLLoss</code></td><td>Multi-class classification, LM</td></tr>
+<tr><td><code>BCEWithLogitsLoss</code></td><td>Binary / multi-label</td></tr>
+<tr><td><code>KLDivLoss</code></td><td>Distillation, VAEs (input log-probs)</td></tr>
+<tr><td><code>CTCLoss</code></td><td>Speech/OCR unaligned sequences</td></tr>
+<tr><td><code>MarginRankingLoss</code>, <code>TripletMarginLoss</code>, <code>CosineEmbeddingLoss</code></td><td>Metric learning, ranking</td></tr>
+<tr><td>Focal / Dice (custom or torchvision.ops)</td><td>Imbalanced detection / segmentation</td></tr></table></div>
+
+<div class="q"><p class="qq">How do you write a custom loss?</p>
+<pre>class FocalLoss(nn.Module):
+    def __init__(self, gamma=2.0, alpha=0.25):
+        super().__init__(); self.gamma, self.alpha = gamma, alpha
+    def forward(self, logits, targets):
+        bce = F.binary_cross_entropy_with_logits(logits, targets, reduction="none")
+        p_t = torch.exp(-bce)
+        return (self.alpha * (1 - p_t) ** self.gamma * bce).mean()</pre>
+<p>Any differentiable tensor ops work; autograd handles gradients.</p></div>
+
+<div class="q"><p class="qq">Compare SGD, Momentum, Adam and AdamW.</p>
+<ul><li><b>SGD</b>: <code>w -= lr * g</code>. Simple; with momentum (0.9) and Nesterov often generalizes best for CNNs.</li>
+<li><b>Momentum</b>: accumulates velocity to dampen oscillations and speed through ravines.</li>
+<li><b>RMSprop / Adagrad</b>: per-parameter adaptive learning rates.</li>
+<li><b>Adam</b>: momentum (1st moment) + RMSprop (2nd moment) with bias correction; fast convergence, less tuning.</li>
+<li><b>AdamW</b>: Adam with <i>decoupled</i> weight decay (applied directly to weights instead of via gradient), which regularizes correctly; standard for transformers.</li></ul>
+<p>Others: LAMB/LARS (large batch), Adafactor (memory-efficient), Lion, Sophia; 8-bit Adam (bitsandbytes).</p></div>
+
+<div class="q"><p class="qq">How do you use parameter groups (different LR / weight decay per layer)?</p>
+<pre>decay, no_decay = [], []
+for n, p in model.named_parameters():
+    (no_decay if p.ndim &lt; 2 or "norm" in n else decay).append(p)
+opt = torch.optim.AdamW([
+    {"params": decay, "weight_decay": 0.01},
+    {"params": no_decay, "weight_decay": 0.0}], lr=3e-4)
+# fine-tuning: lower LR for backbone, higher for new head
+opt = torch.optim.SGD([{"params": model.backbone.parameters(), "lr": 1e-4},
+                       {"params": model.head.parameters()}], lr=1e-2, momentum=0.9)</pre></div>
+
+<div class="q"><p class="qq">What learning rate schedulers exist and how are they used?</p>
+<p><code>StepLR</code>, <code>MultiStepLR</code>, <code>ExponentialLR</code>, <code>CosineAnnealingLR</code>, <code>CosineAnnealingWarmRestarts</code>, <code>OneCycleLR</code>, <code>LinearLR</code> (warmup), <code>SequentialLR</code> (chain warmup + cosine), <code>ReduceLROnPlateau</code> (step with a metric), <code>LambdaLR</code> (custom). Call <code>scheduler.step()</code> <b>after</b> <code>optimizer.step()</code> &mdash; per epoch or per iteration depending on the scheduler (OneCycle/warmup are per iteration). Warmup stabilizes early training for transformers/large batches.</p></div>
+
+<div class="q"><p class="qq">What is gradient clipping and when do you use it?</p>
+<p><code>torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)</code> rescales gradients if their global norm exceeds a threshold; <code>clip_grad_value_</code> clips each element. Prevents exploding gradients in RNNs/transformers. With AMP, call <code>scaler.unscale_(optimizer)</code> before clipping.</p></div>
+
+<div class="q"><p class="qq">How do you implement L1/L2 regularization?</p>
+<p>L2: <code>weight_decay</code> in the optimizer (prefer AdamW for adaptive optimizers). L1: add manually: <code>loss = loss + lam * sum(p.abs().sum() for p in model.parameters())</code>. Other regularizers: dropout, data augmentation, label smoothing, early stopping, stochastic depth, mixup/cutmix.</p></div>
+
+<div class="q"><p class="qq">How do you choose a good learning rate?</p>
+<p>Start from known defaults: AdamW 1e-3 to 3e-4 for training from scratch, 1e-5 to 5e-5 for fine-tuning transformers; SGD 0.1 with momentum for ResNets at batch 256. Run an <b>LR range test</b>: increase the LR exponentially over a few hundred steps, plot loss against LR, and pick a value somewhat below where the loss falls fastest, before it diverges. Combine it with warmup and a decay schedule (cosine or one-cycle). Tune the LR first; it is the most important hyperparameter.</p></div>
+
+<div class="q"><p class="qq">What are EMA of weights and Stochastic Weight Averaging (SWA)?</p>
+<p>Both average model weights to reach flatter minima that generalize better. <b>EMA</b> keeps a shadow copy updated each step (<code>ema = decay&middot;ema + (1-decay)&middot;w</code>, e.g., decay 0.999) and is used for evaluation; it is common in diffusion models, YOLO and semi-supervised learning. <b>SWA</b> averages weights from several points late in training, typically with a constant or cyclic LR.</p>
+<pre>from torch.optim.swa_utils import AveragedModel, get_ema_multi_avg_fn, update_bn
+ema_model = AveragedModel(model, multi_avg_fn=get_ema_multi_avg_fn(0.999))
+ema_model.update_parameters(model)     # after each optimizer.step()
+update_bn(train_loader, ema_model)     # recompute BatchNorm stats for SWA</pre></div>
+
+<div class="q"><p class="qq">How do you combine multiple losses (multi-task learning)?</p>
+<p>Use a weighted sum, <code>loss = w1*l1 + w2*l2</code>, and call a single <code>backward()</code>. Tune the weights so no task dominates; check each task's gradient magnitude. Adaptive alternatives: uncertainty weighting (learnable log-variances per task), GradNorm, and PCGrad for conflicting gradients. Log each loss separately.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p5">19. Datasets, DataLoaders &amp; Transforms</h2>
+
+<div class="q"><p class="qq">Explain <code>Dataset</code> and <code>DataLoader</code>. Write a custom Dataset.</p>
+<pre>class ImageCsvDataset(Dataset):
+    def __init__(self, df, root, transform=None):
+        self.df, self.root, self.transform = df.reset_index(drop=True), root, transform
+    def __len__(self):
+        return len(self.df)
+    def __getitem__(self, idx):
+        row = self.df.iloc[idx]
+        img = Image.open(os.path.join(self.root, row.path)).convert("RGB")
+        if self.transform: img = self.transform(img)
+        return img, torch.tensor(row.label, dtype=torch.long)
+
+loader = DataLoader(ds, batch_size=64, shuffle=True, num_workers=4,
+                    pin_memory=True, drop_last=True, persistent_workers=True)</pre>
+<p><b>Map-style</b> Dataset implements <code>__len__</code> + <code>__getitem__</code>. <b>Iterable-style</b> (<code>IterableDataset</code>) implements <code>__iter__</code> for streams/huge data. DataLoader handles batching, shuffling, sampling, multiprocess loading, collation and pinning. Load lazily in <code>__getitem__</code> rather than loading everything in <code>__init__</code>.</p></div>
+
+<div class="q"><p class="qq">What do <code>num_workers</code>, <code>pin_memory</code>, <code>prefetch_factor</code> and <code>persistent_workers</code> do?</p>
+<ul><li><code>num_workers</code>: number of subprocesses loading data in parallel (0 = main process). Start around number of CPU cores / GPUs; tune empirically.</li>
+<li><code>pin_memory=True</code>: places batches in page-locked memory &rarr; faster host-to-GPU copies and enables <code>non_blocking=True</code>.</li>
+<li><code>prefetch_factor</code>: batches pre-loaded per worker (default 2).</li>
+<li><code>persistent_workers=True</code>: keep workers alive between epochs (avoids startup cost).</li></ul>
+<p>On Windows/macOS (spawn), guard the entry point with <code>if __name__ == "__main__":</code> and ensure the dataset is picklable.</p></div>
+
+<div class="q"><p class="qq">What is <code>collate_fn</code> and when do you need a custom one?</p>
+<p>It merges a list of samples into a batch (default stacks tensors). Custom is needed for variable-length sequences (padding), object detection targets (lists of boxes), or skipping corrupted samples.</p>
+<pre>def collate(batch):
+    seqs, labels = zip(*batch)
+    lengths = torch.tensor([len(s) for s in seqs])
+    padded = nn.utils.rnn.pad_sequence(seqs, batch_first=True, padding_value=0)
+    return padded, lengths, torch.tensor(labels)</pre></div>
+
+<div class="q"><p class="qq">What samplers are available? How do you handle class imbalance?</p>
+<p><code>SequentialSampler</code>, <code>RandomSampler</code>, <code>SubsetRandomSampler</code>, <code>WeightedRandomSampler</code>, <code>BatchSampler</code>, <code>DistributedSampler</code>. Imbalance: <code>WeightedRandomSampler(weights=1/class_freq[labels], num_samples=len(ds), replacement=True)</code> (oversampling), class weights in the loss, focal loss, or augmentation of minority classes. <code>sampler</code> and <code>shuffle=True</code> are mutually exclusive.</p></div>
+
+<div class="q"><p class="qq">How do you use torchvision transforms and data augmentation?</p>
+<pre>from torchvision.transforms import v2
+train_tf = v2.Compose([
+    v2.RandomResizedCrop(224), v2.RandomHorizontalFlip(),
+    v2.ColorJitter(0.2, 0.2, 0.2), v2.ToImage(), v2.ToDtype(torch.float32, scale=True),
+    v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
+val_tf = v2.Compose([v2.Resize(256), v2.CenterCrop(224), v2.ToImage(),
+    v2.ToDtype(torch.float32, scale=True), v2.Normalize(...)])</pre>
+<p>Augment only training data. <code>transforms.v2</code> jointly transforms images, boxes, masks and keypoints. Also: RandAugment, AutoAugment, MixUp/CutMix (<code>v2.MixUp</code>), Albumentations, GPU augmentation (Kornia).</p></div>
+
+<div class="q"><p class="qq">How do you split a dataset into train/val?</p>
+<p><code>torch.utils.data.random_split(ds, [0.8, 0.2], generator=torch.Generator().manual_seed(42))</code> or <code>Subset(ds, indices)</code> with stratified indices from scikit-learn. Use separate dataset instances if train/val need different transforms.</p></div>
+
+<div class="q"><p class="qq">How do you handle datasets that don't fit in memory?</p>
+<p>Lazy loading in <code>__getitem__</code>; memory-mapped arrays (<code>np.memmap</code>), HDF5/LMDB/Zarr; <code>IterableDataset</code> streaming from disk/cloud (WebDataset tar shards, Hugging Face <code>datasets</code> streaming, Mosaic StreamingDataset); shard across workers via <code>get_worker_info()</code>.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p6">20. Training Loop, Evaluation &amp; Checkpointing</h2>
+
+<div class="q"><p class="qq">Define epoch, batch, batch size, iteration and step.</p>
+<p>A <b>batch</b> is a subset of samples processed together in one forward/backward pass. <b>Batch size</b> is the number of samples in that batch. An <b>iteration</b> or <b>step</b> is one parameter update; with gradient accumulation, one step covers several micro-batches. An <b>epoch</b> is one full pass over the training set. Iterations per epoch = <code>ceil(N / batch_size)</code>, i.e., <code>len(loader)</code>. Example: 50,000 images with batch size 100 gives 500 iterations per epoch.</p></div>
+
+<div class="q"><p class="qq">What are the five essential steps of training in PyTorch?</p>
+<ol><li><b>Forward pass</b>: <code>pred = model(x)</code>.</li>
+<li><b>Compute the loss</b>: <code>loss = criterion(pred, y)</code>.</li>
+<li><b>Zero the gradients</b>: <code>optimizer.zero_grad()</code>.</li>
+<li><b>Backward pass</b>: <code>loss.backward()</code> computes gradients.</li>
+<li><b>Update the parameters</b>: <code>optimizer.step()</code>.</li></ol>
+<p>Everything else is built around these steps: device moves, AMP, clipping, scheduling, logging.</p></div>
+
+<div class="q"><p class="qq">Write a standard PyTorch training and validation loop.</p>
+<pre>def train_one_epoch(model, loader, criterion, optimizer, scheduler, device):
+    model.train()
+    total, correct, running = 0, 0, 0.0
+    for x, y in loader:
+        x, y = x.to(device, non_blocking=True), y.to(device, non_blocking=True)
+        optimizer.zero_grad(set_to_none=True)   # 1. reset grads
+        logits = model(x)                       # 2. forward
+        loss = criterion(logits, y)             # 3. loss
+        loss.backward()                         # 4. backward
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        optimizer.step()                        # 5. update
+        scheduler.step()                        # per-iteration scheduler
+        running += loss.item() * x.size(0)
+        correct += (logits.argmax(1) == y).sum().item(); total += x.size(0)
+    return running / total, correct / total
+
+@torch.no_grad()
+def evaluate(model, loader, criterion, device):
+    model.eval()
+    total, correct, running = 0, 0, 0.0
+    for x, y in loader:
+        x, y = x.to(device), y.to(device)
+        logits = model(x)
+        running += criterion(logits, y).item() * x.size(0)
+        correct += (logits.argmax(1) == y).sum().item(); total += x.size(0)
+    return running / total, correct / total</pre></div>
+
+<div class="q"><p class="qq">Why use <code>loss.item()</code> when logging?</p>
+<p><code>.item()</code> converts a 1-element tensor to a Python number, detaching it. Accumulating <code>total_loss += loss</code> keeps the entire graph of every iteration alive &rarr; memory leak. Note <code>.item()</code> forces a GPU sync; for max speed accumulate detached tensors and sync occasionally.</p></div>
+
+<div class="q"><p class="qq">How do you implement gradient accumulation?</p>
+<pre>accum = 4
+for i, (x, y) in enumerate(loader):
+    loss = criterion(model(x), y) / accum     # scale so gradients average
+    loss.backward()
+    if (i + 1) % accum == 0:
+        optimizer.step(); optimizer.zero_grad()</pre>
+<p>Simulates a batch size of <code>accum &times; batch_size</code> when GPU memory is limited. BatchNorm still sees the small micro-batch. In DDP, use <code>model.no_sync()</code> on non-update steps to skip redundant all-reduce.</p></div>
+
+<div class="q"><p class="qq">How do you save and resume a full training checkpoint?</p>
+<pre>torch.save({"epoch": epoch, "model": model.state_dict(),
+            "optimizer": optimizer.state_dict(), "scheduler": scheduler.state_dict(),
+            "scaler": scaler.state_dict(), "best_metric": best,
+            "rng": torch.get_rng_state()}, "ckpt.pt")
+
+ckpt = torch.load("ckpt.pt", map_location=device)
+model.load_state_dict(ckpt["model"]); optimizer.load_state_dict(ckpt["optimizer"])
+scheduler.load_state_dict(ckpt["scheduler"]); start_epoch = ckpt["epoch"] + 1</pre>
+<p>Optimizer state (Adam moments) is needed for proper resumption. For DDP save from rank 0 only (<code>model.module.state_dict()</code>); for FSDP use <code>torch.distributed.checkpoint</code>.</p></div>
+
+<div class="q"><p class="qq">How do you implement early stopping?</p>
+<p>Track the best validation metric; save a checkpoint when it improves; increment a counter otherwise; stop when the counter exceeds <code>patience</code>. Restore the best weights at the end. Libraries like Lightning provide <code>EarlyStopping</code> callbacks.</p></div>
+
+<div class="q"><p class="qq">How do you track experiments and metrics?</p>
+<p>TensorBoard (<code>torch.utils.tensorboard.SummaryWriter</code>), Weights &amp; Biases, MLflow, Neptune; metrics via <code>torchmetrics</code> (handles distributed accumulation correctly). Log losses, LR, gradient norms, metrics, sample predictions, hyperparameters, git commit and seeds.</p></div>
+
+<div class="q"><p class="qq">What is the order of <code>optimizer.step()</code>, <code>scheduler.step()</code> and <code>zero_grad()</code>?</p>
+<p><code>zero_grad()</code> &rarr; forward &rarr; loss &rarr; <code>backward()</code> &rarr; (clip) &rarr; <code>optimizer.step()</code> &rarr; <code>scheduler.step()</code>. <code>zero_grad</code> can also come right after <code>step</code>; it just must happen before the next backward. Calling the scheduler before the optimizer skips the first LR value (PyTorch warns).</p></div>
+
+<div class="q"><p class="qq">How do you compute evaluation metrics correctly?</p>
+<p>Accumulate predictions or counts over the <b>whole</b> validation set, then compute the metric. Averaging per-batch F1 or AUC is wrong, because those metrics aren't decomposable and the last batch may be smaller. <code>torchmetrics</code> handles this, including syncing across GPUs:</p>
+<pre>f1 = torchmetrics.F1Score(task="multiclass", num_classes=10, average="macro").to(device)
+for x, y in val_loader: f1.update(model(x).argmax(1), y)
+print(f1.compute()); f1.reset()</pre></div>
+
+<div class="q"><p class="qq">How do you tune hyperparameters for a PyTorch model?</p>
+<p>Tune the learning rate first, then batch size, weight decay, dropout, depth/width and augmentation strength. Use random search or Bayesian optimization (Optuna, Ray Tune) rather than grid search, with early pruning of bad trials (median or Hyperband pruners). Search the LR on a log scale and evaluate on the validation set only. Fix seeds and log everything; scale up only the best configurations.</p>
+<pre>def objective(trial):
+    lr = trial.suggest_float("lr", 1e-5, 1e-2, log=True)
+    wd = trial.suggest_float("wd", 1e-6, 1e-1, log=True)
+    return train_and_eval(lr, wd, trial)     # call trial.report + trial.should_prune inside
+optuna.create_study(direction="maximize", pruner=optuna.pruners.MedianPruner()).optimize(objective, 50)</pre></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p7">21. GPU, Mixed Precision &amp; Performance</h2>
+
+<div class="q"><p class="qq">What is Automatic Mixed Precision (AMP) and how do you use it?</p>
+<p>AMP runs suitable ops (matmul, conv) in float16/bfloat16 for speed (Tensor Cores) and memory savings, while keeping precision-sensitive ops (reductions, softmax, losses) in float32. With fp16, a <code>GradScaler</code> multiplies the loss to avoid gradient underflow, then unscales before the update and skips steps with inf/NaN.</p>
+<pre>scaler = torch.amp.GradScaler("cuda")
+for x, y in loader:
+    optimizer.zero_grad()
+    with torch.autocast(device_type="cuda", dtype=torch.float16):
+        loss = criterion(model(x), y)
+    scaler.scale(loss).backward()
+    scaler.unscale_(optimizer); clip_grad_norm_(model.parameters(), 1.0)
+    scaler.step(optimizer); scaler.update()</pre>
+<p>With <code>bfloat16</code> (Ampere+), no scaler is needed thanks to its wide exponent range.</p></div>
+
+<div class="q"><p class="qq">How do you diagnose and fix CUDA out-of-memory (OOM) errors?</p>
+<ul><li>Reduce batch size; use gradient accumulation.</li>
+<li>Mixed precision (bf16/fp16); gradient checkpointing.</li>
+<li>Avoid keeping graphs alive (<code>loss.item()</code>, <code>detach()</code> for logged tensors); use <code>no_grad</code> in eval.</li>
+<li>Delete unused tensors, <code>torch.cuda.empty_cache()</code> (releases cached blocks to other processes; doesn't fix leaks).</li>
+<li>Use memory-efficient optimizers (8-bit Adam, Adafactor), FSDP/ZeRO sharding, CPU offload, LoRA for fine-tuning.</li>
+<li>Inspect with <code>torch.cuda.memory_summary()</code>, <code>max_memory_allocated()</code>, memory snapshots (<code>torch.cuda.memory._record_memory_history</code>).</li>
+<li>Set <code>PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True</code> to reduce fragmentation.</li></ul></div>
+
+<div class="q"><p class="qq">What are common ways to speed up PyTorch training?</p>
+<ul><li>Fix data loading bottlenecks: <code>num_workers</code>, <code>pin_memory</code>, faster decoding, pre-processed/cached data.</li>
+<li>AMP (bf16/fp16), TF32 (<code>torch.backends.cuda.matmul.allow_tf32 = True</code> or <code>torch.set_float32_matmul_precision("high")</code>).</li>
+<li><code>torch.compile(model)</code>; fused optimizers (<code>AdamW(fused=True)</code>); fused attention (<code>F.scaled_dot_product_attention</code> &rarr; FlashAttention).</li>
+<li><code>cudnn.benchmark = True</code> for fixed input sizes; channels_last memory format for CNNs.</li>
+<li>Avoid host-device syncs in the loop (<code>.item()</code>, <code>.cpu()</code>, printing, <code>nonzero</code>).</li>
+<li>Larger batches with LR scaling; multi-GPU DDP.</li>
+<li>CUDA Graphs for small, static workloads (<code>mode="reduce-overhead"</code>).</li></ul></div>
+
+<div class="q"><p class="qq">How do you profile PyTorch code?</p>
+<pre>from torch.profiler import profile, ProfilerActivity, schedule
+with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+             schedule=schedule(wait=1, warmup=1, active=3),
+             on_trace_ready=torch.profiler.tensorboard_trace_handler("./log"),
+             record_shapes=True, profile_memory=True) as prof:
+    for step, batch in enumerate(loader):
+        train_step(batch); prof.step()
+print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))</pre>
+<p>CUDA ops are asynchronous &mdash; when timing manually, call <code>torch.cuda.synchronize()</code> or use CUDA events. Also: <code>nvidia-smi</code>, Nsight Systems, GPU utilization to detect data-loading stalls.</p></div>
+
+<div class="q"><p class="qq">Why are CUDA operations asynchronous and what forces synchronization?</p>
+<p>Kernels are queued on a CUDA stream and the Python thread continues, overlapping CPU and GPU work. Synchronization happens on <code>.item()</code>, <code>.cpu()</code>, <code>.numpy()</code>, <code>print(tensor)</code>, <code>torch.cuda.synchronize()</code>, data-dependent shapes (<code>nonzero</code>, boolean masking), and non-pinned copies. Errors may be reported at a later line; set <code>CUDA_LAUNCH_BLOCKING=1</code> to debug.</p></div>
+
+<div class="q"><p class="qq">What is <code>channels_last</code> memory format?</p>
+<p>Stores NCHW tensors physically as NHWC. Convolutions on Tensor Cores (especially with AMP) run faster in this layout. Use <code>model.to(memory_format=torch.channels_last)</code> and <code>x.to(memory_format=torch.channels_last)</code>.</p></div>
+
+<div class="q"><p class="qq">How do you use multiple GPUs on a single machine? Why prefer DDP over DataParallel?</p>
+<p><code>nn.DataParallel</code>: single process, multi-thread; replicates the model every iteration, scatters inputs, gathers outputs on GPU 0 &mdash; GIL contention and imbalanced memory; legacy. <code>DistributedDataParallel</code>: one process per GPU, each with a model replica; gradients are all-reduced in buckets overlapped with backward. Faster, scales to multiple nodes, recommended even for a single node.</p></div>
+
+<div class="q"><p class="qq">What are CUDA streams and events?</p>
+<p>A <b>stream</b> is a queue of GPU operations that execute in order. Operations on different streams can overlap, e.g., copying the next batch while computing on the current one. PyTorch uses one default stream per device; <code>torch.cuda.Stream()</code> with <code>with torch.cuda.stream(s):</code> runs work on another stream, and you sync with <code>wait_stream</code> or <code>record_stream</code>. <b>Events</b> mark points in a stream for synchronization and accurate GPU timing:</p>
+<pre>start, end = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
+start.record(); y = model(x); end.record(); torch.cuda.synchronize()
+print(start.elapsed_time(end), "ms")</pre></div>
+
+<div class="q"><p class="qq">How do you estimate the GPU memory needed for training?</p>
+<p>With mixed-precision Adam, model state needs roughly 16 bytes per parameter:</p>
+<ul><li>fp32 master weights: 4 bytes</li>
+<li>Adam moments (m and v): 8 bytes</li>
+<li>Gradients and bf16 weights: about 4 bytes</li></ul>
+<p>A 7B model therefore needs about 112 GB before counting <b>activations</b>, which scale with batch size &times; sequence length &times; hidden size &times; layers, plus framework overhead. Inference needs roughly 2 bytes per parameter in bf16 (14 GB for 7B), or 0.5 bytes in 4-bit, plus the KV-cache. This explains why FSDP, checkpointing, LoRA and quantization exist.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p8">22. Distributed &amp; Large-Scale Training</h2>
+
+<div class="q"><p class="qq">Explain how DistributedDataParallel (DDP) works and how to set it up.</p>
+<pre>import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
+
+def main():
+    dist.init_process_group("nccl")               # env vars set by torchrun
+    local_rank = int(os.environ["LOCAL_RANK"]); torch.cuda.set_device(local_rank)
+    model = Net().cuda(local_rank)
+    model = DDP(model, device_ids=[local_rank])
+    sampler = DistributedSampler(train_ds, shuffle=True)
+    loader = DataLoader(train_ds, batch_size=64, sampler=sampler, num_workers=4)
+    for epoch in range(E):
+        sampler.set_epoch(epoch)                  # different shuffle each epoch
+        for x, y in loader: ...                   # normal training step
+    if dist.get_rank() == 0: torch.save(model.module.state_dict(), "m.pt")
+    dist.destroy_process_group()
+
+# torchrun --nproc_per_node=4 --nnodes=1 train.py</pre>
+<p>Each process computes forward/backward on its data shard; during backward, gradient buckets are averaged with <b>all-reduce</b> (ring/tree via NCCL), so all replicas apply identical updates. Effective batch = per-GPU batch &times; world size (scale LR accordingly). Use <code>SyncBatchNorm</code> if per-GPU batches are small.</p></div>
+
+<div class="q"><p class="qq">Define world size, rank, local rank, backend.</p>
+<p><b>World size</b>: total number of processes. <b>Rank</b>: global process ID (0 is usually the "main" for logging/saving). <b>Local rank</b>: process ID within a node (maps to GPU index). <b>Backend</b>: communication library &mdash; NCCL (GPU, fastest), Gloo (CPU), MPI. <code>torchrun</code> sets <code>RANK</code>, <code>LOCAL_RANK</code>, <code>WORLD_SIZE</code>, <code>MASTER_ADDR</code>, <code>MASTER_PORT</code> and supports elastic/fault-tolerant training.</p></div>
+
+<div class="q"><p class="qq">What are collective communication operations?</p>
+<p><code>all_reduce</code> (sum/avg across ranks, result on all &mdash; gradient sync), <code>broadcast</code> (from one rank to all &mdash; initial weights), <code>all_gather</code> (collect tensors from all), <code>reduce_scatter</code> (reduce then shard &mdash; used by FSDP/ZeRO), <code>gather</code>, <code>scatter</code>, <code>barrier</code> (synchronize).</p></div>
+
+<div class="q"><p class="qq">What are data, tensor, pipeline and sequence parallelism?</p>
+<ul><li><b>Data parallelism</b>: replicate model, split data (DDP).</li>
+<li><b>Fully Sharded Data Parallel (FSDP / ZeRO-3)</b>: shard parameters, gradients and optimizer states across GPUs; all-gather parameters just in time for each layer's forward/backward. Enables models larger than one GPU's memory.</li>
+<li><b>Tensor parallelism</b>: split individual layers (matmuls) across GPUs (Megatron-LM); needs fast interconnect (NVLink).</li>
+<li><b>Pipeline parallelism</b>: split layers into stages on different GPUs; micro-batches fill the pipeline to reduce bubbles (GPipe, 1F1B).</li>
+<li><b>Sequence/context parallelism</b>: split long sequences across devices.</li>
+<li>3D parallelism combines data + tensor + pipeline for very large LLMs.</li></ul></div>
+
+<div class="q"><p class="qq">Explain ZeRO stages and FSDP.</p>
+<p>ZeRO (DeepSpeed) removes redundancy in data parallelism. <b>Stage 1</b>: shard optimizer states. <b>Stage 2</b>: + gradients. <b>Stage 3</b>: + parameters. Memory per GPU drops roughly linearly with GPU count at the cost of more communication. PyTorch's native equivalent is FSDP (<code>FullyShardedDataParallel</code>, and FSDP2 via <code>fully_shard</code>), with options for mixed precision, CPU offload, activation checkpointing and auto-wrap policies (wrap each transformer block).</p></div>
+
+<div class="q"><p class="qq">What tools simplify distributed training?</p>
+<p>PyTorch Lightning / Fabric, Hugging Face Accelerate &amp; Trainer, DeepSpeed, torchtitan, Megatron-LM, Ray Train, Horovod. They abstract launching, DDP/FSDP wrapping, AMP, checkpointing and logging.</p></div>
+
+<div class="q"><p class="qq">How do you scale the learning rate with batch size?</p>
+<p>Linear scaling rule: multiply LR by <code>k</code> when batch size grows by <code>k</code> (SGD), with warmup to avoid early instability. For Adam, square-root scaling is often used. Very large batches may need LARS/LAMB.</p></div>
+
+<div class="q"><p class="qq">What are DTensor and DeviceMesh?</p>
+<p><code>DeviceMesh</code> describes a multi-dimensional layout of devices, e.g., <code>init_device_mesh("cuda", (2, 4), mesh_dim_names=("dp", "tp"))</code> for 2-way data parallelism &times; 4-way tensor parallelism. <code>DTensor</code> is a tensor sharded or replicated across a mesh according to placements (<code>Shard(dim)</code>, <code>Replicate()</code>, <code>Partial()</code>), and PyTorch inserts the required collectives automatically. They underpin FSDP2 (<code>fully_shard</code>), the tensor-parallel API (<code>parallelize_module</code> with <code>ColwiseParallel</code>/<code>RowwiseParallel</code>) and 2D/3D parallelism in torchtitan.</p></div>
+
+<div class="q"><p class="qq">How do you initialize a model too large for CPU or GPU memory?</p>
+<p>Create it on the <b>meta device</b>, where tensors have shapes but no storage: <code>with torch.device("meta"): model = Big()</code>. Then shard it (FSDP) and materialize only the local shards with <code>model.to_empty(device="cuda")</code>, followed by initialization or checkpoint loading. Hugging Face's <code>device_map="auto"</code> / <code>low_cpu_mem_usage</code> use the same idea.</p></div>
+
+<div class="q"><p class="qq">Distributed training hangs or crashes. How do you debug it?</p>
+<ul><li>Hangs are usually caused by ranks executing <b>different collectives</b>: data-dependent branches, uneven numbers of batches (use <code>drop_last</code> or the <code>Join</code> context), or only rank 0 calling a collective, e.g., during evaluation.</li>
+<li>Set <code>NCCL_DEBUG=INFO</code>, <code>TORCH_DISTRIBUTED_DEBUG=DETAIL</code> and <code>TORCH_NCCL_ASYNC_ERROR_HANDLING=1</code>, and use a timeout in <code>init_process_group</code>. The flight recorder (<code>TORCH_NCCL_TRACE_BUFFER_SIZE</code>) dumps the last collectives on timeout.</li>
+<li>"Expected to have finished reduction" means some parameters received no gradient. Fix the model, or pass <code>find_unused_parameters=True</code> (slower).</li>
+<li>Check network interfaces (<code>NCCL_SOCKET_IFNAME</code>), firewall rules and <code>MASTER_ADDR/PORT</code>.</li></ul></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p9">23. Advanced: Custom Autograd, Hooks, torch.compile &amp; TorchScript</h2>
+
+<div class="q"><p class="qq">How do you write a custom autograd Function?</p>
+<pre>class ClampGrad(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, x, lo, hi):
+        ctx.save_for_backward(x); ctx.lo, ctx.hi = lo, hi
+        return x.clamp(lo, hi)
+    @staticmethod
+    def backward(ctx, grad_out):
+        (x,) = ctx.saved_tensors
+        mask = (x &gt;= ctx.lo) &amp; (x &lt;= ctx.hi)
+        return grad_out * mask, None, None    # one grad per forward input
+
+y = ClampGrad.apply(x, -1.0, 1.0)</pre>
+<p>Used for non-differentiable ops (straight-through estimators), memory-efficient custom gradients, or wrapping custom CUDA/Triton kernels. Verify with <code>torch.autograd.gradcheck</code> (double precision).</p></div>
+
+<div class="q"><p class="qq">What are hooks in PyTorch? Give use cases.</p>
+<ul><li><b>Tensor hooks</b>: <code>t.register_hook(lambda g: g * 0.5)</code> &mdash; inspect/modify gradients.</li>
+<li><b>Forward hooks</b>: <code>module.register_forward_hook(fn(module, inp, out))</code> &mdash; extract intermediate features/activations, feature maps for Grad-CAM, debugging NaNs.</li>
+<li><b>Forward pre-hooks</b>: modify inputs before forward.</li>
+<li><b>Full backward hooks</b>: <code>register_full_backward_hook</code> &mdash; inspect gradients w.r.t. module inputs/outputs.</li>
+<li>State-dict hooks for compatibility when loading old checkpoints.</li></ul>
+<p>They return a handle; call <code>handle.remove()</code> to avoid leaks.</p>
+<pre>feats = {}
+h = model.layer4.register_forward_hook(lambda m, i, o: feats.__setitem__("l4", o.detach()))</pre></div>
+
+<div class="q"><p class="qq">What is <code>torch.compile</code> and how does it work?</p>
+<p>Introduced in PyTorch 2.0: <code>model = torch.compile(model)</code> JIT-compiles the model for speed (often 1.3&ndash;2x). Pipeline:</p>
+<ul><li><b>TorchDynamo</b> captures Python bytecode into FX graphs safely, inserting <b>graph breaks</b> for unsupported Python code and falling back to eager.</li>
+<li><b>AOTAutograd</b> traces the backward graph ahead of time.</li>
+<li><b>PrimTorch</b> decomposes ~2000 ops into a smaller primitive set.</li>
+<li><b>TorchInductor</b> generates fused kernels (Triton on GPU, C++/OpenMP on CPU).</li></ul>
+<p>Modes: <code>"default"</code>, <code>"reduce-overhead"</code> (CUDA graphs), <code>"max-autotune"</code>. Use <code>dynamic=True</code> for varying shapes; <code>fullgraph=True</code> to error on graph breaks. First call is slow (compilation); recompiles on shape/dtype/guard changes. Debug with <code>TORCH_LOGS="graph_breaks,recompiles"</code>.</p></div>
+
+<div class="q"><p class="qq">What is TorchScript? Tracing vs scripting?</p>
+<p>TorchScript is an intermediate representation that serializes models for execution without Python (C++ <code>libtorch</code>, mobile). <b>Tracing</b> (<code>torch.jit.trace(model, example)</code>) records ops executed for one example input &mdash; data-dependent control flow is frozen (silent bugs). <b>Scripting</b> (<code>torch.jit.script</code>) compiles Python source, preserving control flow, but supports a subset of Python. TorchScript is now in maintenance mode; <code>torch.export</code> is the recommended path forward.</p></div>
+
+<div class="q"><p class="qq">What is <code>torch.export</code>?</p>
+<p>Produces a sound, whole-graph <code>ExportedProgram</code> (ATen-level FX graph) ahead of time, with no graph breaks allowed and explicit dynamic shape specifications (<code>Dim</code>). It is the foundation for AOTInductor (compiled .so for server deployment), ExecuTorch (mobile/edge) and the new ONNX exporter (<code>torch.onnx.export(..., dynamo=True)</code>).</p></div>
+
+<div class="q"><p class="qq">What is FX?</p>
+<p><code>torch.fx</code> is a toolkit for capturing and transforming programs as Python-level graphs (<code>symbolic_trace</code> &rarr; <code>GraphModule</code>). Used for operator fusion, quantization (FX graph mode), feature extraction (<code>torchvision.models.feature_extraction</code>), and custom compiler passes.</p></div>
+
+<div class="q"><p class="qq">How do you write custom CUDA/C++ extensions or Triton kernels?</p>
+<p>C++/CUDA: <code>torch.utils.cpp_extension</code> (<code>load_inline</code> or setuptools <code>CUDAExtension</code>), registering ops with <code>TORCH_LIBRARY</code> so they work with <code>torch.compile</code>. Triton: write Python-like GPU kernels with <code>@triton.jit</code>; wrap them with <code>torch.library.triton_op</code> / <code>custom_op</code>. Used for fused attention, custom activations, quantized matmuls.</p></div>
+
+<div class="q"><p class="qq">What is <code>torch.func</code> (functorch) and <code>vmap</code>?</p>
+<p>JAX-like composable function transforms. <code>vmap</code> auto-vectorizes a function over a batch dimension (no manual batching); <code>grad</code>/<code>jacrev</code>/<code>hessian</code> compute derivatives functionally; <code>functional_call(model, params, x)</code> runs a module with given parameters. Use cases: per-sample gradients (differential privacy), ensembling, meta-learning, Jacobians for physics-informed nets.</p></div>
+
+<div class="q"><p class="qq">How does PyTorch execute an operation internally (dispatcher, ATen)?</p>
+<p>A Python call such as <code>torch.add(a, b)</code> goes through C++ bindings into the <b>dispatcher</b>. The dispatcher picks a kernel based on the inputs' <b>dispatch keys</b>, processed in priority order:</p>
+<ul><li>Autograd: records <code>grad_fn</code></li>
+<li>Autocast: casts dtypes</li>
+<li>Functionalization and Python modes</li>
+<li>The backend: CPU, CUDA, MPS, Meta, sparse, quantized, etc.</li></ul>
+<p>The actual kernels live in <b>ATen</b>, the C++ tensor library. This layering is how one API supports many devices, how subclasses such as DTensor work, and how <code>torch.library</code> custom ops plug in.</p></div>
+
+<div class="q"><p class="qq">What are saved-tensor hooks and activation offloading?</p>
+<p><code>torch.autograd.graph.saved_tensors_hooks(pack, unpack)</code> intercepts tensors that autograd saves for backward. You can compress them, quantize them, or move them to CPU (<code>torch.autograd.graph.save_on_cpu(pin_memory=True)</code>) and bring them back during backward. This trades PCIe bandwidth for GPU memory and complements activation checkpointing.</p></div>
+
+<div class="q"><p class="qq">What is FlexAttention?</p>
+<p><code>torch.nn.attention.flex_attention</code> lets you express attention variants (causal, sliding window, ALiBi, document masking, soft-capping) as small Python <code>score_mod</code>/<code>mask_mod</code> functions. <code>torch.compile</code> then generates fused FlashAttention-style kernels, and block masks skip fully masked blocks. You get custom attention without writing CUDA.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p10">24. Model Export, Quantization, Pruning &amp; Deployment</h2>
+
+<div class="q"><p class="qq">How do you export a PyTorch model to ONNX?</p>
+<pre>model.eval()
+dummy = torch.randn(1, 3, 224, 224)
+torch.onnx.export(model, (dummy,), "model.onnx",
+                  input_names=["input"], output_names=["logits"],
+                  dynamic_axes={"input": {0: "batch"}, "logits": {0: "batch"}},
+                  opset_version=17)
+# verify
+sess = onnxruntime.InferenceSession("model.onnx")
+out = sess.run(None, {"input": dummy.numpy()})</pre>
+<p>ONNX is a framework-neutral format runnable by ONNX Runtime (CPU/GPU/DirectML), TensorRT, OpenVINO. Compare outputs with PyTorch (<code>np.testing.assert_allclose</code>). Newer: <code>torch.onnx.export(..., dynamo=True)</code> built on <code>torch.export</code>.</p></div>
+
+<div class="q"><p class="qq">What is quantization? Explain dynamic, static and quantization-aware training.</p>
+<p>Representing weights/activations in lower precision (int8, int4, fp8) to shrink models (~4x for int8) and speed up inference with small accuracy loss.</p>
+<ul><li><b>Dynamic (post-training)</b>: weights quantized ahead of time, activations quantized on the fly. Easy; great for LSTMs/Linear-heavy models on CPU. <code>torch.ao.quantization.quantize_dynamic(model, {nn.Linear}, dtype=torch.qint8)</code>.</li>
+<li><b>Static (post-training)</b>: weights and activations quantized; requires calibration data to compute activation ranges (observers); fuse Conv-BN-ReLU first. Best CPU speedups for CNNs.</li>
+<li><b>Quantization-aware training (QAT)</b>: inserts fake-quant ops during training/fine-tuning so the model learns to tolerate quantization noise; best accuracy.</li></ul>
+<p>Modern stack: <code>torchao</code> (int8/int4 weight-only, fp8, PT2E quantization), bitsandbytes/GPTQ/AWQ for LLMs.</p></div>
+
+<div class="q"><p class="qq">What is pruning?</p>
+<p>Removing weights (unstructured: individual weights by magnitude &mdash; sparse but needs special hardware to speed up) or whole channels/heads/layers (structured: real speedups). <code>torch.nn.utils.prune.l1_unstructured(module, "weight", amount=0.3)</code>, then <code>prune.remove</code> to make it permanent. Usually followed by fine-tuning; 2:4 semi-structured sparsity is accelerated on Ampere+ GPUs.</p></div>
+
+<div class="q"><p class="qq">What is knowledge distillation and how do you implement it in PyTorch?</p>
+<p>Train a small student to mimic a large teacher's softened outputs.</p>
+<pre>T = 4.0
+with torch.no_grad(): t_logits = teacher(x)
+s_logits = student(x)
+kd = F.kl_div(F.log_softmax(s_logits / T, -1), F.softmax(t_logits / T, -1),
+              reduction="batchmean") * T * T
+loss = alpha * kd + (1 - alpha) * F.cross_entropy(s_logits, y)</pre></div>
+
+<div class="q"><p class="qq">What are the options for deploying PyTorch models?</p>
+<ul><li><b>Python services</b>: FastAPI/Flask with eager or compiled model; Ray Serve; BentoML; LitServe.</li>
+<li><b>Model servers</b>: TorchServe (handlers, batching, metrics &mdash; now limited maintenance), NVIDIA Triton (multi-framework, dynamic batching, ONNX/TensorRT backends), KServe on Kubernetes, Azure ML / SageMaker endpoints.</li>
+<li><b>LLM servers</b>: vLLM (PagedAttention, continuous batching), TGI, SGLang, TensorRT-LLM.</li>
+<li><b>Compiled</b>: ONNX Runtime, TensorRT, OpenVINO, AOTInductor.</li>
+<li><b>Edge/mobile</b>: ExecuTorch (successor to PyTorch Mobile), Core ML, TFLite via conversion.</li></ul></div>
+
+<div class="q"><p class="qq">What should you consider for inference optimization?</p>
+<p><code>eval()</code> + <code>inference_mode()</code>; batch requests; half precision / int8; <code>torch.compile</code> or TensorRT; fuse layers (Conv+BN); warm up the model (first calls trigger cuDNN autotune/compilation); pin threads (<code>torch.set_num_threads</code>); avoid CPU&harr;GPU transfers per request; KV-cache for autoregressive models; monitor p50/p95/p99 latency and throughput.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p11">25. Common Architectures in PyTorch (CNN, RNN, Transformer)</h2>
+
+<div class="q"><p class="qq">Implement a simple CNN for image classification. How do you compute output sizes?</p>
+<pre>class SimpleCNN(nn.Module):
+    def __init__(self, num_classes=10):
+        super().__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(32, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU(), nn.MaxPool2d(2))
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Linear(64, num_classes)
+    def forward(self, x):                 # x: (N, 3, H, W)
+        x = self.pool(self.features(x))   # (N, 64, 1, 1)
+        return self.fc(torch.flatten(x, 1))</pre>
+<p>Output size: <code>floor((W + 2P - D&middot;(K-1) - 1) / S) + 1</code>. <code>AdaptiveAvgPool2d</code> makes the head independent of input resolution. Use <code>bias=False</code> on convs followed by BatchNorm.</p></div>
+
+<div class="q"><p class="qq">Implement a residual block.</p>
+<pre>class ResBlock(nn.Module):
+    def __init__(self, c_in, c_out, stride=1):
+        super().__init__()
+        self.conv1 = nn.Conv2d(c_in, c_out, 3, stride, 1, bias=False); self.bn1 = nn.BatchNorm2d(c_out)
+        self.conv2 = nn.Conv2d(c_out, c_out, 3, 1, 1, bias=False);     self.bn2 = nn.BatchNorm2d(c_out)
+        self.short = nn.Identity() if stride == 1 and c_in == c_out else nn.Sequential(
+            nn.Conv2d(c_in, c_out, 1, stride, bias=False), nn.BatchNorm2d(c_out))
+    def forward(self, x):
+        out = F.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        return F.relu(out + self.short(x))</pre>
+<p>Skip connections give gradients a direct path, enabling very deep networks.</p></div>
+
+<div class="q"><p class="qq">How do you use LSTMs in PyTorch? What shapes are involved?</p>
+<pre>lstm = nn.LSTM(input_size=128, hidden_size=256, num_layers=2,
+               batch_first=True, bidirectional=True, dropout=0.2)
+out, (h_n, c_n) = lstm(x)   # x: (N, L, 128)
+# out: (N, L, 2*256)   h_n, c_n: (num_layers*2, N, 256)</pre>
+<p>Default is <code>batch_first=False</code> (shape <code>(L, N, H)</code>). For variable-length sequences use <code>pack_padded_sequence(x, lengths, batch_first=True, enforce_sorted=False)</code> so padding isn't processed, then <code>pad_packed_sequence</code>. For classification use the final hidden state (concatenate both directions) or pooled outputs.</p></div>
+
+<div class="q"><p class="qq">Implement scaled dot-product self-attention / multi-head attention.</p>
+<pre>class MultiHeadAttention(nn.Module):
+    def __init__(self, d_model, n_heads, dropout=0.1):
+        super().__init__()
+        assert d_model % n_heads == 0
+        self.h, self.dk = n_heads, d_model // n_heads
+        self.qkv = nn.Linear(d_model, 3 * d_model)
+        self.out = nn.Linear(d_model, d_model)
+        self.drop = nn.Dropout(dropout)
+    def forward(self, x, mask=None):                    # x: (B, T, D)
+        B, T, D = x.shape
+        q, k, v = self.qkv(x).view(B, T, 3, self.h, self.dk).permute(2, 0, 3, 1, 4)
+        att = (q @ k.transpose(-2, -1)) / math.sqrt(self.dk)   # (B, h, T, T)
+        if mask is not None:
+            att = att.masked_fill(mask == 0, float("-inf"))
+        att = self.drop(att.softmax(-1))
+        y = (att @ v).transpose(1, 2).reshape(B, T, D)
+        return self.out(y)</pre>
+<p>In practice use <code>F.scaled_dot_product_attention(q, k, v, is_causal=True)</code>, which dispatches to FlashAttention / memory-efficient kernels. Causal mask: <code>torch.tril(torch.ones(T, T))</code>.</p></div>
+
+<div class="q"><p class="qq">Implement a transformer encoder block (pre-norm).</p>
+<pre>class Block(nn.Module):
+    def __init__(self, d, h, ff=4, p=0.1):
+        super().__init__()
+        self.ln1, self.ln2 = nn.LayerNorm(d), nn.LayerNorm(d)
+        self.attn = MultiHeadAttention(d, h, p)
+        self.mlp = nn.Sequential(nn.Linear(d, ff * d), nn.GELU(), nn.Linear(ff * d, d), nn.Dropout(p))
+    def forward(self, x, mask=None):
+        x = x + self.attn(self.ln1(x), mask)
+        return x + self.mlp(self.ln2(x))</pre>
+<p>Built-ins: <code>nn.TransformerEncoderLayer(d_model, nhead, batch_first=True, norm_first=True)</code>, <code>nn.MultiheadAttention</code> (note its <code>key_padding_mask</code> uses True = ignore).</p></div>
+
+<div class="q"><p class="qq">How do you implement positional encodings and embeddings?</p>
+<pre>class SinusoidalPE(nn.Module):
+    def __init__(self, d, max_len=5000):
+        super().__init__()
+        pos = torch.arange(max_len).unsqueeze(1)
+        div = torch.exp(torch.arange(0, d, 2) * (-math.log(10000.0) / d))
+        pe = torch.zeros(max_len, d)
+        pe[:, 0::2], pe[:, 1::2] = torch.sin(pos * div), torch.cos(pos * div)
+        self.register_buffer("pe", pe)
+    def forward(self, x): return x + self.pe[: x.size(1)]</pre>
+<p><code>nn.Embedding(vocab, d, padding_idx=0)</code> maps token IDs to vectors; learned positional embeddings use another <code>nn.Embedding(max_len, d)</code>; modern LLMs use RoPE.</p></div>
+
+<div class="q"><p class="qq">How do you build a simple autoencoder or GAN training step?</p>
+<p><b>Autoencoder</b>: encoder &rarr; bottleneck &rarr; decoder; loss = MSE/BCE between input and reconstruction. <b>GAN</b> step: (1) update discriminator on real (label 1) and <code>fake.detach()</code> (label 0) with <code>BCEWithLogitsLoss</code>; (2) update generator with the discriminator's output on fake labeled as real. Separate optimizers (Adam, betas=(0.5, 0.999)); <code>detach</code> prevents generator gradients during the D step.</p></div>
+
+<div class="q"><p class="qq">What is the reparameterization trick? How is it used in a VAE?</p>
+<p>Gradients can't flow through random sampling. Instead of sampling <code>z ~ N(&mu;, &sigma;&sup2;)</code> directly, sample <code>&epsilon; ~ N(0, 1)</code> and compute <code>z = &mu; + &sigma;&middot;&epsilon;</code>, which is differentiable with respect to &mu; and &sigma;.</p>
+<pre>mu, logvar = enc(x).chunk(2, dim=-1)
+z = mu + torch.exp(0.5 * logvar) * torch.randn_like(mu)
+recon = dec(z)
+kl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp(), dim=-1).mean()
+loss = F.mse_loss(recon, x, reduction="sum") / x.size(0) + kl</pre>
+<p><code>torch.distributions</code> provides the same through <code>Normal(mu, std).rsample()</code> (reparameterized) vs <code>.sample()</code> (no gradient), along with <code>log_prob</code>, <code>entropy</code> and <code>kl_divergence</code>. These are also used in RL policy gradients.</p></div>
+
+<div class="q"><p class="qq">What is the KV-cache in autoregressive transformers?</p>
+<p>When generating token by token, the keys and values of earlier tokens don't change. Caching them means each new step computes Q, K and V only for the new token and attends over the cached K and V. Without a cache, each step recomputes the whole prefix (quadratic total cost); with it, the per-step cost is linear in context length. The trade-off is memory: <code>2 &times; layers &times; heads &times; head_dim &times; seq_len &times; batch &times; bytes</code>. Optimizations include MQA/GQA (shared KV heads), paged attention (vLLM), KV quantization and sliding windows.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p12">26. Transfer Learning &amp; Ecosystem</h2>
+
+<div class="q"><p class="qq">How do you fine-tune a pretrained torchvision model?</p>
+<pre>from torchvision.models import resnet50, ResNet50_Weights
+weights = ResNet50_Weights.DEFAULT
+model = resnet50(weights=weights)
+for p in model.parameters(): p.requires_grad = False        # feature extraction
+model.fc = nn.Linear(model.fc.in_features, num_classes)     # new trainable head
+preprocess = weights.transforms()                            # matching preprocessing</pre>
+<p>Strategies: (1) <b>feature extraction</b> &mdash; freeze backbone, train head; (2) <b>full fine-tuning</b> with lower LR for backbone (discriminative LRs); (3) <b>gradual unfreezing</b>. Use the same normalization as pretraining. With small data, freeze more; with large/different data, fine-tune more.</p></div>
+
+<div class="q"><p class="qq">How do you fine-tune a Hugging Face transformer with PyTorch?</p>
+<pre>tok = AutoTokenizer.from_pretrained("bert-base-uncased")
+model = AutoModelForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2)
+batch = tok(texts, padding=True, truncation=True, max_length=256, return_tensors="pt")
+out = model(**batch, labels=labels)       # out.loss, out.logits
+out.loss.backward(); optimizer.step()</pre>
+<p>HF models are <code>nn.Module</code>s, so custom loops work; or use <code>Trainer</code>/Accelerate. For LLMs use PEFT (LoRA/QLoRA) to train small adapter matrices while freezing the base model.</p></div>
+
+<div class="q"><p class="qq">What is LoRA and how does it relate to PyTorch modules?</p>
+<p>Low-Rank Adaptation freezes a pretrained weight <code>W</code> and learns <code>&Delta;W = B A</code> with rank <code>r &laquo; d</code>, scaled by <code>&alpha;/r</code>. Implemented by wrapping <code>nn.Linear</code> layers (e.g., attention projections) with an extra low-rank path; only A and B require grad. Reduces trainable params by &gt;99% and allows merging back into W for inference. QLoRA adds 4-bit quantized base weights.</p></div>
+
+<div class="q"><p class="qq">What is PyTorch Lightning and why use it?</p>
+<p>A high-level wrapper that organizes code into a <code>LightningModule</code> (<code>training_step</code>, <code>validation_step</code>, <code>configure_optimizers</code>) and a <code>Trainer</code> handling the loop, devices, DDP/FSDP, AMP, checkpointing, logging, early stopping and gradient accumulation via flags. Reduces boilerplate and errors while keeping pure PyTorch models.</p></div>
+
+<div class="q"><p class="qq">Name key libraries in the PyTorch ecosystem.</p>
+<p>torchvision (vision datasets, models, transforms, ops like NMS/RoIAlign), torchaudio, TorchText (deprecated) / HF tokenizers, timm (image models), Hugging Face transformers/datasets/peft/accelerate, PyTorch Geometric &amp; DGL (graphs), torchmetrics, Lightning, Captum (interpretability), Optuna/Ray Tune (HPO), torchao (quantization), TorchRL, ExecuTorch, ONNX Runtime, DeepSpeed, Detectron2/MMDetection, Ultralytics YOLO.</p></div>
+
+<div class="q"><p class="qq">How do you interpret/explain PyTorch models?</p>
+<p>Captum provides Integrated Gradients, Saliency, DeepLIFT, GradCAM, SHAP approximations, occlusion. Manual Grad-CAM uses forward + backward hooks on the last conv layer to weight feature maps by pooled gradients. Attention visualization for transformers (with caution).</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p13">27. Debugging &amp; Common Pitfalls</h2>
+
+<div class="q"><p class="qq">Your training loss is NaN. How do you debug it?</p>
+<ul><li>Check inputs/labels for NaN/inf (<code>torch.isfinite(x).all()</code>) and correct normalization.</li>
+<li>Lower the learning rate; add warmup and gradient clipping.</li>
+<li>Numerical issues: <code>log(0)</code>, division by zero, softmax + log separately &rarr; use <code>log_softmax</code>, <code>BCEWithLogitsLoss</code>, add eps.</li>
+<li>fp16 overflow &rarr; use GradScaler or bf16.</li>
+<li><code>torch.autograd.set_detect_anomaly(True)</code> to find the op producing NaN in backward (slow; debug only).</li>
+<li>Forward hooks to locate the first layer producing NaN.</li></ul></div>
+
+<div class="q"><p class="qq">The loss doesn't decrease. What do you check?</p>
+<ul><li>Overfit a single small batch first &mdash; if it can't reach ~0 loss, there's a bug.</li>
+<li>Forgot <code>zero_grad()</code>, <code>optimizer.step()</code>, or optimizer created with wrong params (e.g., before replacing the head).</li>
+<li>Applied softmax before <code>CrossEntropyLoss</code>; wrong target dtype/shape; label/input misalignment after shuffling.</li>
+<li>Learning rate too high/low (LR range test); bad initialization; dead ReLUs.</li>
+<li>Frozen parameters accidentally; <code>detach()</code>/<code>.data</code>/numpy conversions breaking the graph.</li>
+<li>Inspect gradient norms per layer (vanishing/exploding).</li></ul></div>
+
+<div class="q"><p class="qq">List common PyTorch mistakes.</p>
+<ol><li>Forgetting <code>model.eval()</code> during validation/inference (or <code>model.train()</code> afterwards).</li>
+<li>Not using <code>no_grad</code>/<code>inference_mode</code> in evaluation &rarr; memory blow-up.</li>
+<li>Accumulating <code>loss</code> instead of <code>loss.item()</code>.</li>
+<li>Softmax before <code>CrossEntropyLoss</code>; float targets for class indices.</li>
+<li>Tensors on different devices; <code>tensor.to(device)</code> without reassigning.</li>
+<li>Broadcasting shape bugs (<code>(N,)</code> vs <code>(N,1)</code>).</li>
+<li>Using <code>view</code> on non-contiguous tensors.</li>
+<li>Layers in plain Python lists (not registered).</li>
+<li>Not calling <code>sampler.set_epoch</code> in DDP (same shuffle each epoch).</li>
+<li>Same random augmentation seeds across DataLoader workers with NumPy RNG (older versions).</li>
+<li>Scheduler stepped at the wrong frequency.</li>
+<li>Loading a DDP checkpoint with <code>module.</code> prefixes into a non-DDP model.</li>
+<li>Using <code>.data</code> (bypasses autograd safety) instead of <code>detach()</code> / <code>no_grad</code>.</li></ol></div>
+
+<div class="q"><p class="qq">How do you load a checkpoint saved from DDP/<code>torch.compile</code> into a plain model?</p>
+<p>Keys are prefixed with <code>module.</code> (DDP) or <code>_orig_mod.</code> (compile). Strip them: <code>{k.removeprefix("module."): v for k, v in sd.items()}</code>, or save <code>model.module.state_dict()</code> / the original module's state dict in the first place.</p></div>
+
+<div class="q"><p class="qq">What causes "Expected all tensors to be on the same device" and "expected scalar type Float but found Double"?</p>
+<p>Device mismatch: input, model, targets, or a tensor created inside <code>forward</code> (e.g., <code>torch.zeros(...)</code> without <code>device=x.device</code>) live on different devices &mdash; create tensors with <code>device=x.device</code> or register them as buffers. Dtype mismatch: NumPy arrays are float64 by default; convert with <code>.float()</code> or <code>torch.from_numpy(a).float()</code>.</p></div>
+
+<div class="q"><p class="qq">How do you detect overfitting and data leakage in a PyTorch pipeline?</p>
+<p>Plot train vs validation curves; compare against a simple baseline; check that augmentations/normalization statistics are computed on training data only; ensure no duplicates or same-entity samples across splits; verify the validation transform is deterministic; evaluate on a held-out test set once.</p></div>
+
+<!-- ===================================================== -->
+<h2 class="pt" id="p14">28. Coding &amp; Scenario-Based Questions</h2>
+
+<div class="q"><p class="qq">Implement linear regression from scratch using only tensors and autograd.</p>
+<pre>X = torch.randn(100, 3); true_w = torch.tensor([2., -1., .5])
+y = X @ true_w + 0.3 + 0.1 * torch.randn(100)
+w = torch.zeros(3, requires_grad=True); b = torch.zeros(1, requires_grad=True)
+lr = 0.1
+for _ in range(200):
+    loss = ((X @ w + b - y) ** 2).mean()
+    loss.backward()
+    with torch.no_grad():
+        w -= lr * w.grad; b -= lr * b.grad
+        w.grad.zero_(); b.grad.zero_()</pre>
+<p>Parameter updates happen inside <code>no_grad</code> so they aren't tracked.</p></div>
+
+<div class="q"><p class="qq">Implement softmax and cross-entropy in a numerically stable way.</p>
+<pre>def log_softmax(z, dim=-1):
+    z = z - z.max(dim=dim, keepdim=True).values      # shift for stability
+    return z - z.exp().sum(dim=dim, keepdim=True).log()
+
+def cross_entropy(logits, targets):
+    return -log_softmax(logits).gather(1, targets.unsqueeze(1)).mean()</pre></div>
+
+<div class="q"><p class="qq">Implement dropout and batch normalization manually.</p>
+<pre>def dropout(x, p, training):
+    if not training or p == 0: return x
+    mask = (torch.rand_like(x) &gt; p).float()
+    return x * mask / (1 - p)                  # inverted dropout keeps expectation
+
+class MyBatchNorm1d(nn.Module):
+    def __init__(self, n, eps=1e-5, momentum=0.1):
+        super().__init__()
+        self.gamma, self.beta = nn.Parameter(torch.ones(n)), nn.Parameter(torch.zeros(n))
+        self.register_buffer("rm", torch.zeros(n)); self.register_buffer("rv", torch.ones(n))
+        self.eps, self.m = eps, momentum
+    def forward(self, x):
+        if self.training:
+            mean, var = x.mean(0), x.var(0, unbiased=False)
+            with torch.no_grad():
+                self.rm.lerp_(mean, self.m); self.rv.lerp_(x.var(0, unbiased=True), self.m)
+        else:
+            mean, var = self.rm, self.rv
+        return self.gamma * (x - mean) / torch.sqrt(var + self.eps) + self.beta</pre></div>
+
+<div class="q"><p class="qq">Your GPU utilization is only 30% during training. What do you do?</p>
+<p>Likely a data pipeline bottleneck or sync overhead. Profile; increase <code>num_workers</code>, enable <code>pin_memory</code>/<code>non_blocking</code>, <code>persistent_workers</code>; move augmentation to GPU or pre-process offline; use faster storage/formats (local SSD, WebDataset, decoded caches); remove per-step <code>.item()</code>/prints; increase batch size; use AMP and <code>torch.compile</code>; check CPU core count and contention.</p></div>
+
+<div class="q"><p class="qq">Your model performs well in training/validation but poorly in production. Why?</p>
+<p>Training-serving skew: different preprocessing (resize, normalization, tokenization) at inference; forgot <code>model.eval()</code>; different input distribution (data drift); label leakage in validation; dtype/precision differences after export/quantization; batch-dependent behavior (BatchNorm with batch size 1 in train mode). Fix by sharing preprocessing code, packaging transforms with the model, logging inputs and monitoring drift.</p></div>
+
+<div class="q"><p class="qq">Design an end-to-end system to train a PyTorch image classifier and serve it via FastAPI.</p>
+<ol><li><b>Data</b>: versioned dataset (DVC/blob storage), stratified splits, <code>Dataset</code> + augmentations.</li>
+<li><b>Training</b>: pretrained backbone fine-tuning, AMP, DDP on multiple GPUs, experiment tracking (MLflow/W&amp;B), early stopping, checkpointing.</li>
+<li><b>Evaluation</b>: held-out test metrics, confusion matrix, calibration, error analysis.</li>
+<li><b>Packaging</b>: export state_dict / ONNX / compiled artifact; register model with version + metadata (class names, preprocessing config).</li>
+<li><b>Serving</b>: FastAPI app loads the model in lifespan, accepts <code>UploadFile</code>, validates type/size, preprocesses identically, runs inference in <code>inference_mode</code> with dynamic batching or behind Triton; returns top-k labels with probabilities.</li>
+<li><b>Ops</b>: Docker image, Kubernetes/Azure Container Apps with GPU nodes, autoscaling, health/readiness probes, auth + rate limiting, logging, Prometheus metrics, drift monitoring, canary releases, retraining pipeline.</li></ol></div>
+
+<div class="q"><p class="qq">How would you serve an LLM chatbot with streaming using FastAPI and PyTorch?</p>
+<p>Load the model (HF transformers, bf16/4-bit) in lifespan or delegate to vLLM/TGI. Endpoint accepts chat messages (Pydantic), applies the chat template, generates tokens with <code>TextIteratorStreamer</code> in a background thread (or vLLM's async engine) and streams them via SSE (<code>StreamingResponse</code>). Add continuous batching, KV-cache management, max-token and timeout limits, auth, rate limiting, prompt-injection/content filters, and token usage logging.</p></div>
+
+<div class="q"><p class="qq">Explain what happens step by step in one training iteration, from data to updated weights.</p>
+<p>DataLoader worker reads samples &rarr; transforms &rarr; <code>collate_fn</code> builds a batch &rarr; pinned memory &rarr; async copy to GPU &rarr; forward pass builds the autograd graph and saves activations &rarr; loss computed &rarr; <code>backward()</code> traverses the graph in reverse computing VJPs, accumulating <code>.grad</code> (in DDP, gradient buckets all-reduced concurrently) &rarr; optional unscale/clip &rarr; <code>optimizer.step()</code> updates parameters using its state (momentum/Adam moments) &rarr; scheduler updates LR &rarr; gradients zeroed &rarr; graph freed.</p></div>
+
+<div class="q"><p class="qq">Write a FastAPI endpoint that accepts an image and returns predictions from a torchvision model.</p>
+<pre>weights = ResNet50_Weights.DEFAULT
+preprocess = weights.transforms()
+categories = weights.meta["categories"]
+
+@asynccontextmanager
+async def lifespan(app):
+    app.state.model = resnet50(weights=weights).eval()
+    yield
+app = FastAPI(lifespan=lifespan)
+
+@app.post("/classify")
+def classify(file: UploadFile, request: Request, top_k: int = Query(5, ge=1, le=20)):
+    if file.content_type not in {"image/jpeg", "image/png"}:
+        raise HTTPException(415, "Unsupported image type")
+    data = file.file.read(10 * 1024 * 1024 + 1)
+    if len(data) &gt; 10 * 1024 * 1024:
+        raise HTTPException(413, "File too large")
+    try:
+        img = Image.open(io.BytesIO(data)).convert("RGB")
+    except UnidentifiedImageError:
+        raise HTTPException(400, "Invalid image")
+    x = preprocess(img).unsqueeze(0)
+    with torch.inference_mode():
+        probs = request.app.state.model(x).softmax(-1)[0]
+    p, idx = probs.topk(top_k)
+    return [{"label": categories[i], "prob": round(v, 4)} for v, i in zip(p.tolist(), idx.tolist())]</pre></div>
+
+<div class="q"><p class="qq">Implement IoU and Non-Maximum Suppression (NMS).</p>
+<pre>def box_iou(a, b):                       # a: (N,4), b: (M,4) as x1,y1,x2,y2
+    area_a = (a[:, 2] - a[:, 0]) * (a[:, 3] - a[:, 1])
+    area_b = (b[:, 2] - b[:, 0]) * (b[:, 3] - b[:, 1])
+    lt = torch.max(a[:, None, :2], b[None, :, :2])
+    rb = torch.min(a[:, None, 2:], b[None, :, 2:])
+    inter = (rb - lt).clamp(min=0).prod(-1)
+    return inter / (area_a[:, None] + area_b[None, :] - inter)
+
+def nms(boxes, scores, thr=0.5):
+    order, keep = scores.argsort(descending=True), []
+    while order.numel() &gt; 0:
+        i = order[0]; keep.append(i.item())
+        if order.numel() == 1: break
+        ious = box_iou(boxes[i:i+1], boxes[order[1:]])[0]
+        order = order[1:][ious &lt;= thr]
+    return torch.tensor(keep)</pre>
+<p>In production use <code>torchvision.ops.nms</code> / <code>batched_nms</code> and <code>box_iou</code>.</p></div>
+
+<div class="q"><p class="qq">Implement a contrastive (InfoNCE / CLIP-style) loss.</p>
+<pre>def clip_loss(img_emb, txt_emb, temperature=0.07):
+    img = F.normalize(img_emb, dim=-1); txt = F.normalize(txt_emb, dim=-1)
+    logits = img @ txt.T / temperature                 # (B, B) similarity matrix
+    targets = torch.arange(len(img), device=img.device)  # matching pairs on diagonal
+    return (F.cross_entropy(logits, targets) + F.cross_entropy(logits.T, targets)) / 2</pre>
+<p>The other samples in the batch serve as negatives, so larger batches help. SimCLR applies the same idea to two augmented views of each image.</p></div>
+
+<div class="q"><p class="qq">Implement text generation with temperature, top-k and top-p sampling.</p>
+<pre>@torch.inference_mode()
+def generate(model, ids, max_new=50, temperature=0.8, top_k=50, top_p=0.9, eos_id=None):
+    for _ in range(max_new):
+        logits = model(ids)[:, -1, :] / max(temperature, 1e-5)
+        if top_k:
+            kth = torch.topk(logits, top_k).values[:, -1, None]
+            logits = logits.masked_fill(logits &lt; kth, float("-inf"))
+        if top_p &lt; 1.0:
+            sorted_logits, idx = logits.sort(descending=True)
+            cum = sorted_logits.softmax(-1).cumsum(-1)
+            remove = cum - sorted_logits.softmax(-1) &gt; top_p      # keep first token past p
+            sorted_logits[remove] = float("-inf")
+            logits = torch.full_like(logits, float("-inf")).scatter(-1, idx, sorted_logits)
+        next_id = torch.multinomial(logits.softmax(-1), 1)
+        ids = torch.cat([ids, next_id], dim=1)
+        if eos_id is not None and (next_id == eos_id).all(): break
+    return ids</pre>
+<p>Temperature below 1 sharpens the distribution and above 1 flattens it. Greedy decoding uses <code>argmax</code>; beam search keeps the k best sequences. Real implementations use a KV-cache instead of re-running the full prefix.</p></div>
+
+<div class="q"><p class="qq">Implement k-means clustering using only PyTorch tensors.</p>
+<pre>def kmeans(x, k, iters=50):
+    c = x[torch.randperm(len(x))[:k]].clone()
+    for _ in range(iters):
+        assign = torch.cdist(x, c).argmin(1)             # (N,)
+        new_c = torch.zeros_like(c).index_add_(0, assign, x)
+        counts = torch.bincount(assign, minlength=k).unsqueeze(1)
+        new_c = torch.where(counts &gt; 0, new_c / counts.clamp(min=1), c)   # keep empty clusters
+        if torch.allclose(new_c, c): break
+        c = new_c
+    return c, assign</pre>
+<p>This tests vectorization skills: <code>cdist</code> broadcasting, <code>index_add_</code> and <code>bincount</code> instead of Python loops. It runs on GPU unchanged.</p></div>
+
+<p style="text-align:center;color:#666;margin-top:30px">&mdash; End of Document &mdash;</p>
+
+</body>
+</html>

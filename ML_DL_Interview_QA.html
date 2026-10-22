@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Machine Learning &amp; Deep Learning Interview Questions and Answers</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #1d1d1d; counter-reset: q; }
+  .cover { text-align: center; padding-top: 220px; page-break-after: always; }
+  .cover h1 { font-size: 30pt; color: #0b3d91; margin-bottom: 8px; }
+  .cover p { font-size: 13pt; color: #444; }
+  h2 { color: #fff; background: #0b3d91; padding: 6px 10px; border-radius: 4px; page-break-before: always; font-size: 15pt; }
+  h3 { color: #0b3d91; border-bottom: 1px solid #c8d3ea; padding-bottom: 2px; margin-top: 18px; font-size: 12pt; }
+  .toc h2 { page-break-before: avoid; }
+  .toc ol { columns: 2; font-size: 11pt; }
+  .toc a { color: #0b3d91; text-decoration: none; }
+  .q { margin: 8px 0 10px 0; page-break-inside: avoid; }
+  .qq { font-weight: 600; color: #8a1c1c; margin: 0 0 3px 0; }
+  .qq::before { counter-increment: q; content: "Q" counter(q) ". "; }
+  .q p { margin: 2px 0; }
+  .q ul, .q ol { margin: 2px 0 2px 18px; padding-left: 10px; }
+  code, .f { font-family: Consolas, "Courier New", monospace; background: #f2f4f8; padding: 0 3px; border-radius: 3px; font-size: 9.5pt; }
+  table { border-collapse: collapse; margin: 4px 0; font-size: 9.5pt; }
+  th, td { border: 1px solid #b9c4d8; padding: 3px 6px; text-align: left; vertical-align: top; }
+  th { background: #e8eef9; }
+  pre { background: #f5f7fb; border: 1px solid #d5dcea; border-radius: 4px; padding: 6px 8px; font-family: Consolas, "Courier New", monospace; font-size: 8.8pt; line-height: 1.35; white-space: pre-wrap; margin: 4px 0; }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  .lvl { font-size: 9.5pt; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>Machine Learning &amp; Deep Learning</h1>
+  <h1 style="font-size:22pt;color:#333">Interview Questions and Answers</h1>
+  <p id="part-title" style="font-size:16pt;color:#8a1c1c;font-weight:600">Complete Edition &mdash; Beginner to Advanced</p>
+  <p>Fundamentals &bull; Statistics &bull; Classical ML &bull; Evaluation &bull; Deep Learning &bull; CNNs &bull; RNNs &bull; Transformers &bull; NLP &bull; MLOps &bull; Scenarios &bull; Coding</p>
+</div>
+
+<div class="toc">
+<h2>Table of Contents</h2>
+<ol>
+  <li><a href="#s1">Machine Learning Fundamentals</a></li>
+  <li><a href="#s2">Statistics, Probability &amp; Math</a></li>
+  <li><a href="#s3">Data Preprocessing &amp; Feature Engineering</a></li>
+  <li><a href="#s4">Linear &amp; Logistic Regression</a></li>
+  <li><a href="#s5">Optimization</a></li>
+  <li><a href="#s6">Decision Trees &amp; Ensembles</a></li>
+  <li><a href="#s7">SVM, KNN &amp; Naive Bayes</a></li>
+  <li><a href="#s8">Unsupervised Learning &amp; Dimensionality Reduction</a></li>
+  <li><a href="#s9">Model Evaluation &amp; Metrics</a></li>
+  <li><a href="#s10">Model Selection &amp; Hyperparameter Tuning</a></li>
+  <li><a href="#s11">Time Series</a></li>
+  <li><a href="#s12">Recommender Systems</a></li>
+  <li><a href="#s13">Deep Learning Fundamentals</a></li>
+  <li><a href="#s14">Training Deep Networks &amp; Regularization</a></li>
+  <li><a href="#s15">Convolutional Neural Networks &amp; Computer Vision</a></li>
+  <li><a href="#s16">RNNs, LSTMs &amp; Sequence Models</a></li>
+  <li><a href="#s17">Attention &amp; Transformers</a></li>
+  <li><a href="#s18">Natural Language Processing</a></li>
+  <li><a href="#s19">MLOps, Deployment &amp; Efficiency</a></li>
+  <li><a href="#s20">Scenario-Based &amp; System Design Questions</a></li>
+  <li><a href="#s21">Coding Questions (Implement from Scratch)</a></li>
+</ol>
+</div>
+
+<div class="roadmap">
+<h2>Study Roadmap: Beginner to Advanced</h2>
+<p class="lvl">Within every section, questions go roughly from basic to advanced. Suggested order:</p>
+<table class="lvl">
+<tr><th>Level</th><th>Focus</th><th>Sections</th></tr>
+<tr><td><b>1. Beginner</b></td><td>Core vocabulary, types of ML, basic statistics, data cleaning, linear/logistic regression, decision trees, basic metrics, neural network basics, Python libraries</td><td>1, 2 (first half), 3, 4, 6 (first half), 9 (first half), 13 (first half), 21 (metrics, pandas, linear regression)</td></tr>
+<tr><td><b>2. Intermediate</b></td><td>Optimization, ensembles and boosting, SVM/KNN/Naive Bayes, clustering and PCA, tuning, time series, training deep nets, CNNs, RNNs, NLP</td><td>5, 6, 7, 8, 10, 11, 13&ndash;16, 18, 21 (k-means, KNN, logistic regression, PyTorch loop)</td></tr>
+<tr><td><b>3. Advanced</b></td><td>Statistical testing and causal inference, XGBoost internals, calibration and uncertainty, recommender and ranking systems, Transformers, MLOps, system design, implementing attention/NMS from scratch</td><td>2 (second half), 9 (second half), 12, 17, 19, 20, 21 (attention, NMS, AUC)</td></tr>
+</table>
+<p class="lvl"><b>Tip:</b> For each answer, practise explaining it in 30 seconds, then be ready to go one level deeper (the math, a trade-off, or a real example from your projects).</p>
+</div>
+
+<!-- ===================================================== -->
+<h2 id="s1">1. Machine Learning Fundamentals</h2>
+
+<div class="q"><p class="qq">What is the difference between AI, machine learning and deep learning?</p>
+<p><b>AI</b> is the broad field of building systems that perform tasks requiring human intelligence (including rule-based systems). <b>ML</b> is a subset of AI where systems learn patterns from data instead of being explicitly programmed. <b>Deep learning</b> is a subset of ML that uses multi-layer neural networks to learn features automatically from raw data.</p></div>
+
+<div class="q"><p class="qq">What is machine learning? How does it differ from traditional programming?</p>
+<p>ML is the study of algorithms that improve at a task through experience (data) rather than explicit rules. In traditional programming, humans write rules: <i>data + rules &rarr; output</i>. In ML, the algorithm learns rules: <i>data + output &rarr; rules (model)</i>.</p></div>
+
+<div class="q"><p class="qq">What are features, labels and samples? Structured vs unstructured data?</p>
+<p>A <b>feature</b> is an input variable (age, pixel value, word count); a <b>label/target</b> is what we want to predict; a <b>sample/instance</b> is one row/example, represented as a <b>feature vector</b>. <b>Structured</b> data is tabular (rows and columns, databases, spreadsheets). <b>Unstructured</b> data has no fixed schema (text, images, audio, video). <b>Semi-structured</b> data has some structure (JSON, XML, logs).</p></div>
+
+<div class="q"><p class="qq">What is the difference between training and inference?</p>
+<p><b>Training</b> learns model parameters from historical data; it is compute heavy and usually done offline. <b>Inference</b> (prediction/scoring) applies the trained model to new data; latency, throughput and cost matter most here.</p></div>
+
+<div class="q"><p class="qq">Give real-world applications of machine learning.</p>
+<p>Spam filtering, product/movie recommendations, fraud detection, credit scoring, demand and sales forecasting, customer churn prediction, medical image diagnosis, speech recognition, machine translation, face recognition, self-driving car perception, predictive maintenance, search ranking, and dynamic pricing.</p></div>
+
+<div class="q"><p class="qq">What are the main types of machine learning?</p>
+<ul><li><b>Supervised</b>: labeled data; classification and regression.</li>
+<li><b>Unsupervised</b>: unlabeled data; clustering, dimensionality reduction, density estimation.</li>
+<li><b>Semi-supervised</b>: few labels + many unlabeled samples (pseudo-labeling, consistency regularization).</li>
+<li><b>Self-supervised</b>: labels derived from data itself (masked tokens, next token, contrastive views).</li>
+<li><b>Reinforcement learning</b>: agent learns via rewards from interacting with an environment.</li></ul></div>
+
+<div class="q"><p class="qq">Classification vs regression?</p>
+<p>Classification predicts discrete categories (spam / not spam); regression predicts continuous values (house price). Some problems can be framed either way (e.g., ordinal ratings).</p></div>
+
+<div class="q"><p class="qq">Explain the bias-variance trade-off.</p>
+<p>Expected error = Bias&sup2; + Variance + Irreducible noise. <b>Bias</b> is error from overly simple assumptions (underfitting). <b>Variance</b> is sensitivity to fluctuations in training data (overfitting). Increasing model complexity lowers bias but raises variance; the goal is the sweet spot minimizing total error. Regularization, more data, and ensembling help manage it (bagging reduces variance; boosting reduces bias).</p></div>
+
+<div class="q"><p class="qq">What are overfitting and underfitting? How do you detect and fix them?</p>
+<p><b>Overfitting</b>: low training error, high validation error. Fix: more data, augmentation, regularization (L1/L2, dropout), simpler model, early stopping, feature selection, ensembling, cross-validation.<br>
+<b>Underfitting</b>: high training and validation error. Fix: more complex model, more/better features, less regularization, train longer.<br>
+Detect via learning curves (train vs validation error as data/epochs grow).</p></div>
+
+<div class="q"><p class="qq">Why split data into train, validation and test sets?</p>
+<p>Train: fit parameters. Validation: tune hyperparameters / model selection / early stopping. Test: final unbiased estimate of generalization, touched only once. Using the test set for tuning leaks information and gives optimistic estimates. Typical splits: 70/15/15 or 80/10/10; for big data, 98/1/1 is fine.</p></div>
+
+<div class="q"><p class="qq">What is cross-validation? Describe its variants.</p>
+<ul><li><b>k-fold</b>: split into k folds; train on k-1, validate on 1, rotate; average scores.</li>
+<li><b>Stratified k-fold</b>: preserves class proportions in each fold (important for imbalance).</li>
+<li><b>Leave-one-out (LOOCV)</b>: k = n; low bias, high variance, expensive.</li>
+<li><b>Group k-fold</b>: same group (e.g., patient/user) never appears in both train and validation.</li>
+<li><b>Time-series split (forward chaining)</b>: train on past, validate on future only.</li>
+<li><b>Nested CV</b>: inner loop tunes hyperparameters, outer loop estimates performance.</li></ul></div>
+
+<div class="q"><p class="qq">What is data leakage? Give examples.</p>
+<p>When information not available at prediction time leaks into training, producing overly optimistic results. Examples: scaling/imputing using statistics of the full dataset before splitting; features derived from the target (e.g., "account_closed_date" when predicting churn); future data in time series; duplicate records across train/test; same patient in train and test. Prevent with pipelines fit only on training folds, time-aware splits, group splits, and careful feature audits.</p></div>
+
+<div class="q"><p class="qq">What is the curse of dimensionality?</p>
+<p>As dimensions grow, data becomes sparse, volume grows exponentially, distances become less discriminative (nearest and farthest neighbors become nearly equidistant), and you need exponentially more data to cover the space. It hurts distance-based methods (KNN, k-means). Mitigate with feature selection, dimensionality reduction (PCA), regularization, and domain knowledge.</p></div>
+
+<div class="q"><p class="qq">Parametric vs non-parametric models?</p>
+<p><b>Parametric</b>: fixed number of parameters regardless of data size (linear/logistic regression, Naive Bayes, neural nets of fixed size); strong assumptions, fast, less data needed. <b>Non-parametric</b>: complexity grows with data (KNN, decision trees, kernel SVM, Gaussian processes); flexible but needs more data and can overfit.</p></div>
+
+<div class="q"><p class="qq">Generative vs discriminative models?</p>
+<p>Discriminative models learn P(y|x) or a decision boundary directly (logistic regression, SVM, neural classifiers). Generative models learn P(x, y) or P(x) and can generate samples (Naive Bayes, GMM, HMM, VAE, GAN, diffusion, LLMs). Discriminative usually gives better classification accuracy with enough data; generative handles missing data, works with fewer samples, and can synthesize data.</p></div>
+
+<div class="q"><p class="qq">What is the No Free Lunch theorem?</p>
+<p>Averaged over all possible problems, no learning algorithm outperforms another. Hence model choice must be guided by assumptions about the specific problem (inductive bias) and empirical validation.</p></div>
+
+<div class="q"><p class="qq">What is inductive bias?</p>
+<p>The set of assumptions a learner uses to generalize beyond training data. Examples: linear regression assumes linearity; CNNs assume locality and translation equivariance; RNNs assume sequential structure; KNN assumes nearby points share labels; Transformers have weak inductive bias and therefore need more data.</p></div>
+
+<div class="q"><p class="qq">What is the difference between a parameter and a hyperparameter?</p>
+<p>Parameters are learned from data during training (weights, biases, split thresholds). Hyperparameters are set before training and control the learning process (learning rate, number of trees, depth, regularization strength, batch size, k in KNN).</p></div>
+
+<div class="q"><p class="qq">What is the difference between a loss function, a cost function and an objective function?</p>
+<p><b>Loss</b>: error for a single example (e.g., squared error). <b>Cost</b>: average loss over the dataset, often plus a regularization term. <b>Objective</b>: any function being optimized, minimized or maximized (e.g., maximizing likelihood). In practice the terms are often used interchangeably.</p></div>
+
+<div class="q"><p class="qq">What is a baseline model and why build one first?</p>
+<p>A simple reference model: majority class, mean/median prediction, naive forecast (last value), simple rules, or plain logistic/linear regression. It sets the minimum bar, shows whether ML adds value, justifies extra complexity, and helps catch bugs or leakage (a complex model that barely beats, or suspiciously crushes, the baseline needs investigation).</p></div>
+
+<div class="q"><p class="qq">What is regularization and why is it used?</p>
+<p>Any technique that constrains model complexity to reduce overfitting: L1/L2 penalties, dropout, early stopping, data augmentation, weight decay, pruning trees, max depth, label smoothing, noise injection. It trades a bit of bias for a large reduction in variance.</p></div>
+
+<div class="q"><p class="qq">What is the difference between online learning and batch learning?</p>
+<p>Batch (offline) learning trains on the full dataset at once and is retrained periodically. Online learning updates the model incrementally as each sample/mini-batch arrives (SGD, streaming); useful for non-stationary data and data that does not fit in memory, but sensitive to noise and needs learning-rate control.</p></div>
+
+<div class="q"><p class="qq">Which Python libraries are commonly used for ML and DL?</p>
+<p><b>NumPy</b> (arrays, linear algebra), <b>pandas</b> (tabular data manipulation), <b>Matplotlib/Seaborn/Plotly</b> (visualization), <b>SciPy</b> and <b>statsmodels</b> (statistics, tests, classical models), <b>scikit-learn</b> (classical ML, preprocessing, pipelines, metrics), <b>XGBoost/LightGBM/CatBoost</b> (boosting), <b>PyTorch</b> and <b>TensorFlow/Keras</b> (deep learning), <b>OpenCV</b> (vision), <b>NLTK/spaCy/Hugging Face Transformers</b> (NLP), <b>MLflow</b> (experiment tracking).</p></div>
+
+<div class="q"><p class="qq">How would you approach a new ML problem end to end?</p>
+<ol><li>Understand the business goal and define success metrics (business + ML metric).</li>
+<li>Check if ML is needed; establish a simple baseline/heuristic.</li>
+<li>Collect data, understand labels, check quality, EDA.</li>
+<li>Split data correctly (time/group aware) to avoid leakage.</li>
+<li>Feature engineering and preprocessing in a pipeline.</li>
+<li>Train simple models first, then more complex ones; tune with CV.</li>
+<li>Error analysis; iterate on data and features.</li>
+<li>Evaluate on held-out test; check fairness, robustness, latency.</li>
+<li>Deploy, monitor drift and performance, retrain.</li></ol></div>
+
+<div class="q"><p class="qq">How do you choose which algorithm to use?</p>
+<p>Consider the problem type (classification, regression, clustering), data size and type, need for interpretability, latency/memory limits, linearity of relationships, number of features and missing values. Rules of thumb: tabular &rarr; gradient boosting / random forest (logistic/linear regression as a baseline); images &rarr; CNNs/ViTs; text &rarr; Transformers (TF-IDF + linear model as a baseline); small data &rarr; simpler, regularized models; need explanations &rarr; linear models or shallow trees. Start simple and let cross-validation decide.</p></div>
+
+<div class="q"><p class="qq">What is semi-supervised learning? Name some techniques.</p>
+<p>Learning from a small labeled set plus a large unlabeled set. Techniques: self-training / pseudo-labeling, co-training, consistency regularization (FixMatch, Mean Teacher), label propagation on graphs, and pretraining with self-supervision followed by fine-tuning.</p></div>
+
+<div class="q"><p class="qq">What is active learning?</p>
+<p>The model chooses which unlabeled samples should be labeled next, typically the most informative (uncertainty sampling, query-by-committee, expected model change, diversity sampling). Reduces labeling cost.</p></div>
+
+<div class="q"><p class="qq">What is transfer learning?</p>
+<p>Reusing knowledge from a model trained on a source task/domain for a target task: use pretrained weights as a feature extractor or fine-tune some/all layers. Very effective when target data is limited (ImageNet CNNs, BERT, LLMs).</p></div>
+
+<div class="q"><p class="qq">What is multi-task learning and meta-learning?</p>
+<p><b>Multi-task learning</b>: one model trained jointly on related tasks with shared representations, improving generalization via shared signal. <b>Meta-learning</b> ("learning to learn"): train across many tasks so the model adapts quickly to new tasks with few examples (MAML, prototypical networks). Related: few-shot and zero-shot learning.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s2">2. Statistics, Probability &amp; Math</h2>
+
+<div class="q"><p class="qq">What are conditional, joint and marginal probability? Independent vs mutually exclusive events?</p>
+<p><b>Joint</b> P(A, B): both occur. <b>Marginal</b> P(A): sum/integrate the joint over other variables. <b>Conditional</b> P(A|B) = P(A, B)/P(B): probability of A given B occurred. <b>Independent</b> events: P(A, B) = P(A)P(B), so knowing one tells nothing about the other. <b>Mutually exclusive</b>: cannot occur together, P(A, B) = 0; such events (with non-zero probability) are therefore dependent.</p></div>
+
+<div class="q"><p class="qq">State Bayes' theorem and give an ML use.</p>
+<p><span class="f">P(A|B) = P(B|A) &middot; P(A) / P(B)</span>. Posterior = likelihood &times; prior / evidence. Used in Naive Bayes classifiers, Bayesian inference, MAP estimation, Bayesian optimization, spam filtering, and medical test interpretation.</p></div>
+
+<div class="q"><p class="qq">MLE vs MAP estimation?</p>
+<p><b>MLE</b> chooses parameters maximizing P(data | &theta;). <b>MAP</b> maximizes P(&theta; | data) &prop; P(data | &theta;)P(&theta;), i.e., MLE plus a prior. A Gaussian prior on weights gives L2 regularization; a Laplace prior gives L1. With infinite data, MAP converges to MLE.</p></div>
+
+<div class="q"><p class="qq">Why is minimizing MSE equivalent to MLE under Gaussian noise, and cross-entropy to MLE for classification?</p>
+<p>If y = f(x) + &epsilon;, &epsilon; ~ N(0, &sigma;&sup2;), the negative log-likelihood is proportional to &Sigma;(y &minus; f(x))&sup2;, so MLE = least squares. For Bernoulli/categorical labels, the negative log-likelihood is exactly binary/categorical cross-entropy.</p></div>
+
+<div class="q"><p class="qq">Common probability distributions you should know?</p>
+<p>Bernoulli (single binary trial), Binomial (# successes in n trials), Poisson (count of events per interval), Geometric, Uniform, Normal/Gaussian, Exponential (time between events), Beta (probabilities; conjugate to Bernoulli), Dirichlet (multinomial prior; used in LDA), Multinomial/Categorical, Student-t (heavier tails), Chi-squared, Log-normal.</p></div>
+
+<div class="q"><p class="qq">Mean vs median vs mode? What are variance, standard deviation, skewness and kurtosis?</p>
+<p><b>Mean</b>: average, sensitive to outliers. <b>Median</b>: middle value, robust; preferred for skewed data (income, house prices). <b>Mode</b>: most frequent value; useful for categorical data. <b>Variance</b>: average squared deviation from the mean; <b>standard deviation</b> is its square root, in the original units. <b>Skewness</b>: asymmetry (right-skewed: mean &gt; median). <b>Kurtosis</b>: heaviness of tails / outlier proneness.</p></div>
+
+<div class="q"><p class="qq">What are the properties of the normal distribution?</p>
+<p>Symmetric and bell-shaped; mean = median = mode; fully defined by &mu; and &sigma;. Empirical rule: ~68% of data within 1&sigma;, ~95% within 2&sigma;, ~99.7% within 3&sigma;. Standardize with z = (x &minus; &mu;)/&sigma;. Check normality with histograms, Q-Q plots, or Shapiro-Wilk / Kolmogorov-Smirnov tests.</p></div>
+
+<div class="q"><p class="qq">What are common sampling techniques?</p>
+<p><b>Simple random</b> (every item equally likely), <b>stratified</b> (sample within subgroups to preserve proportions; used for train/test splits on imbalanced data), <b>cluster</b> (randomly select whole groups), <b>systematic</b> (every k-th item), and <b>convenience</b> sampling (easy but biased). Over/undersampling adjusts class balance.</p></div>
+
+<div class="q"><p class="qq">Population vs sample? Standard deviation vs standard error?</p>
+<p>The population is the full group of interest; a sample is a subset used to estimate population parameters (sample variance divides by n &minus; 1 for an unbiased estimate). <b>Standard deviation</b> measures spread of individual data points. <b>Standard error</b> measures the uncertainty of an estimate such as the sample mean: SE = &sigma;/&radic;n, shrinking as sample size grows; it is used to build confidence intervals and test statistics.</p></div>
+
+<div class="q"><p class="qq">What is the Central Limit Theorem and why does it matter?</p>
+<p>The distribution of the sample mean of i.i.d. variables with finite variance approaches a normal distribution as sample size grows, regardless of the original distribution. It justifies confidence intervals, z/t-tests, and A/B test statistics.</p></div>
+
+<div class="q"><p class="qq">Law of large numbers?</p>
+<p>As the number of i.i.d. samples grows, the sample average converges to the expected value. Underlies Monte Carlo estimation and the use of empirical risk to approximate expected risk.</p></div>
+
+<div class="q"><p class="qq">Explain hypothesis testing, p-value, Type I and Type II errors, and statistical power.</p>
+<p>Null hypothesis H0 (no effect) vs alternative H1. <b>p-value</b>: probability of observing data at least as extreme as seen, assuming H0 is true. Reject H0 if p &lt; &alpha; (e.g., 0.05). <b>Type I error</b> (false positive): rejecting a true H0, rate &alpha;. <b>Type II error</b> (false negative): failing to reject a false H0, rate &beta;. <b>Power</b> = 1 &minus; &beta;, increases with sample size and effect size.</p></div>
+
+<div class="q"><p class="qq">When do you use a z-test, t-test, chi-square test or ANOVA?</p>
+<ul><li><b>z-test</b>: compare means with known population variance or large samples; compare proportions (A/B conversion rates).</li>
+<li><b>t-test</b>: compare means with unknown variance / small samples; one-sample, two-sample (independent) or paired.</li>
+<li><b>Chi-square test</b>: categorical data; goodness-of-fit or independence between two categorical variables (also used for feature selection).</li>
+<li><b>ANOVA</b>: compare means across 3+ groups (F-test).</li>
+<li>Non-parametric alternatives when normality fails: Mann-Whitney U, Wilcoxon signed-rank, Kruskal-Wallis.</li></ul></div>
+
+<div class="q"><p class="qq">What is a confidence interval?</p>
+<p>A range computed from data such that, under repeated sampling, X% of such intervals contain the true parameter. It is not the probability the parameter lies in this particular interval (that is a Bayesian credible interval).</p></div>
+
+<div class="q"><p class="qq">How do you design and analyze an A/B test?</p>
+<p>Define the hypothesis and primary metric; choose &alpha;, power, minimum detectable effect; compute sample size; randomize users (unit of randomization); run for full business cycles; avoid peeking (or use sequential testing); check sample ratio mismatch; analyze with t-test / z-test for proportions / bootstrap; account for multiple comparisons (Bonferroni, FDR); consider novelty effects and network effects.</p></div>
+
+<div class="q"><p class="qq">Correlation vs causation? Pearson vs Spearman?</p>
+<p>Correlation measures association; causation means changing X changes Y. Confounders, reverse causality, and selection bias can create correlation without causation; establish causality with randomized experiments or causal inference (instrumental variables, diff-in-diff, propensity scores). <b>Pearson</b> measures linear correlation; <b>Spearman</b> measures monotonic rank correlation and is robust to outliers.</p></div>
+
+<div class="q"><p class="qq">Covariance vs correlation?</p>
+<p>Covariance measures joint variability and depends on units/scale. Correlation is covariance normalized by the product of standard deviations, bounded in [&minus;1, 1] and unitless.</p></div>
+
+<div class="q"><p class="qq">What are entropy, cross-entropy and KL divergence?</p>
+<p><b>Entropy</b> H(p) = &minus;&Sigma; p log p: uncertainty of a distribution. <b>Cross-entropy</b> H(p, q) = &minus;&Sigma; p log q: expected bits to encode p using q. <b>KL divergence</b> KL(p||q) = &Sigma; p log(p/q) = H(p, q) &minus; H(p) &ge; 0; asymmetric, measures how q differs from p. Minimizing cross-entropy w.r.t. q is equivalent to minimizing KL since H(p) is constant. JS divergence is a symmetric, bounded version.</p></div>
+
+<div class="q"><p class="qq">What is mutual information?</p>
+<p>I(X;Y) = H(X) &minus; H(X|Y): reduction in uncertainty about X from knowing Y. Zero iff independent; captures non-linear dependencies. Used for feature selection and in decision trees (information gain).</p></div>
+
+<div class="q"><p class="qq">What is the bootstrap?</p>
+<p>Resampling the dataset with replacement many times to estimate the sampling distribution of a statistic (confidence intervals, standard errors). Also the basis of bagging. About 63.2% of unique samples appear in each bootstrap sample.</p></div>
+
+<div class="q"><p class="qq">Key linear algebra concepts for ML?</p>
+<p>Vectors, matrices, dot product (similarity), matrix multiplication, transpose, inverse, rank, eigenvalues/eigenvectors (PCA, stability), SVD (PCA, recommender systems, low-rank approximation, LoRA), positive (semi-)definite matrices (covariance, convexity via Hessian), norms (L1, L2, Frobenius), orthogonality, projections.</p></div>
+
+<div class="q"><p class="qq">What are eigenvalues and eigenvectors? Where are they used in ML?</p>
+<p>For a square matrix A, an eigenvector v is a non-zero vector whose direction is unchanged by A: Av = &lambda;v, where the eigenvalue &lambda; is the scaling factor. In PCA, eigenvectors of the covariance matrix are the principal directions and eigenvalues are the variance along them. Also used in spectral clustering, PageRank, analyzing Hessians (convexity) and RNN stability.</p></div>
+
+<div class="q"><p class="qq">Key calculus concepts for ML?</p>
+<p>Derivatives and partial derivatives, gradient (direction of steepest ascent), chain rule (backpropagation), Jacobian (vector-valued functions), Hessian (curvature; second-order optimization, convexity check), Taylor expansion (justifies gradient descent and Newton's method).</p></div>
+
+<div class="q"><p class="qq">What is a convex function and why does it matter?</p>
+<p>f is convex if the line segment between any two points lies above the graph (Hessian PSD). Any local minimum is global, so gradient methods converge to the optimum. Linear/logistic regression and SVM objectives are convex; neural network losses are non-convex.</p></div>
+
+<div class="q"><p class="qq">What is the difference between probability and likelihood?</p>
+<p>Probability: parameters fixed, data varies; P(data | &theta;). Likelihood: data fixed, viewed as a function of parameters; L(&theta; | data). Likelihood is not a probability distribution over &theta;.</p></div>
+
+<div class="q"><p class="qq">What is the i.i.d. assumption and why can it fail?</p>
+<p>Independent and identically distributed: samples are drawn independently from the same distribution. It fails for time series (autocorrelation), grouped data (same user), and distribution shift between train and production, which invalidates naive CV and generalization estimates.</p></div>
+
+<div class="q"><p class="qq">What are Simpson's paradox and selection bias?</p>
+<p><b>Simpson's paradox</b>: a trend appearing in groups reverses when groups are combined, due to a confounder. <b>Selection bias</b>: the sample is not representative of the population (survivorship bias, non-response), causing models to fail in production.</p></div>
+
+<div class="q"><p class="qq">How do you estimate a causal effect when an A/B test isn't possible? What is uplift modeling?</p>
+<p>Randomized experiments are the gold standard. With observational data use: propensity score matching/weighting (balance treated and control on observed covariates), difference-in-differences (compare changes over time against a control group), regression discontinuity (units just above vs below a cutoff), instrumental variables, and synthetic control. All rely on assumptions such as no unmeasured confounding. <b>Uplift modeling</b> predicts the <i>incremental</i> effect of a treatment for each individual, P(y | treated, x) &minus; P(y | control, x), using T-/S-/X-learners or causal forests, so you target "persuadable" customers rather than those who would convert anyway.</p></div>
+
+<div class="q"><p class="qq">What is survival analysis?</p>
+<p>Modeling time until an event (churn, machine failure, death) when some observations are <b>censored</b> (the event hasn't happened yet by the end of observation). Tools: Kaplan-Meier estimator (survival curve), log-rank test (compare groups), Cox proportional hazards model (hazard ratios for features; assumes proportional hazards), and ML variants such as random survival forests and XGBoost with AFT/Cox objectives. Evaluated with the concordance index (C-index).</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s3">3. Data Preprocessing &amp; Feature Engineering</h2>
+
+<div class="q"><p class="qq">What steps do you follow in Exploratory Data Analysis (EDA)?</p>
+<ol><li>Understand the dataset: shape, data types, meaning of columns and the target.</li>
+<li>Summary statistics; missing values; duplicates; inconsistent or invalid values.</li>
+<li>Univariate analysis: distributions (histograms, box plots), skewness, outliers, class balance.</li>
+<li>Bivariate/multivariate analysis: correlation heatmap, scatter plots, feature vs target relationships, categorical cardinality.</li>
+<li>Time trends and seasonality if data is temporal.</li>
+<li>Flag possible leakage features and form hypotheses for feature engineering.</li></ol></div>
+
+<div class="q"><p class="qq">How do you handle missing values?</p>
+<p>First understand the mechanism: MCAR (completely at random), MAR (depends on observed data), MNAR (depends on the missing value itself). Options: drop rows/columns (if few or useless), mean/median/mode imputation, constant + "missing" indicator flag, KNN imputation, iterative/MICE (model-based), forward/backward fill for time series, or use models that handle NaNs natively (XGBoost, LightGBM). Fit imputers on training data only.</p></div>
+
+<div class="q"><p class="qq">Normalization vs standardization? When is scaling needed?</p>
+<p><b>Min-max normalization</b>: (x &minus; min)/(max &minus; min) &rarr; [0, 1]; sensitive to outliers. <b>Standardization (z-score)</b>: (x &minus; &mu;)/&sigma; &rarr; mean 0, std 1. <b>Robust scaling</b>: uses median and IQR. Scaling matters for gradient-based models, distance-based methods (KNN, k-means, SVM), PCA and regularized models. Tree-based models are scale-invariant.</p></div>
+
+<div class="q"><p class="qq">How do you encode categorical variables?</p>
+<ul><li><b>One-hot</b>: nominal, low cardinality.</li>
+<li><b>Label/ordinal encoding</b>: ordinal categories, or tree models.</li>
+<li><b>Target/mean encoding</b>: high cardinality; use out-of-fold + smoothing to avoid leakage.</li>
+<li><b>Frequency/count encoding</b>.</li>
+<li><b>Hashing trick</b>: very high cardinality, fixed dimension.</li>
+<li><b>Embeddings</b>: learned dense vectors in neural nets.</li>
+<li>CatBoost uses ordered target statistics natively.</li></ul></div>
+
+<div class="q"><p class="qq">What is the dummy variable trap?</p>
+<p>With one-hot encoding of k categories plus an intercept, the k columns always sum to 1, causing perfect multicollinearity in linear models. Fix: use k &minus; 1 dummy columns (<code>drop_first=True</code>). Not an issue for tree models and less of one with regularization.</p></div>
+
+<div class="q"><p class="qq">How do you detect and handle outliers?</p>
+<p>Detect: box plots / IQR rule (outside Q1 &minus; 1.5&middot;IQR, Q3 + 1.5&middot;IQR), z-score &gt; 3, Mahalanobis distance, isolation forest, LOF, DBSCAN. Handle: verify if error or genuine; remove, cap/winsorize, log/Box-Cox transform, use robust models/losses (Huber, MAE, trees), or treat as separate signal (fraud).</p></div>
+
+<div class="q"><p class="qq">How do you handle imbalanced datasets?</p>
+<ul><li>Use proper metrics: precision, recall, F1, PR-AUC instead of accuracy.</li>
+<li>Resampling: random oversampling, undersampling, SMOTE/ADASYN (on training data only).</li>
+<li>Class weights / cost-sensitive learning (<code>class_weight='balanced'</code>, <code>scale_pos_weight</code>).</li>
+<li>Threshold tuning on the validation set.</li>
+<li>Focal loss for deep learning; ensembles like balanced random forest / EasyEnsemble.</li>
+<li>Anomaly detection framing when positives are extremely rare.</li>
+<li>Collect more minority data.</li></ul></div>
+
+<div class="q"><p class="qq">What is SMOTE?</p>
+<p>Synthetic Minority Over-sampling Technique: for a minority sample, pick one of its k nearest minority neighbors and create a synthetic point on the line segment between them. Reduces overfitting vs duplicate oversampling, but can create noise near class boundaries and doesn't work well for high-dimensional/categorical data. Apply only inside training folds.</p></div>
+
+<div class="q"><p class="qq">What are feature selection methods?</p>
+<ul><li><b>Filter</b>: statistical scores independent of model (correlation, chi-square, ANOVA F-test, mutual information, variance threshold).</li>
+<li><b>Wrapper</b>: search subsets using model performance (forward selection, backward elimination, RFE).</li>
+<li><b>Embedded</b>: selection during training (L1/Lasso, tree feature importance).</li></ul>
+<p>Benefits: less overfitting, faster training, interpretability.</p></div>
+
+<div class="q"><p class="qq">Feature selection vs feature extraction?</p>
+<p><b>Selection</b> keeps a subset of the original features, preserving interpretability (Lasso, RFE, mutual information). <b>Extraction</b> creates new features by transforming or combining existing ones (PCA, LDA, autoencoders, embeddings); can capture more information in fewer dimensions but new features are harder to interpret.</p></div>
+
+<div class="q"><p class="qq">What is multicollinearity and how do you detect and handle it?</p>
+<p>High correlation among features. It inflates coefficient variance in linear models, making coefficients unstable and hard to interpret (predictions may still be fine). Detect with correlation matrix and Variance Inflation Factor (VIF &gt; 5&ndash;10). Handle by dropping/combining features, PCA, or Ridge regularization.</p></div>
+
+<div class="q"><p class="qq">Why apply log or power transforms?</p>
+<p>To reduce right skew, stabilize variance, make relationships more linear, and lessen outlier impact. Examples: log(1+x), square root, Box-Cox (positive data), Yeo-Johnson (any sign). Also used on targets like price, then exponentiated back.</p></div>
+
+<div class="q"><p class="qq">What feature engineering techniques do you know?</p>
+<p>Binning/discretization, polynomial and interaction features, ratios and differences, aggregations (group-by mean/count/std per user), date-time features (hour, weekday, holiday, cyclical sin/cos encoding), lag and rolling-window features, text features (TF-IDF, embeddings), geospatial features (distance, clusters), domain-specific features, target encoding.</p></div>
+
+<div class="q"><p class="qq">Why use cyclical encoding for time features?</p>
+<p>Hour 23 and hour 0 are adjacent but numerically far. Encoding as sin(2&pi;&middot;h/24) and cos(2&pi;&middot;h/24) preserves circular continuity.</p></div>
+
+<div class="q"><p class="qq">How should preprocessing be applied to train and test sets?</p>
+<p>Fit transformers (scalers, imputers, encoders, PCA) on training data only, then transform validation/test with those fitted parameters. Use pipelines (e.g., scikit-learn <code>Pipeline</code>/<code>ColumnTransformer</code>) so the same steps run in each CV fold and in production.</p></div>
+
+<div class="q"><p class="qq">What is the difference between fit, transform and fit_transform?</p>
+<p><code>fit</code> learns parameters from data (e.g., mean and std for a scaler, vocabulary for a vectorizer). <code>transform</code> applies the learned parameters to data. <code>fit_transform</code> does both in one step and should be used only on training data; validation, test and production data must use <code>transform</code> only, otherwise information leaks.</p></div>
+
+<div class="q"><p class="qq">How do you deal with high-cardinality categorical features?</p>
+<p>Target encoding with smoothing and out-of-fold computation, frequency encoding, grouping rare categories into "Other", hashing, learned embeddings, or CatBoost's native handling. Avoid one-hot explosion.</p></div>
+
+<div class="q"><p class="qq">What is data augmentation? Give examples across modalities.</p>
+<p>Creating modified copies of data to increase diversity and reduce overfitting. Images: flips, crops, rotation, color jitter, cutout, mixup, cutmix. Text: synonym replacement, back-translation, random deletion, paraphrasing with LLMs. Audio: time-shift, pitch shift, noise, SpecAugment. Tabular: SMOTE, noise injection.</p></div>
+
+<div class="q"><p class="qq">How do you handle noisy labels?</p>
+<p>Label auditing and relabeling, consensus of multiple annotators, confident learning (cleanlab) to find mislabeled samples, robust losses (MAE, symmetric CE), label smoothing, co-teaching, early stopping (nets memorize noise late).</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s4">4. Linear &amp; Logistic Regression</h2>
+
+<div class="q"><p class="qq">Explain linear regression.</p>
+<p>Models the target as a linear combination of features: <span class="f">&ycirc; = &beta;<sub>0</sub> + &beta;<sub>1</sub>x<sub>1</sub> + ... + &beta;<sub>p</sub>x<sub>p</sub></span>. Parameters are fit by minimizing the sum of squared residuals (Ordinary Least Squares), via the normal equation or gradient descent. Simple regression has one feature; multiple regression has many. Fast, interpretable, and a strong baseline; evaluated with RMSE, MAE and R&sup2;.</p></div>
+
+<div class="q"><p class="qq">What are the assumptions of linear regression?</p>
+<ol><li>Linearity between features and target.</li><li>Independence of errors.</li><li>Homoscedasticity (constant error variance).</li><li>Normality of residuals (for inference).</li><li>No (perfect) multicollinearity.</li></ol>
+<p>Check with residual plots, Q-Q plots, Durbin-Watson test, VIF.</p></div>
+
+<div class="q"><p class="qq">What is the closed-form (normal equation) solution of linear regression? When not to use it?</p>
+<p><span class="f">&beta; = (X<sup>T</sup>X)<sup>&minus;1</sup>X<sup>T</sup>y</span>. Cost is O(n&middot;d&sup2; + d&sup3;); impractical for many features or when X<sup>T</sup>X is singular (multicollinearity, d &gt; n). Use gradient descent, QR/SVD, or Ridge, which gives (X<sup>T</sup>X + &lambda;I)<sup>&minus;1</sup>X<sup>T</sup>y and is always invertible.</p></div>
+
+<div class="q"><p class="qq">L1 (Lasso) vs L2 (Ridge) vs Elastic Net?</p>
+<table><tr><th></th><th>L1 (Lasso)</th><th>L2 (Ridge)</th></tr>
+<tr><td>Penalty</td><td>&lambda;&Sigma;|w|</td><td>&lambda;&Sigma;w&sup2;</td></tr>
+<tr><td>Effect</td><td>Sparse weights (feature selection)</td><td>Shrinks weights smoothly, none exactly zero</td></tr>
+<tr><td>Correlated features</td><td>Picks one arbitrarily</td><td>Spreads weight among them</td></tr>
+<tr><td>Prior</td><td>Laplace</td><td>Gaussian</td></tr></table>
+<p>Elastic Net combines both: good with correlated features while still being sparse. L1 creates sparsity because its diamond-shaped constraint region has corners on the axes where the loss contours tend to touch.</p></div>
+
+<div class="q"><p class="qq">Explain R&sup2; and adjusted R&sup2;.</p>
+<p>R&sup2; = 1 &minus; SS<sub>res</sub>/SS<sub>tot</sub>: fraction of target variance explained. It never decreases when adding features. Adjusted R&sup2; = 1 &minus; (1 &minus; R&sup2;)(n &minus; 1)/(n &minus; p &minus; 1) penalizes extra features. R&sup2; can be negative on test data if the model is worse than predicting the mean.</p></div>
+
+<div class="q"><p class="qq">How do you check whether a feature is significant in linear regression?</p>
+<p>Each coefficient has a t-statistic (&beta;/SE(&beta;)) and p-value testing H0: &beta; = 0; p &lt; 0.05 suggests the feature is significant. The F-test checks whether the model as a whole (or a group of features) is significant. Confidence intervals that exclude 0 tell the same story. Multicollinearity inflates standard errors and can hide significant features.</p></div>
+
+<div class="q"><p class="qq">How do you interpret coefficients in linear regression?</p>
+<p>&beta;<sub>j</sub> is the expected change in y for a one-unit increase in x<sub>j</sub>, holding other features constant. With standardized features, magnitudes are comparable. With log target, coefficients approximate percentage change. Multicollinearity makes interpretation unreliable.</p></div>
+
+<div class="q"><p class="qq">What is logistic regression? Why is it called regression?</p>
+<p>A linear classifier modeling the log-odds as linear: log(p/(1&minus;p)) = w<sup>T</sup>x + b, so p = &sigma;(w<sup>T</sup>x + b) with the sigmoid &sigma;(z) = 1/(1+e<sup>&minus;z</sup>). It "regresses" the probability (log-odds) and is a GLM with a logit link. The decision boundary is linear.</p></div>
+
+<div class="q"><p class="qq">Linear regression vs logistic regression? Why not use linear regression for classification?</p>
+<table><tr><th></th><th>Linear regression</th><th>Logistic regression</th></tr>
+<tr><td>Task</td><td>Regression (continuous target)</td><td>Classification (probability of class)</td></tr>
+<tr><td>Output</td><td>Unbounded real value</td><td>Probability in (0, 1) via sigmoid</td></tr>
+<tr><td>Loss</td><td>Mean squared error</td><td>Log loss (cross-entropy)</td></tr>
+<tr><td>Estimation</td><td>OLS / closed form</td><td>MLE via iterative optimization</td></tr>
+<tr><td>Metrics</td><td>RMSE, MAE, R&sup2;</td><td>Accuracy, precision, recall, AUC, log loss</td></tr></table>
+<p>Linear regression for classification produces values outside [0, 1], and outliers shift the fitted line and therefore the decision threshold.</p></div>
+
+<div class="q"><p class="qq">What is the loss function of logistic regression and why not MSE?</p>
+<p>Binary cross-entropy (log loss): &minus;[y log p + (1&minus;y) log(1&minus;p)]. It is the Bernoulli negative log-likelihood and is convex in w. MSE with sigmoid is non-convex and yields small gradients when predictions are confidently wrong.</p></div>
+
+<div class="q"><p class="qq">How do you interpret logistic regression coefficients?</p>
+<p>A one-unit increase in x<sub>j</sub> changes the log-odds by &beta;<sub>j</sub>, i.e., multiplies the odds by e<sup>&beta;<sub>j</sub></sup> (odds ratio).</p></div>
+
+<div class="q"><p class="qq">How does logistic regression handle multi-class problems?</p>
+<p>One-vs-Rest (train K binary classifiers) or multinomial (softmax) regression: p<sub>k</sub> = e<sup>z<sub>k</sub></sup>/&Sigma;e<sup>z<sub>j</sub></sup>, trained with categorical cross-entropy.</p></div>
+
+<div class="q"><p class="qq">What happens with perfectly separable data in logistic regression?</p>
+<p>The MLE does not exist: weights grow to infinity to push probabilities to 0/1. Regularization fixes this.</p></div>
+
+<div class="q"><p class="qq">What are polynomial regression and GLMs?</p>
+<p>Polynomial regression adds powers/interactions of features and is still linear in parameters. Generalized Linear Models connect a linear predictor to the mean of an exponential-family distribution through a link function: linear (identity, Gaussian), logistic (logit, Bernoulli), Poisson regression (log, counts), Gamma regression.</p></div>
+
+<div class="q"><p class="qq">What is heteroscedasticity and how to fix it?</p>
+<p>Non-constant residual variance (e.g., errors grow with predicted value). Coefficients remain unbiased but standard errors are wrong. Fix with transforming the target (log), weighted least squares, or robust (Huber-White) standard errors.</p></div>
+
+<div class="q"><p class="qq">What are robust regression methods?</p>
+<p>Methods less sensitive to outliers: Huber loss (quadratic near zero, linear far away), MAE / quantile regression, RANSAC, Theil-Sen.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s5">5. Optimization</h2>
+
+<div class="q"><p class="qq">Explain gradient descent.</p>
+<p>Iteratively update parameters opposite to the gradient of the loss: <span class="f">&theta; &larr; &theta; &minus; &eta;&nabla;L(&theta;)</span>. Learning rate &eta; too small &rarr; slow; too large &rarr; divergence/oscillation.</p></div>
+
+<div class="q"><p class="qq">Batch vs stochastic vs mini-batch gradient descent?</p>
+<p><b>Batch GD</b>: full dataset per step; stable, slow, memory heavy. <b>SGD</b>: one sample per step; noisy, fast updates, noise can escape saddle points/sharp minima. <b>Mini-batch</b> (32&ndash;1024): compromise; uses GPU parallelism efficiently; the standard in deep learning.</p></div>
+
+<div class="q"><p class="qq">What is momentum? Nesterov momentum?</p>
+<p>Momentum accumulates an exponentially decaying average of past gradients: v = &beta;v + &nabla;L; &theta; -= &eta;v. It accelerates along consistent directions and dampens oscillations in ravines. Nesterov evaluates the gradient at the look-ahead position (&theta; &minus; &eta;&beta;v), giving more responsive corrections.</p></div>
+
+<div class="q"><p class="qq">Explain AdaGrad, RMSProp and Adam.</p>
+<ul><li><b>AdaGrad</b>: per-parameter learning rates scaled by the sum of squared past gradients; good for sparse features but learning rate decays to near zero.</li>
+<li><b>RMSProp</b>: uses an exponential moving average of squared gradients instead of the sum, fixing AdaGrad's decay.</li>
+<li><b>Adam</b>: momentum (1st moment m) + RMSProp (2nd moment v) with bias correction: &theta; -= &eta;&middot;m&#770;/(&radic;v&#770; + &epsilon;). Defaults &beta;<sub>1</sub>=0.9, &beta;<sub>2</sub>=0.999. Fast and robust; sometimes generalizes slightly worse than SGD+momentum.</li></ul></div>
+
+<div class="q"><p class="qq">What is AdamW and why is it preferred?</p>
+<p>In Adam, L2 regularization added to the loss gets scaled by the adaptive denominator, so it is not true weight decay. AdamW decouples weight decay, applying it directly to weights (&theta; -= &eta;&lambda;&theta;). It generalizes better and is the default for Transformers.</p></div>
+
+<div class="q"><p class="qq">What are learning rate schedules?</p>
+<p>Step decay, exponential decay, cosine annealing, cosine with warm restarts (SGDR), one-cycle policy, reduce-on-plateau, linear warmup then decay (standard for Transformers since early large updates with Adam's unstable statistics can diverge).</p></div>
+
+<div class="q"><p class="qq">How do you choose a good learning rate?</p>
+<p>Start from common defaults (Adam: 1e-3 or 3e-4; SGD with momentum: ~0.1 for CNNs), then tune on a log scale. Use an LR range test: increase the LR exponentially over a few hundred steps and pick a value about 10&times; below where the loss starts to blow up. Read loss curves: diverging or oscillating means too high; very slow decrease means too low. Combine with warmup and decay schedules.</p></div>
+
+<div class="q"><p class="qq">What are saddle points and local minima? Which is the bigger problem in deep learning?</p>
+<p>In high dimensions, saddle points (gradient zero, curvature positive in some directions and negative in others) are far more common than bad local minima. Most local minima of large networks have similar loss. Momentum and SGD noise help escape saddle points and plateaus.</p></div>
+
+<div class="q"><p class="qq">What are second-order optimization methods? Why are they rarely used in deep learning?</p>
+<p>Newton's method uses the Hessian: &theta; -= H<sup>&minus;1</sup>&nabla;L; converges in fewer steps. Quasi-Newton methods (BFGS, L-BFGS) approximate the Hessian. For networks with millions of parameters, storing/inverting a d&times;d Hessian is infeasible, and stochastic mini-batches make curvature estimates noisy.</p></div>
+
+<div class="q"><p class="qq">How does batch size affect training?</p>
+<p>Larger batches: more accurate gradients, better hardware utilization, fewer steps, but may converge to sharper minima and generalize worse and need learning-rate scaling (linear scaling rule with warmup). Smaller batches: noisier gradients acting as regularization, more updates, slower per epoch. Memory limits batch size; gradient accumulation simulates larger batches.</p></div>
+
+<div class="q"><p class="qq">What is gradient clipping?</p>
+<p>Limiting gradient magnitude (by value or by global norm) before the update to prevent exploding gradients, especially in RNNs and Transformers.</p></div>
+
+<div class="q"><p class="qq">What is early stopping?</p>
+<p>Monitor validation loss and stop when it hasn't improved for a "patience" number of epochs, restoring the best weights. Acts as regularization, similar in effect to L2 for linear models.</p></div>
+
+<div class="q"><p class="qq">What is the difference between an epoch, a batch and an iteration?</p>
+<p>Epoch: one full pass over the training data. Batch: subset of samples used in one update. Iteration: one parameter update. Iterations per epoch = dataset size / batch size.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s6">6. Decision Trees &amp; Ensembles</h2>
+
+<div class="q"><p class="qq">How does a decision tree work?</p>
+<p>Recursively splits data on the feature/threshold that best improves purity (classification) or reduces variance (regression), forming a tree of if-else rules. Leaves predict the majority class or mean value. Greedy, top-down (CART, ID3, C4.5).</p></div>
+
+<div class="q"><p class="qq">Gini impurity vs entropy (information gain)?</p>
+<p>Gini = 1 &minus; &Sigma;p<sub>k</sub>&sup2;; Entropy = &minus;&Sigma;p<sub>k</sub> log p<sub>k</sub>. Information gain = parent entropy &minus; weighted child entropy. Both give similar trees; Gini is slightly faster (no log). Information gain is biased toward high-cardinality features; C4.5 uses gain ratio to correct this. Regression trees use MSE/variance reduction.</p></div>
+
+<div class="q"><p class="qq">How do you prevent overfitting in decision trees?</p>
+<p>Pre-pruning: max_depth, min_samples_split, min_samples_leaf, max_leaf_nodes, min_impurity_decrease. Post-pruning: cost-complexity pruning (ccp_alpha). Or use ensembles (random forest, boosting).</p></div>
+
+<div class="q"><p class="qq">Advantages and disadvantages of decision trees?</p>
+<p>Pros: interpretable, handle non-linearity and interactions, no scaling needed, handle mixed types, fast inference. Cons: high variance/unstable, overfit easily, axis-aligned splits, poor extrapolation, greedy (not globally optimal), biased toward dominant classes.</p></div>
+
+<div class="q"><p class="qq">What is bagging?</p>
+<p>Bootstrap Aggregating: train models on bootstrap samples in parallel and average (regression) or vote (classification). Reduces variance; best with high-variance, low-bias base learners like deep trees.</p></div>
+
+<div class="q"><p class="qq">How does random forest work and why is it better than bagged trees?</p>
+<p>Bagging of decision trees plus random feature subsampling at each split (typically &radic;d for classification, d/3 for regression). The feature randomness decorrelates trees, so averaging reduces variance more. Robust, little tuning, gives feature importance and OOB error.</p></div>
+
+<div class="q"><p class="qq">What is out-of-bag (OOB) error?</p>
+<p>Each tree leaves out ~36.8% of samples. Predicting each sample using only trees that didn't see it gives an OOB estimate of generalization error, a free validation score without a separate holdout.</p></div>
+
+<div class="q"><p class="qq">What is boosting? How does it differ from bagging?</p>
+<p>Boosting trains weak learners sequentially, each focusing on errors of the previous ensemble, and combines them in a weighted sum. Reduces bias (and variance). Bagging is parallel, independent models, reduces variance. Boosting is more prone to overfitting noise and needs careful tuning (learning rate, n_estimators, depth).</p></div>
+
+<div class="q"><p class="qq">Explain AdaBoost.</p>
+<p>Start with equal sample weights; train a weak learner (often a stump); compute weighted error &epsilon; and learner weight &alpha; = &frac12; ln((1&minus;&epsilon;)/&epsilon;); increase weights of misclassified samples; repeat. Final prediction: sign(&Sigma;&alpha;<sub>t</sub>h<sub>t</sub>(x)). Equivalent to minimizing exponential loss; sensitive to outliers.</p></div>
+
+<div class="q"><p class="qq">Explain gradient boosting.</p>
+<p>Builds an additive model F<sub>m</sub>(x) = F<sub>m&minus;1</sub>(x) + &eta;&middot;h<sub>m</sub>(x), where each new tree h<sub>m</sub> fits the negative gradient of the loss w.r.t. current predictions (pseudo-residuals; for MSE these are ordinary residuals). It's gradient descent in function space and works with any differentiable loss. Key hyperparameters: learning rate, n_estimators, max_depth, subsample, min_child_weight.</p></div>
+
+<div class="q"><p class="qq">What makes XGBoost better than vanilla gradient boosting?</p>
+<p>Second-order Taylor approximation of the loss (gradient + Hessian), regularized objective (L1/L2 on leaf weights, &gamma; penalty on number of leaves), sparsity-aware split finding (learns default direction for missing values), weighted quantile sketch for approximate splits, column/row subsampling, parallelized split finding, cache-aware and out-of-core computation, built-in CV and early stopping.</p></div>
+
+<div class="q"><p class="qq">How does XGBoost compute leaf weights and split gain?</p>
+<p>Using a second-order Taylor expansion, each sample has gradient g<sub>i</sub> and Hessian h<sub>i</sub>. For a leaf with sums G = &Sigma;g<sub>i</sub> and H = &Sigma;h<sub>i</sub>, the optimal weight is <span class="f">w* = &minus;G / (H + &lambda;)</span>. The gain of splitting a node into left and right children is:<br>
+<span class="f">Gain = &frac12;[G<sub>L</sub>&sup2;/(H<sub>L</sub>+&lambda;) + G<sub>R</sub>&sup2;/(H<sub>R</sub>+&lambda;) &minus; (G<sub>L</sub>+G<sub>R</sub>)&sup2;/(H<sub>L</sub>+H<sub>R</sub>+&lambda;)] &minus; &gamma;</span><br>
+A split is kept only if the gain is positive, so &gamma; acts as built-in pruning and &lambda; shrinks leaf weights. <code>min_child_weight</code> sets a minimum H per leaf.</p></div>
+
+<div class="q"><p class="qq">XGBoost vs LightGBM vs CatBoost?</p>
+<table><tr><th>XGBoost</th><th>LightGBM</th><th>CatBoost</th></tr>
+<tr><td>Level-wise growth; histogram or exact splits; very mature.</td>
+<td>Leaf-wise (best-first) growth: faster, lower loss, but can overfit small data (limit num_leaves). Histogram binning, GOSS (gradient-based one-side sampling), EFB (exclusive feature bundling). Fastest on large data.</td>
+<td>Symmetric (oblivious) trees; native categorical handling with ordered target statistics; ordered boosting to reduce prediction shift/target leakage; strong defaults.</td></tr></table></div>
+
+<div class="q"><p class="qq">Random forest vs gradient boosting: differences and when to use which?</p>
+<table><tr><th></th><th>Random forest</th><th>Gradient boosting</th></tr>
+<tr><td>Training</td><td>Trees built independently, in parallel</td><td>Trees built sequentially, each correcting previous errors</td></tr>
+<tr><td>Reduces</td><td>Variance</td><td>Bias (and variance)</td></tr>
+<tr><td>Trees</td><td>Deep, fully grown</td><td>Shallow (weak learners)</td></tr>
+<tr><td>Tuning</td><td>Works well with defaults</td><td>Sensitive (learning rate, depth, n_estimators)</td></tr>
+<tr><td>Overfitting</td><td>More trees don't overfit</td><td>Too many trees can overfit; use early stopping</td></tr>
+<tr><td>Noise/outliers</td><td>More robust</td><td>More sensitive</td></tr></table>
+<p>Use random forest for a quick, robust baseline; gradient boosting (XGBoost/LightGBM/CatBoost) for best accuracy on tabular data when you can tune.</p></div>
+
+<div class="q"><p class="qq">How is feature importance computed in tree models? What are its pitfalls?</p>
+<p>Impurity-based (mean decrease in Gini/variance), split count, gain. Pitfalls: biased toward high-cardinality/continuous features, computed on training data, unreliable with correlated features. Better: permutation importance on validation data, or SHAP values (TreeSHAP).</p></div>
+
+<div class="q"><p class="qq">What are stacking, blending and voting?</p>
+<p><b>Voting</b>: combine predictions by majority (hard) or averaged probabilities (soft). <b>Stacking</b>: train a meta-model on out-of-fold predictions of base models. <b>Blending</b>: like stacking but the meta-model is trained on predictions on a holdout set. Works best with diverse base models.</p></div>
+
+<div class="q"><p class="qq">Why do ensembles work?</p>
+<p>If base models are accurate and make uncorrelated errors, averaging cancels individual errors, reducing variance (and boosting reduces bias). Variance of an average of n models with correlation &rho; is &rho;&sigma;&sup2; + (1&minus;&rho;)&sigma;&sup2;/n, so lowering correlation is key.</p></div>
+
+<div class="q"><p class="qq">Can tree-based models extrapolate?</p>
+<p>No. Predictions are constants (averages) in leaves, so outside the training range they stay flat at boundary values. For trends (e.g., time series growth), detrend first or use linear models.</p></div>
+
+<div class="q"><p class="qq">Why do gradient boosted trees often beat deep learning on tabular data?</p>
+<p>Tabular data has heterogeneous, non-smooth, often irregular features and moderate sample sizes; trees handle irregular decision boundaries, uninformative features, missing values, and different scales without preprocessing, and are easier to tune.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s7">7. SVM, KNN &amp; Naive Bayes</h2>
+
+<div class="q"><p class="qq">Explain Support Vector Machines.</p>
+<p>SVM finds the hyperplane that maximizes the margin between classes. The closest points (support vectors) define it. Hard margin requires separability; soft margin allows violations via slack variables controlled by C. Objective: min &frac12;||w||&sup2; + C&Sigma;&xi;<sub>i</sub>, equivalently hinge loss max(0, 1 &minus; y&middot;f(x)) + L2 regularization.</p></div>
+
+<div class="q"><p class="qq">What is the effect of the C parameter in SVM?</p>
+<p>Large C: penalizes misclassification heavily &rarr; narrow margin, low bias, high variance. Small C: wider margin, more violations allowed &rarr; more regularization.</p></div>
+
+<div class="q"><p class="qq">What is the kernel trick?</p>
+<p>Kernels compute inner products in a high-dimensional feature space without explicitly mapping data: K(x, z) = &phi;(x)&middot;&phi;(z). Since the SVM dual depends only on inner products, it can learn non-linear boundaries efficiently. Kernels: linear, polynomial (x&middot;z + c)<sup>d</sup>, RBF/Gaussian exp(&minus;&gamma;||x&minus;z||&sup2;), sigmoid. Valid kernels must be positive semi-definite (Mercer's theorem).</p></div>
+
+<div class="q"><p class="qq">What does gamma do in the RBF kernel?</p>
+<p>Controls the reach of each support vector. High &gamma;: very local influence, wiggly boundary, overfitting. Low &gamma;: smoother boundary, may underfit. Tune C and &gamma; together.</p></div>
+
+<div class="q"><p class="qq">SVM pros and cons? Does SVM output probabilities?</p>
+<p>Pros: effective in high dimensions, memory efficient (support vectors), strong with clear margin, flexible kernels. Cons: O(n&sup2;)&ndash;O(n&sup3;) training (poor for large n), sensitive to scaling and hyperparameters, less interpretable. SVM outputs distances, not probabilities; use Platt scaling for calibrated probabilities. SVR is the regression version with an &epsilon;-insensitive tube.</p></div>
+
+<div class="q"><p class="qq">How does KNN work and how do you choose k?</p>
+<p>Lazy, instance-based: predict by majority vote (classification) or average (regression) of the k nearest training points. Small k: low bias, high variance, noisy. Large k: smoother, more bias. Choose k via CV; use odd k for binary classification. Use distance weighting optionally.</p></div>
+
+<div class="q"><p class="qq">What distance metrics are used in ML?</p>
+<p>Euclidean (L2), Manhattan (L1), Minkowski (generalization), Chebyshev (L&infin;), cosine (orientation; text/embeddings), Hamming (categorical/binary), Jaccard (sets), Mahalanobis (accounts for covariance).</p></div>
+
+<div class="q"><p class="qq">KNN drawbacks and speedups?</p>
+<p>Slow prediction O(n&middot;d) per query, memory heavy, needs scaling, suffers from curse of dimensionality, sensitive to irrelevant features and imbalance. Speedups: KD-trees, Ball trees, approximate nearest neighbor (HNSW, FAISS, LSH).</p></div>
+
+<div class="q"><p class="qq">How does Naive Bayes work? Why "naive"?</p>
+<p>Applies Bayes' theorem assuming features are conditionally independent given the class: P(y|x) &prop; P(y)&Pi;P(x<sub>i</sub>|y). "Naive" because independence rarely holds, but it still classifies well (ranking is often correct even if probabilities are poorly calibrated). Variants: Gaussian (continuous), Multinomial (counts, text), Bernoulli (binary features), Complement NB (imbalanced text).</p></div>
+
+<div class="q"><p class="qq">What is Laplace smoothing?</p>
+<p>Adding a pseudo-count (&alpha;, typically 1) to every feature count so unseen feature-class combinations don't get zero probability, which would zero out the whole product.</p></div>
+
+<div class="q"><p class="qq">Why compute Naive Bayes in log space?</p>
+<p>Multiplying many small probabilities underflows to zero; summing log probabilities is numerically stable.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s8">8. Unsupervised Learning &amp; Dimensionality Reduction</h2>
+
+<div class="q"><p class="qq">Explain k-means clustering.</p>
+<p>Initialize k centroids; assign each point to its nearest centroid; recompute centroids as cluster means; repeat until convergence. Minimizes within-cluster sum of squares (inertia). Converges to a local optimum; complexity O(n&middot;k&middot;d&middot;iterations).</p></div>
+
+<div class="q"><p class="qq">What is k-means++?</p>
+<p>Smart initialization: choose the first centroid randomly, then pick subsequent centroids with probability proportional to squared distance from the nearest chosen centroid. Spreads centroids out, faster convergence and better results.</p></div>
+
+<div class="q"><p class="qq">How do you choose k in k-means?</p>
+<p>Elbow method (inertia vs k), silhouette score (higher is better, range &minus;1 to 1), gap statistic, Davies-Bouldin index (lower better), Calinski-Harabasz (higher better), and domain knowledge/business use.</p></div>
+
+<div class="q"><p class="qq">Limitations of k-means?</p>
+<p>Must choose k; assumes spherical, similarly sized clusters; sensitive to initialization, outliers and scaling; only numeric data (use k-modes/k-prototypes for categorical); struggles with non-convex shapes.</p></div>
+
+<div class="q"><p class="qq">K-means vs KNN?</p>
+<p><b>K-means</b>: unsupervised clustering; k = number of clusters; iteratively learns centroids. <b>KNN</b>: supervised classification/regression; k = number of neighbors; lazy learner with no training phase. Both rely on distance metrics and need feature scaling.</p></div>
+
+<div class="q"><p class="qq">Explain hierarchical clustering.</p>
+<p>Agglomerative (bottom-up): start with each point as a cluster and repeatedly merge the closest pair; divisive is top-down. Linkage: single (min distance; chaining), complete (max), average, Ward (minimizes variance increase). Produces a dendrogram; cut at a height to get clusters. O(n&sup2;) memory, no need to pre-specify k.</p></div>
+
+<div class="q"><p class="qq">Explain DBSCAN.</p>
+<p>Density-based: points with at least minPts neighbors within &epsilon; are core points; clusters grow from core points through density-reachable points; others are noise. Finds arbitrary shapes, detects outliers, no k needed. Struggles with varying densities (use HDBSCAN) and high dimensions; sensitive to &epsilon;.</p></div>
+
+<div class="q"><p class="qq">What are Gaussian Mixture Models and the EM algorithm?</p>
+<p>GMM models data as a mixture of K Gaussians with soft (probabilistic) assignments and elliptical clusters. Fit with Expectation-Maximization: <b>E-step</b> computes responsibilities (posterior cluster probabilities) given current parameters; <b>M-step</b> updates means, covariances, and mixing weights to maximize expected log-likelihood. K-means is a special case (hard assignments, equal spherical covariance). Choose K with BIC/AIC.</p></div>
+
+<div class="q"><p class="qq">Explain PCA.</p>
+<p>Linear dimensionality reduction that projects data onto orthogonal directions (principal components) of maximum variance. Steps: standardize, compute covariance matrix, eigen-decompose (or SVD of centered data), sort eigenvectors by eigenvalue, project onto top k. Choose k by explained variance (e.g., 95%) or scree plot. Limitations: linear, sensitive to scaling, components less interpretable, variance &ne; predictive relevance.</p></div>
+
+<div class="q"><p class="qq">How are PCA and SVD related?</p>
+<p>For centered data X = U&Sigma;V<sup>T</sup>, the columns of V are the principal directions, and eigenvalues of the covariance are &sigma;<sub>i</sub>&sup2;/(n&minus;1). SVD is more numerically stable than forming the covariance matrix.</p></div>
+
+<div class="q"><p class="qq">PCA vs LDA (Linear Discriminant Analysis)?</p>
+<p>PCA is unsupervised and maximizes variance. LDA is supervised and maximizes between-class separation relative to within-class scatter; at most (C&minus;1) components. LDA is also a classifier assuming Gaussian classes with shared covariance.</p></div>
+
+<div class="q"><p class="qq">t-SNE vs UMAP?</p>
+<p>Both are non-linear methods for visualization. <b>t-SNE</b> matches neighbor probability distributions (Gaussian in high-D, Student-t in low-D to avoid crowding); preserves local structure, slow, stochastic, perplexity-sensitive; cluster sizes/distances are not meaningful; no transform for new data. <b>UMAP</b>: based on manifold theory and fuzzy topological graphs; faster, scales better, preserves more global structure, supports transforming new points.</p></div>
+
+<div class="q"><p class="qq">What other dimensionality reduction methods exist?</p>
+<p>Kernel PCA (non-linear), ICA (statistically independent sources; blind source separation), NMF (non-negative parts-based; topic modeling), truncated SVD/LSA (sparse text), autoencoders, feature selection, random projections (Johnson-Lindenstrauss).</p></div>
+
+<div class="q"><p class="qq">What anomaly detection methods do you know?</p>
+<p>Statistical (z-score, IQR, Gaussian density), Isolation Forest (anomalies are isolated in fewer random splits &rarr; shorter path length), Local Outlier Factor (local density compared to neighbors), One-Class SVM, DBSCAN noise points, autoencoder reconstruction error, and forecasting residuals for time series.</p></div>
+
+<div class="q"><p class="qq">What is association rule mining?</p>
+<p>Finding item co-occurrence rules X &rarr; Y in transactions (market basket). Metrics: support = P(X&cup;Y), confidence = P(Y|X), lift = confidence / P(Y) (&gt;1 means positive association). Algorithms: Apriori (prunes using frequent-subset property), FP-Growth (prefix tree, no candidate generation).</p></div>
+
+<div class="q"><p class="qq">How do you evaluate clustering without labels?</p>
+<p>Internal metrics: silhouette, Davies-Bouldin, Calinski-Harabasz, inertia. With ground truth: Adjusted Rand Index, Normalized Mutual Information, homogeneity/completeness. Also stability across resamples and business usefulness.</p></div>
+
+<div class="q"><p class="qq">What is topic modeling (LDA - Latent Dirichlet Allocation)?</p>
+<p>Generative model where each document is a mixture of topics and each topic is a distribution over words, with Dirichlet priors. Inferred via Gibbs sampling or variational inference. Evaluate with coherence scores. Modern alternative: BERTopic (embeddings + clustering + c-TF-IDF).</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s9">9. Model Evaluation &amp; Metrics</h2>
+
+<div class="q"><p class="qq">Explain the confusion matrix and derived metrics.</p>
+<table><tr><th></th><th>Predicted +</th><th>Predicted &minus;</th></tr>
+<tr><th>Actual +</th><td>TP</td><td>FN (Type II)</td></tr>
+<tr><th>Actual &minus;</th><td>FP (Type I)</td><td>TN</td></tr></table>
+<p>Accuracy = (TP+TN)/All. Precision = TP/(TP+FP). Recall/Sensitivity/TPR = TP/(TP+FN). Specificity/TNR = TN/(TN+FP). FPR = FP/(FP+TN). F1 = 2PR/(P+R).</p></div>
+
+<div class="q"><p class="qq">When to prioritize precision vs recall?</p>
+<p><b>Precision</b> when false positives are costly: spam filtering (don't lose real emails), recommending content, legal decisions. <b>Recall</b> when false negatives are costly: cancer screening, fraud detection, safety defects. F&beta; balances them (&beta; &gt; 1 weights recall).</p></div>
+
+<div class="q"><p class="qq">Why does the F1 score use the harmonic mean instead of the arithmetic mean?</p>
+<p>The harmonic mean is dominated by the smaller value, so F1 is high only when both precision and recall are high. A model with precision 1.0 and recall 0.0 would get 0.5 with the arithmetic mean but 0 with F1.</p></div>
+
+<div class="q"><p class="qq">Why is accuracy misleading on imbalanced data?</p>
+<p>With 99% negatives, predicting all negative gives 99% accuracy but zero recall. Use precision, recall, F1, PR-AUC, balanced accuracy, MCC (Matthews correlation coefficient), or Cohen's kappa.</p></div>
+
+<div class="q"><p class="qq">Explain ROC curve and AUC.</p>
+<p>ROC plots TPR vs FPR across all thresholds. AUC is the probability that a random positive is scored higher than a random negative; 0.5 = random, 1.0 = perfect. Threshold-independent and scale-invariant; measures ranking quality.</p></div>
+
+<div class="q"><p class="qq">ROC-AUC vs PR-AUC?</p>
+<p>With heavy imbalance, FPR stays small because TN is huge, so ROC-AUC can look optimistic. PR curves (precision vs recall) focus on the positive class and are more informative for rare positives; baseline PR-AUC equals positive prevalence.</p></div>
+
+<div class="q"><p class="qq">How do you choose a classification threshold?</p>
+<p>Based on business costs: maximize F1/F&beta;, use Youden's J (TPR &minus; FPR) on ROC, set a minimum precision or recall constraint, or minimize expected cost (cost<sub>FP</sub>&middot;FP + cost<sub>FN</sub>&middot;FN). Choose on validation data, not test.</p></div>
+
+<div class="q"><p class="qq">Micro vs macro vs weighted averaging in multi-class metrics?</p>
+<p><b>Macro</b>: compute metric per class, average equally (treats rare classes equally). <b>Micro</b>: aggregate TP/FP/FN globally (dominated by frequent classes; micro-F1 = accuracy in single-label multi-class). <b>Weighted</b>: macro weighted by class support.</p></div>
+
+<div class="q"><p class="qq">Explain regression metrics.</p>
+<ul><li><b>MAE</b>: mean |error|; robust to outliers; median-optimal.</li>
+<li><b>MSE</b>: mean squared error; penalizes large errors; mean-optimal; differentiable.</li>
+<li><b>RMSE</b>: &radic;MSE; same units as target.</li>
+<li><b>R&sup2; / adjusted R&sup2;</b>: variance explained.</li>
+<li><b>MAPE</b>: mean |error/actual|; scale-free but undefined at zero and asymmetric; sMAPE fixes partly.</li>
+<li><b>RMSLE</b>: penalizes under-prediction more; for targets spanning orders of magnitude.</li>
+<li><b>Huber</b>: MSE for small errors, MAE for large.</li></ul></div>
+
+<div class="q"><p class="qq">What is log loss and why use it?</p>
+<p>&minus;(1/N)&Sigma;[y log p + (1&minus;y) log(1&minus;p)]. Evaluates the quality of predicted probabilities, heavily penalizing confident wrong predictions. Useful when calibrated probabilities matter.</p></div>
+
+<div class="q"><p class="qq">What is model calibration and how do you calibrate?</p>
+<p>A model is calibrated if, among predictions with probability 0.8, about 80% are positive. Check with reliability diagrams, Brier score, Expected Calibration Error (ECE). Calibrate with Platt scaling (logistic fit on scores), isotonic regression, or temperature scaling (neural nets). Boosted trees, SVMs, Naive Bayes, and deep nets are often miscalibrated.</p></div>
+
+<div class="q"><p class="qq">How do you quantify uncertainty in predictions? What is conformal prediction?</p>
+<p><b>Aleatoric</b> uncertainty comes from noise in the data (irreducible); <b>epistemic</b> uncertainty comes from limited knowledge (reducible with more data). Methods: calibrated probabilities, prediction intervals via quantile regression, ensembles (spread of predictions), MC dropout, Bayesian models. <b>Conformal prediction</b> uses a held-out calibration set of residuals/non-conformity scores to turn any model's output into prediction intervals (regression) or prediction sets (classification) with a guaranteed coverage such as 90%, assuming exchangeable data.</p></div>
+
+<div class="q"><p class="qq">What are ranking metrics?</p>
+<p><b>Precision@k / Recall@k</b>; <b>MAP</b> (mean average precision over queries); <b>MRR</b> (mean of 1/rank of first relevant item); <b>NDCG@k</b> (discounted cumulative gain with graded relevance, normalized by ideal ordering); hit rate; coverage and diversity for recommenders.</p></div>
+
+<div class="q"><p class="qq">What are learning curves and validation curves?</p>
+<p><b>Learning curves</b> plot train/validation score vs training set size: a large gap means high variance (more data helps); both low and close means high bias. <b>Validation curves</b> plot scores vs a hyperparameter value to find the sweet spot between under- and overfitting.</p></div>
+
+<div class="q"><p class="qq">How do you compare two models statistically?</p>
+<p>Use the same CV folds and a paired test: paired t-test on fold scores (corrected resampled t-test), McNemar's test on classification disagreements, 5&times;2 CV test, or bootstrap confidence intervals of the metric difference.</p></div>
+
+<div class="q"><p class="qq">What metrics are used for object detection, segmentation and NLP generation?</p>
+<p>Detection: IoU, mAP@0.5, mAP@[0.5:0.95]. Segmentation: pixel accuracy, mean IoU, Dice coefficient. Generation: BLEU (n-gram precision, translation), ROUGE (recall, summarization), METEOR, BERTScore, perplexity, human/LLM-as-judge evaluation.</p></div>
+
+<div class="q"><p class="qq">How do you explain a model's predictions (feature importance, SHAP, LIME)?</p>
+<p><b>Global</b> explanations describe overall behavior: coefficients (linear models), permutation importance (drop in validation score when a feature is shuffled), partial dependence plots. <b>Local</b> explanations describe one prediction: <b>SHAP</b> assigns each feature its Shapley value (average marginal contribution across feature combinations; contributions sum to prediction minus baseline; TreeSHAP is fast for tree models); <b>LIME</b> fits a simple surrogate model on perturbed samples around the instance. Needed for trust, debugging, leakage detection and regulatory compliance.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s10">10. Model Selection &amp; Hyperparameter Tuning</h2>
+
+<div class="q"><p class="qq">Grid search vs random search vs Bayesian optimization?</p>
+<p><b>Grid search</b>: exhaustive over a grid; expensive, scales exponentially. <b>Random search</b>: samples combinations; more efficient since few hyperparameters usually matter (Bergstra &amp; Bengio). <b>Bayesian optimization</b>: builds a surrogate model (Gaussian process, TPE) of score vs hyperparameters and picks the next trial using an acquisition function (Expected Improvement, UCB), balancing exploration/exploitation. Tools: Optuna, Hyperopt, Ray Tune.</p></div>
+
+<div class="q"><p class="qq">What are AIC and BIC?</p>
+<p>Model selection criteria balancing fit and complexity: AIC = 2k &minus; 2 ln L; BIC = k ln n &minus; 2 ln L. Lower is better; BIC penalizes complexity more and prefers simpler models for large n.</p></div>
+
+<div class="q"><p class="qq">What is Occam's razor in ML?</p>
+<p>Among models with similar performance, prefer the simpler one: it generalizes better, is easier to interpret, maintain and serve.</p></div>
+
+<div class="q"><p class="qq">Which hyperparameters matter most for common models?</p>
+<p>Random forest: n_estimators, max_features, max_depth, min_samples_leaf. GBM/XGBoost: learning_rate, n_estimators (with early stopping), max_depth/num_leaves, subsample, colsample_bytree, min_child_weight, regularization. SVM: C, kernel, &gamma;. Neural nets: learning rate (most important), batch size, architecture size, weight decay, dropout, optimizer, schedule.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s11">11. Time Series</h2>
+
+<div class="q"><p class="qq">What are the components of a time series?</p>
+<p>Trend (long-term direction), seasonality (fixed-period patterns), cyclical (non-fixed longer cycles), and residual/noise. Decompose additively (y = T + S + R) or multiplicatively (y = T &times; S &times; R), e.g., STL decomposition.</p></div>
+
+<div class="q"><p class="qq">What is stationarity and how do you test/achieve it?</p>
+<p>A stationary series has constant mean, variance and autocovariance over time. Tests: Augmented Dickey-Fuller (H0: non-stationary/unit root), KPSS (H0: stationary). Achieve via differencing, seasonal differencing, log/Box-Cox transforms, detrending.</p></div>
+
+<div class="q"><p class="qq">Explain ACF and PACF.</p>
+<p>ACF: correlation of the series with its lags (including indirect effects). PACF: correlation with a lag after removing effects of shorter lags. For AR(p), PACF cuts off after p; for MA(q), ACF cuts off after q.</p></div>
+
+<div class="q"><p class="qq">Explain ARIMA and SARIMA.</p>
+<p>ARIMA(p, d, q): AutoRegressive terms (p past values), Integrated (d differences), Moving Average (q past errors). SARIMA adds seasonal (P, D, Q, s) terms; ARIMAX/SARIMAX adds exogenous variables. Select orders via ACF/PACF, AIC, or auto-ARIMA.</p></div>
+
+<div class="q"><p class="qq">What other forecasting methods exist?</p>
+<p>Naive / seasonal naive baselines, moving averages, exponential smoothing (Holt-Winters: level, trend, seasonality), Prophet (trend + seasonality + holidays), VAR (multivariate), gradient boosting with lag/rolling features, RNN/LSTM, Temporal Convolutional Networks, Transformers (Temporal Fusion Transformer, Informer, PatchTST), N-BEATS, foundation models (TimeGPT, Chronos).</p></div>
+
+<div class="q"><p class="qq">How do you validate time series models?</p>
+<p>Never shuffle. Use walk-forward / expanding or sliding window validation (TimeSeriesSplit), with a gap between train and test if features use lags. Compute features only from past data. Metrics: MAE, RMSE, MAPE, sMAPE, MASE (scaled by naive forecast).</p></div>
+
+<div class="q"><p class="qq">How do you convert a time series into a supervised learning problem?</p>
+<p>Create lag features (y<sub>t&minus;1</sub>, y<sub>t&minus;7</sub>), rolling statistics (mean, std over windows, shifted to avoid leakage), date features (day, month, holiday), and exogenous variables. For multi-step forecasting: recursive (feed predictions back), direct (one model per horizon), or multi-output.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s12">12. Recommender Systems</h2>
+
+<div class="q"><p class="qq">What are the main types of recommender systems?</p>
+<p><b>Content-based</b>: recommend items similar to those the user liked using item features. <b>Collaborative filtering</b>: use user-item interactions; user-based (similar users) or item-based (similar items). <b>Hybrid</b>: combine both. <b>Knowledge-based</b> and <b>popularity-based</b> baselines.</p></div>
+
+<div class="q"><p class="qq">Explain matrix factorization for recommendations.</p>
+<p>Approximate the sparse user-item rating matrix R &asymp; U&middot;V<sup>T</sup> with low-dimensional latent factors for users and items, learned by minimizing squared error on observed entries plus regularization, via SGD or Alternating Least Squares (ALS). Predicted rating = u<sub>i</sub>&middot;v<sub>j</sub> + biases. Popularized by the Netflix Prize (SVD++, etc.).</p></div>
+
+<div class="q"><p class="qq">Explicit vs implicit feedback?</p>
+<p>Explicit: ratings, likes (sparse, biased). Implicit: clicks, views, purchases, watch time (abundant, noisy, no negatives). Implicit needs negative sampling and losses like BPR (Bayesian Personalized Ranking) or weighted ALS.</p></div>
+
+<div class="q"><p class="qq">What is the cold-start problem and how to address it?</p>
+<p>New users or items lack interaction history. Solutions: content-based features, popularity/trending recommendations, onboarding questionnaires, demographic/contextual features, hybrid models, exploration via bandits, and using metadata embeddings.</p></div>
+
+<div class="q"><p class="qq">Describe a modern large-scale recommender architecture.</p>
+<p>Multi-stage: <b>candidate generation</b> (two-tower models producing user and item embeddings, retrieved via approximate nearest neighbor search) &rarr; <b>ranking</b> (heavier model such as Wide &amp; Deep, DeepFM, DCN, DLRM, or GBDT with rich features predicting click/engagement) &rarr; <b>re-ranking</b> (diversity, freshness, business rules, fairness). Evaluate offline (NDCG, recall@k) and online (A/B: CTR, retention).</p></div>
+
+<div class="q"><p class="qq">What is learning to rank? Pointwise vs pairwise vs listwise?</p>
+<p>Training models to order items by relevance for a query or user. <b>Pointwise</b>: predict a relevance score/label per item (regression/classification). <b>Pairwise</b>: learn to order pairs correctly (RankNet, RankSVM). <b>Listwise</b>: optimize a metric over the whole list such as NDCG (ListNet, LambdaRank). <b>LambdaMART</b> (gradient boosted trees with lambda gradients; <code>rank:ndcg</code> in XGBoost, <code>lambdarank</code> in LightGBM) is a strong industry standard. Click data needs position-bias correction.</p></div>
+
+<div class="q"><p class="qq">What are multi-armed bandits?</p>
+<p>Online methods balancing exploration and exploitation: &epsilon;-greedy, Upper Confidence Bound (UCB), Thompson sampling. Contextual bandits (LinUCB) use features. Used for recommendations, ad selection and adaptive A/B testing.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s13">13. Deep Learning Fundamentals</h2>
+
+<div class="q"><p class="qq">What is deep learning and why has it succeeded recently?</p>
+<p>Deep learning uses neural networks with many layers to learn hierarchical representations directly from raw data, removing manual feature engineering. Success drivers: large datasets, GPUs/TPUs, better architectures (ResNets, Transformers), better training techniques (ReLU, BatchNorm, Adam, residual connections), and open-source frameworks.</p></div>
+
+<div class="q"><p class="qq">Explain the structure of a neural network. What are weights and biases?</p>
+<p>An input layer, one or more hidden layers, and an output layer. Each neuron computes a weighted sum of its inputs plus a bias and applies an activation: <span class="f">a = f(w&middot;x + b)</span>. <b>Weights</b> set the strength of each connection; the <b>bias</b> shifts the activation threshold so the decision boundary need not pass through the origin. In dense (fully connected) layers every neuron connects to all neurons of the previous layer. Training adjusts weights and biases via backpropagation.</p></div>
+
+<div class="q"><p class="qq">What is a tensor? Why are GPUs used for deep learning?</p>
+<p>A tensor is an n-dimensional array: scalar (0-D), vector (1-D), matrix (2-D), and higher, e.g., a batch of images has shape (N, C, H, W). Deep learning is dominated by large matrix multiplications and convolutions that are highly parallel; GPUs have thousands of cores and high memory bandwidth to do these in parallel, often 10&ndash;100&times; faster than CPUs. TPUs and NPUs are chips specialized for the same operations.</p></div>
+
+<div class="q"><p class="qq">What is a perceptron? Why can't it solve XOR?</p>
+<p>A single neuron computing step(w&middot;x + b); a linear classifier. XOR is not linearly separable, so one perceptron can't solve it. A multi-layer perceptron with a hidden layer and non-linear activation can.</p></div>
+
+<div class="q"><p class="qq">What is the Universal Approximation Theorem?</p>
+<p>A feed-forward network with a single hidden layer of enough neurons and a non-linear activation can approximate any continuous function on a compact domain to arbitrary accuracy. It says nothing about how many neurons are needed, or whether training can find the weights; deep networks represent many functions far more efficiently than wide shallow ones.</p></div>
+
+<div class="q"><p class="qq">Why do we need non-linear activation functions?</p>
+<p>Without them, stacked linear layers collapse into a single linear transformation (W<sub>2</sub>W<sub>1</sub>x = Wx), so depth adds no expressive power.</p></div>
+
+<div class="q"><p class="qq">Compare common activation functions.</p>
+<table><tr><th>Activation</th><th>Formula / Range</th><th>Notes</th></tr>
+<tr><td>Sigmoid</td><td>1/(1+e<sup>&minus;x</sup>), (0,1)</td><td>Saturates &rarr; vanishing gradients; not zero-centered; used for binary outputs and gates.</td></tr>
+<tr><td>Tanh</td><td>(&minus;1,1)</td><td>Zero-centered, still saturates; used in RNNs.</td></tr>
+<tr><td>ReLU</td><td>max(0,x)</td><td>Cheap, no saturation for x&gt;0, sparse; "dying ReLU" for x&lt;0.</td></tr>
+<tr><td>Leaky ReLU / PReLU</td><td>max(&alpha;x, x)</td><td>Small slope for negatives fixes dying ReLU; PReLU learns &alpha;.</td></tr>
+<tr><td>ELU / SELU</td><td>smooth negative part</td><td>Mean closer to zero; SELU self-normalizes.</td></tr>
+<tr><td>GELU</td><td>x&middot;&Phi;(x)</td><td>Smooth; default in BERT/GPT.</td></tr>
+<tr><td>Swish / SiLU</td><td>x&middot;&sigma;(x)</td><td>Smooth, non-monotonic; EfficientNet, LLaMA (SwiGLU).</td></tr>
+<tr><td>Softmax</td><td>e<sup>z<sub>i</sub></sup>/&Sigma;e<sup>z<sub>j</sub></sup></td><td>Multi-class probability output.</td></tr></table></div>
+
+<div class="q"><p class="qq">What is the dying ReLU problem?</p>
+<p>If a neuron's pre-activation is negative for all inputs (e.g., due to a large learning rate or bad bias), its gradient is zero and it never updates again. Fix with Leaky ReLU/ELU/GELU, proper initialization, and lower learning rates.</p></div>
+
+<div class="q"><p class="qq">Which activation should be used in the output layer (sigmoid vs softmax vs linear)?</p>
+<ul><li>Binary classification: 1 sigmoid unit + binary cross-entropy.</li>
+<li>Multi-class (one label per sample): softmax over K units + categorical cross-entropy; probabilities sum to 1.</li>
+<li>Multi-label (several labels per sample): K independent sigmoid units + binary cross-entropy per label.</li>
+<li>Regression: linear (no activation); ReLU/softplus if output must be non-negative.</li></ul>
+<p>Hidden layers typically use ReLU/GELU, not sigmoid.</p></div>
+
+<div class="q"><p class="qq">Explain forward propagation and backpropagation.</p>
+<p>Forward: compute layer outputs sequentially to get predictions and loss. Backward: apply the chain rule from the loss back through each layer to compute gradients of the loss w.r.t. every parameter, reusing intermediate results (reverse-mode automatic differentiation), then update weights with an optimizer. Cost of backward pass is about 2&times; forward.</p></div>
+
+<div class="q"><p class="qq">Derive the gradient of softmax + cross-entropy.</p>
+<p>For logits z, p = softmax(z), and one-hot target y, L = &minus;&Sigma;y<sub>k</sub> log p<sub>k</sub>. Then &part;L/&part;z<sub>k</sub> = p<sub>k</sub> &minus; y<sub>k</sub>. This simple, well-behaved gradient is why softmax and cross-entropy are combined (also numerically stable via log-sum-exp). Similarly, sigmoid + BCE gives p &minus; y.</p></div>
+
+<div class="q"><p class="qq">What is automatic differentiation? Static vs dynamic computation graphs?</p>
+<p>Autodiff computes exact derivatives by recording elementary operations in a computational graph and applying the chain rule (reverse mode for many-inputs-to-scalar-loss). Dynamic graphs (PyTorch eager) are built on the fly, easy to debug, support Python control flow. Static graphs (TF1, compiled modes like <code>torch.compile</code>, JAX jit, XLA) allow global optimizations.</p></div>
+
+<div class="q"><p class="qq">What are vanishing and exploding gradients? How to address them?</p>
+<p>During backprop, gradients are products of many layer Jacobians; if factors are &lt;1 they shrink exponentially (early layers stop learning), if &gt;1 they explode (unstable training, NaNs). Remedies: ReLU-family activations, proper initialization (Xavier/He), batch/layer normalization, residual connections, LSTM/GRU gating, gradient clipping, smaller learning rates.</p></div>
+
+<div class="q"><p class="qq">Why does weight initialization matter? Explain Xavier and He initialization.</p>
+<p>All-zero initialization makes neurons symmetric (they learn the same thing). Too large/small weights cause exploding/vanishing activations. <b>Xavier/Glorot</b>: Var(w) = 2/(fan_in + fan_out), designed for tanh/sigmoid. <b>He/Kaiming</b>: Var(w) = 2/fan_in, designed for ReLU (which zeroes half the inputs). Both keep activation variance roughly constant across layers.</p></div>
+
+<div class="q"><p class="qq">Which loss functions are used for which tasks?</p>
+<ul><li>Regression: MSE, MAE, Huber, log-cosh, quantile (pinball) loss.</li>
+<li>Binary classification: binary cross-entropy (BCEWithLogits), hinge.</li>
+<li>Multi-class: categorical cross-entropy; multi-label: per-label sigmoid BCE.</li>
+<li>Imbalanced/detection: focal loss = &minus;&alpha;(1&minus;p)<sup>&gamma;</sup> log p (down-weights easy examples).</li>
+<li>Segmentation: Dice loss, IoU/Jaccard loss, combined with CE.</li>
+<li>Metric learning: contrastive loss, triplet loss (anchor-positive closer than anchor-negative by margin), InfoNCE.</li>
+<li>Distributions: KL divergence; GANs: adversarial loss; ranking: pairwise/listwise losses.</li></ul></div>
+
+<div class="q"><p class="qq">What is the difference between a logit, a probability and log-odds?</p>
+<p>Logits are raw unnormalized scores output by the last layer. Softmax/sigmoid convert logits into probabilities. For binary sigmoid output, the logit equals log-odds log(p/(1&minus;p)). Losses like <code>CrossEntropyLoss</code> take logits for numerical stability.</p></div>
+
+<div class="q"><p class="qq">What are the differences between ML and DL?</p>
+<p>Classical ML relies on hand-engineered features and works well on small/structured data with fast training and better interpretability. DL learns features automatically, excels on unstructured data (images, text, audio) with lots of data and compute, but is less interpretable and more resource intensive.</p></div>
+
+<div class="q"><p class="qq">How do you count parameters in dense and convolutional layers?</p>
+<p>Dense: (inputs &times; outputs) + outputs (bias). Conv2D: (k<sub>h</sub> &times; k<sub>w</sub> &times; C<sub>in</sub> + 1) &times; C<sub>out</sub>. Example: 3&times;3 conv, 64&rarr;128 channels = (3&middot;3&middot;64 + 1)&middot;128 = 73,856.</p></div>
+
+<div class="q"><p class="qq">How do you choose the number of hidden layers and neurons?</p>
+<p>There is no formula. Start from a proven architecture for the data type, or a small network (1&ndash;3 hidden layers) for tabular data. Increase capacity until training error is low and validation stops improving, then control overfitting with regularization; a slightly larger network with dropout/weight decay usually beats a too-small one. Tune with random or Bayesian search and prefer transfer learning when possible.</p></div>
+
+<div class="q"><p class="qq">What is an autoencoder and what is it used for?</p>
+<p>A network with an encoder that compresses the input into a low-dimensional latent code (bottleneck) and a decoder that reconstructs the input; trained to minimize reconstruction loss without labels. Uses: non-linear dimensionality reduction, denoising (denoising autoencoder), anomaly detection (high reconstruction error flags anomalies), feature learning and pretraining. Unlike PCA, it can learn non-linear structure.</p></div>
+
+<div class="q"><p class="qq">When would you use an MLP vs CNN vs RNN vs Transformer?</p>
+<ul><li><b>MLP</b>: fixed-size feature vectors / tabular data (though gradient boosting often wins there).</li>
+<li><b>CNN</b>: grid-like data with local patterns: images, spectrograms, 1D signals.</li>
+<li><b>RNN/LSTM/GRU</b>: sequential data with small datasets, streaming or low-latency step-by-step processing, some time series.</li>
+<li><b>Transformer</b>: text and sequences with long-range dependencies and large data; ViT for images with lots of data.</li></ul></div>
+
+<!-- ===================================================== -->
+<h2 id="s14">14. Training Deep Networks &amp; Regularization</h2>
+
+<div class="q"><p class="qq">How do you prevent overfitting in neural networks?</p>
+<p>Get more data or use data augmentation; use transfer learning; add regularization (weight decay/L2, dropout, label smoothing); use batch normalization; apply early stopping on validation loss; reduce model size; use ensembles; and make sure train/validation splits are clean (no leakage or duplicates).</p></div>
+
+<div class="q"><p class="qq">Explain batch normalization. Why does it help?</p>
+<p>Normalizes each feature over the mini-batch to zero mean and unit variance, then applies learnable scale &gamma; and shift &beta;. Uses running averages at inference. Benefits: allows higher learning rates, faster convergence, less sensitivity to initialization, mild regularization. Originally attributed to reducing "internal covariate shift"; later work suggests it mainly smooths the loss landscape. Downsides: depends on batch size, differs between train/eval, awkward for RNNs and small batches.</p></div>
+
+<div class="q"><p class="qq">Batch norm vs layer norm vs instance norm vs group norm?</p>
+<p><b>BatchNorm</b>: normalize across batch per channel (CNNs, large batches). <b>LayerNorm</b>: normalize across features per sample, batch-independent (Transformers, RNNs). <b>InstanceNorm</b>: per sample per channel (style transfer). <b>GroupNorm</b>: per sample over groups of channels (small-batch detection/segmentation). <b>RMSNorm</b>: LayerNorm without mean-centering (LLaMA), cheaper.</p></div>
+
+<div class="q"><p class="qq">How does dropout work? Why does it regularize?</p>
+<p>During training, randomly zero each activation with probability p and scale survivors by 1/(1&minus;p) (inverted dropout) so inference needs no change. It prevents co-adaptation of neurons and approximates averaging an exponential ensemble of sub-networks. Disabled at inference (<code>model.eval()</code>). MC Dropout keeps it on at inference to estimate uncertainty.</p></div>
+
+<div class="q"><p class="qq">L2 regularization vs weight decay?</p>
+<p>For plain SGD they are equivalent. For adaptive optimizers like Adam they differ, because L2's gradient is rescaled per parameter; decoupled weight decay (AdamW) applies shrinkage directly and works better.</p></div>
+
+<div class="q"><p class="qq">What is label smoothing?</p>
+<p>Replace one-hot targets with (1&minus;&epsilon;) for the true class and &epsilon;/(K&minus;1) (or &epsilon;/K) for others. Prevents over-confident logits, improves calibration and generalization (used in Inception, Transformers).</p></div>
+
+<div class="q"><p class="qq">What are residual (skip) connections and why do they work?</p>
+<p>Output = F(x) + x. The layer learns a residual, so learning identity is easy; gradients flow directly through the identity path, mitigating vanishing gradients and the degradation problem, enabling 100+ layer networks (ResNet) and deep Transformers.</p></div>
+
+<div class="q"><p class="qq">Describe a typical training loop (e.g., in PyTorch).</p>
+<ol><li>For each epoch, call <code>model.train()</code> and iterate over mini-batches from a DataLoader.</li>
+<li>Move data to the device; forward pass to get outputs; compute loss.</li>
+<li><code>optimizer.zero_grad()</code> (gradients accumulate otherwise), <code>loss.backward()</code>, optionally clip gradients, <code>optimizer.step()</code>, step the LR scheduler.</li>
+<li>Validation: <code>model.eval()</code> (disables dropout, uses BatchNorm running stats) inside <code>torch.no_grad()</code> (no gradient tracking, saves memory); compute metrics.</li>
+<li>Log metrics, checkpoint the best model, apply early stopping.</li></ol></div>
+
+<div class="q"><p class="qq">PyTorch vs TensorFlow/Keras?</p>
+<p><b>PyTorch</b>: Pythonic, eager (dynamic graphs), easy debugging, dominant in research and increasingly in production (TorchScript, <code>torch.compile</code>, ONNX). <b>TensorFlow/Keras</b>: high-level Keras API for quick model building, mature production ecosystem (TF Serving, TF Lite for mobile, TF.js), graph compilation with <code>tf.function</code>. Both support GPUs/TPUs and distributed training; the choice is often driven by team and deployment ecosystem.</p></div>
+
+<div class="q"><p class="qq">What are the steps to debug a neural network that isn't learning?</p>
+<ol><li>Overfit a tiny batch first; if it can't reach ~0 loss, there's a bug.</li>
+<li>Check data pipeline: labels aligned, normalization, augmentation correctness, shuffling.</li>
+<li>Check loss/activation pairing (logits vs probabilities), loss scale at init (~ln K for K classes).</li>
+<li>Tune learning rate (LR range test); check for NaNs, exploding/vanishing gradients (monitor gradient norms).</li>
+<li>Verify <code>model.train()</code>/<code>eval()</code>, zeroing gradients, correct optimizer params.</li>
+<li>Simplify architecture; then add complexity back.</li></ol></div>
+
+<div class="q"><p class="qq">What is mixed-precision training?</p>
+<p>Use FP16/BF16 for most computations and FP32 master weights for updates. Speeds up training on Tensor Cores and halves memory. FP16 needs loss scaling to avoid gradient underflow; BF16 has FP32's exponent range so usually doesn't.</p></div>
+
+<div class="q"><p class="qq">What is gradient accumulation and gradient checkpointing?</p>
+<p><b>Gradient accumulation</b>: sum gradients over several small batches before an update to emulate a large batch under memory limits. <b>Gradient (activation) checkpointing</b>: store only some activations during forward and recompute the rest during backward, trading compute for memory.</p></div>
+
+<div class="q"><p class="qq">How is deep learning training distributed across devices?</p>
+<p><b>Data parallelism</b> (DDP): replicate model, split batches, all-reduce gradients. <b>ZeRO / FSDP</b>: shard optimizer states, gradients and parameters across devices. <b>Tensor parallelism</b>: split individual layers' matrices. <b>Pipeline parallelism</b>: split layers across devices with micro-batches. Large LLMs combine all (3D parallelism).</p></div>
+
+<div class="q"><p class="qq">What is knowledge distillation?</p>
+<p>A small student model is trained to match the softened output distribution (soft targets, temperature T) of a large teacher, plus the true labels. Soft targets carry "dark knowledge" about class similarities. Used to compress models (DistilBERT, TinyLLMs).</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s15">15. Convolutional Neural Networks &amp; Computer Vision</h2>
+
+<div class="q"><p class="qq">Why use CNNs instead of fully connected networks for images?</p>
+<p><b>Local connectivity</b> (neurons see local patches), <b>weight sharing</b> (same filter across positions &rarr; far fewer parameters), and <b>translation equivariance</b> (features detected anywhere). Pooling adds some translation invariance. Hierarchy: edges &rarr; textures &rarr; parts &rarr; objects.</p></div>
+
+<div class="q"><p class="qq">How does a convolution operation work? What is a feature map?</p>
+<p>A small learnable filter (kernel, e.g., 3&times;3&times;C<sub>in</sub>) slides over the input; at each position it computes the sum of element-wise products plus a bias, producing one value of the output <b>feature map</b>. Each filter yields one output channel, so N filters give N feature maps. Early filters learn edges and colors; deeper filters learn textures, parts and objects. Convolution is typically followed by an activation (ReLU) and sometimes pooling.</p></div>
+
+<div class="q"><p class="qq">What is the output size formula for a convolution?</p>
+<p>Output = &lfloor;(W &minus; K + 2P)/S&rfloor; + 1 where W = input size, K = kernel size, P = padding, S = stride. "Same" padding with stride 1 uses P = (K&minus;1)/2.</p></div>
+
+<div class="q"><p class="qq">What are padding, stride, and dilation?</p>
+<p><b>Padding</b>: add border pixels to preserve spatial size and edge information. <b>Stride</b>: step size of the filter; stride &gt; 1 downsamples. <b>Dilation</b>: spaces kernel elements to enlarge the receptive field without extra parameters (atrous convolution, used in DeepLab, WaveNet).</p></div>
+
+<div class="q"><p class="qq">What is the receptive field?</p>
+<p>The region of the input that affects a particular feature. It grows with depth, kernel size, stride, pooling and dilation. Deep layers need large receptive fields to capture global context.</p></div>
+
+<div class="q"><p class="qq">Max pooling vs average pooling vs global average pooling?</p>
+<p>Max pooling keeps the strongest activation (feature presence), average pooling smooths. Global average pooling averages each feature map into one value, replacing large FC layers, reducing parameters and overfitting. Strided convolutions can replace pooling.</p></div>
+
+<div class="q"><p class="qq">What is a 1&times;1 convolution used for?</p>
+<p>Mixes channels at each pixel: reduces/increases channel dimension cheaply (bottlenecks in Inception/ResNet), adds non-linearity, and acts as a per-pixel fully connected layer.</p></div>
+
+<div class="q"><p class="qq">What are depthwise separable convolutions?</p>
+<p>Split a standard conv into a depthwise conv (one filter per input channel) and a pointwise 1&times;1 conv. Cost drops by roughly a factor of 1/C<sub>out</sub> + 1/K&sup2; (8&ndash;9&times; fewer FLOPs for 3&times;3). Used in MobileNet, Xception, EfficientNet.</p></div>
+
+<div class="q"><p class="qq">Summarize key CNN architectures.</p>
+<ul><li><b>LeNet-5</b> (1998): digit recognition; conv + pooling + FC.</li>
+<li><b>AlexNet</b> (2012): ReLU, dropout, GPUs, data augmentation; ImageNet breakthrough.</li>
+<li><b>VGG</b>: stacks of 3&times;3 convs; simple, deep, many parameters.</li>
+<li><b>GoogLeNet/Inception</b>: parallel multi-scale filters with 1&times;1 bottlenecks.</li>
+<li><b>ResNet</b>: residual connections; 50&ndash;152+ layers; bottleneck blocks.</li>
+<li><b>DenseNet</b>: each layer connected to all previous layers (feature reuse).</li>
+<li><b>MobileNet / ShuffleNet</b>: efficient mobile models.</li>
+<li><b>EfficientNet</b>: compound scaling of depth, width, resolution.</li>
+<li><b>ConvNeXt</b>: modernized CNN competitive with ViTs.</li></ul></div>
+
+<div class="q"><p class="qq">Why stack two 3&times;3 convolutions instead of one 5&times;5?</p>
+<p>Same receptive field (5&times;5), fewer parameters (18C&sup2; vs 25C&sup2;), and an extra non-linearity, increasing expressiveness.</p></div>
+
+<div class="q"><p class="qq">How do you apply transfer learning / fine-tuning in vision?</p>
+<p>Load a pretrained backbone, replace the classification head. Small dataset similar to source: freeze backbone, train head. Larger or different dataset: unfreeze top layers or all, with a small learning rate (discriminative learning rates: lower for early layers). Use same input normalization as pretraining.</p></div>
+
+<div class="q"><p class="qq">Image classification vs object detection vs semantic, instance and panoptic segmentation?</p>
+<p>Classification: one label per image. Detection: bounding boxes + classes. Semantic segmentation: class per pixel (no instance separation). Instance segmentation: per-object masks. Panoptic: both semantic stuff and instance things.</p></div>
+
+<div class="q"><p class="qq">Explain the R-CNN family.</p>
+<p><b>R-CNN</b>: selective search proposals &rarr; CNN on each crop &rarr; SVM; very slow. <b>Fast R-CNN</b>: run CNN once, RoI pooling on feature map, joint classification + box regression. <b>Faster R-CNN</b>: Region Proposal Network with anchors replaces selective search; end-to-end. <b>Mask R-CNN</b>: adds mask branch and RoIAlign (no quantization) for instance segmentation.</p></div>
+
+<div class="q"><p class="qq">One-stage vs two-stage detectors? Explain YOLO.</p>
+<p>Two-stage (Faster R-CNN): propose regions, then classify; more accurate, slower. One-stage (YOLO, SSD, RetinaNet): predict boxes and classes densely in one pass; real-time. YOLO divides the image into a grid; each cell predicts boxes, objectness, and class probabilities; later versions add anchors, multi-scale feature pyramids, and anchor-free heads. RetinaNet introduced focal loss to handle extreme foreground/background imbalance.</p></div>
+
+<div class="q"><p class="qq">What are anchor boxes, IoU and Non-Max Suppression?</p>
+<p><b>Anchors</b>: predefined boxes of various scales/aspect ratios; the model predicts offsets from them. <b>IoU</b>: area of overlap / area of union between boxes. <b>NMS</b>: sort detections by confidence, keep the best, remove others with IoU above a threshold, repeat. Soft-NMS decays scores instead of removing.</p></div>
+
+<div class="q"><p class="qq">How is mAP computed?</p>
+<p>For each class, rank detections by confidence; a detection is TP if IoU &ge; threshold with an unmatched ground truth. Compute the precision-recall curve and its area (AP). mAP averages AP over classes (and over IoU thresholds 0.5:0.95 in COCO).</p></div>
+
+<div class="q"><p class="qq">What is a Feature Pyramid Network (FPN)?</p>
+<p>Combines high-resolution, low-level features with low-resolution, semantically strong features through a top-down pathway with lateral connections, giving strong multi-scale features for detecting small and large objects.</p></div>
+
+<div class="q"><p class="qq">Explain U-Net and FCN for segmentation.</p>
+<p><b>FCN</b>: replaces FC layers with convs and upsamples to produce per-pixel predictions. <b>U-Net</b>: symmetric encoder-decoder with skip connections concatenating encoder features to decoder layers, preserving fine spatial detail; popular in medical imaging and diffusion models. Upsampling via transposed convolution or interpolation + conv. DeepLab uses atrous convolution + ASPP.</p></div>
+
+<div class="q"><p class="qq">What is a transposed convolution? What are checkerboard artifacts?</p>
+<p>A learnable upsampling operation (sometimes miscalled deconvolution) that maps a small input to a larger output. Uneven overlap when kernel size isn't divisible by stride causes checkerboard artifacts; fix with resize (nearest/bilinear) + conv.</p></div>
+
+<div class="q"><p class="qq">What is a Vision Transformer (ViT)? ViT vs CNN?</p>
+<p>ViT splits an image into patches (e.g., 16&times;16), linearly embeds them, adds positional embeddings and a [CLS] token, and feeds them to a Transformer encoder. Global attention from the first layer; weaker inductive bias, so needs large datasets or strong augmentation/distillation (DeiT). Swin Transformer uses shifted local windows for hierarchical features and linear complexity. CNNs are more data-efficient; ViTs scale better with data.</p></div>
+
+<div class="q"><p class="qq">What is Grad-CAM?</p>
+<p>A visualization technique that weights the last convolutional feature maps by the gradient of the class score (global-average-pooled) to produce a heatmap of image regions important for the prediction.</p></div>
+
+<div class="q"><p class="qq">What are face recognition / Siamese networks?</p>
+<p>Siamese networks share weights across two (or three) inputs to learn an embedding where similar items are close. Trained with contrastive or triplet loss (FaceNet) or margin-based softmax (ArcFace). Enables one-shot verification by comparing embedding distances.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s16">16. RNNs, LSTMs &amp; Sequence Models</h2>
+
+<div class="q"><p class="qq">How does a recurrent neural network work?</p>
+<p>Processes sequences step by step, maintaining a hidden state: h<sub>t</sub> = tanh(W<sub>h</sub>h<sub>t&minus;1</sub> + W<sub>x</sub>x<sub>t</sub> + b). Weights are shared across time steps. Configurations: one-to-many (captioning), many-to-one (sentiment), many-to-many (tagging, translation).</p></div>
+
+<div class="q"><p class="qq">What is Backpropagation Through Time (BPTT)? Truncated BPTT?</p>
+<p>Unroll the RNN over time and backpropagate through the unrolled graph, summing gradients for shared weights. Truncated BPTT limits backprop to a fixed number of steps for efficiency and stability.</p></div>
+
+<div class="q"><p class="qq">Why do vanilla RNNs struggle with long-term dependencies?</p>
+<p>Gradients are multiplied by the recurrent weight Jacobian at every step, so they vanish or explode exponentially with sequence length, making long-range dependencies hard to learn.</p></div>
+
+<div class="q"><p class="qq">Explain the LSTM architecture.</p>
+<p>LSTM adds a cell state c<sub>t</sub> (a "conveyor belt") with gates:
+<br>Forget gate f = &sigma;(W<sub>f</sub>[h<sub>t&minus;1</sub>, x<sub>t</sub>]) &mdash; what to discard.
+<br>Input gate i = &sigma;(...) and candidate c&#771; = tanh(...) &mdash; what to add.
+<br>c<sub>t</sub> = f &odot; c<sub>t&minus;1</sub> + i &odot; c&#771;.
+<br>Output gate o = &sigma;(...); h<sub>t</sub> = o &odot; tanh(c<sub>t</sub>).
+<br>The additive cell update lets gradients flow over many steps, mitigating vanishing gradients.</p></div>
+
+<div class="q"><p class="qq">GRU vs LSTM?</p>
+<p>GRU merges forget and input gates into an update gate, uses a reset gate, and has no separate cell state. Fewer parameters, faster, often similar performance; LSTM can be better on longer/more complex sequences.</p></div>
+
+<div class="q"><p class="qq">What are bidirectional and stacked RNNs?</p>
+<p>Bidirectional RNNs run one RNN forward and one backward and concatenate states, giving each position past and future context (good for tagging, not for autoregressive generation). Stacked (deep) RNNs feed one layer's hidden states as input to the next.</p></div>
+
+<div class="q"><p class="qq">Explain the seq2seq encoder-decoder model.</p>
+<p>An encoder RNN compresses the input sequence into a context vector; a decoder RNN generates the output sequence conditioned on it. The fixed-size bottleneck hurts long sequences, motivating attention (Bahdanau, Luong), where the decoder attends to all encoder states at each step.</p></div>
+
+<div class="q"><p class="qq">What is teacher forcing and exposure bias?</p>
+<p>Teacher forcing feeds the ground-truth previous token to the decoder during training, speeding convergence. At inference the model consumes its own predictions, so errors compound (exposure bias). Mitigations: scheduled sampling, sequence-level training.</p></div>
+
+<div class="q"><p class="qq">Greedy decoding vs beam search?</p>
+<p>Greedy picks the most probable token each step (fast, can miss better sequences). Beam search keeps the top-B partial sequences at each step, usually with length normalization; better for translation/summarization, but can be repetitive/bland for open-ended generation where sampling is preferred.</p></div>
+
+<div class="q"><p class="qq">Why did Transformers replace RNNs?</p>
+<p>RNNs process tokens sequentially (no parallelism across time), struggle with long dependencies, and are slow to train. Transformers use self-attention to connect all positions directly (path length O(1)), fully parallelize training, and scale better with data and compute.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s17">17. Attention &amp; Transformers</h2>
+
+<div class="q"><p class="qq">What is the attention mechanism?</p>
+<p>A way to compute a weighted sum of values, where weights reflect relevance of each key to a query. It lets a model focus on relevant parts of the input dynamically instead of compressing everything into a fixed vector.</p></div>
+
+<div class="q"><p class="qq">Explain scaled dot-product self-attention.</p>
+<p>Each token embedding X is projected into Q = XW<sub>Q</sub>, K = XW<sub>K</sub>, V = XW<sub>V</sub>.
+<br><span class="f">Attention(Q,K,V) = softmax(QK<sup>T</sup> / &radic;d<sub>k</sub>) V</span>.
+<br>Every token attends to every other token, producing context-aware representations.</p></div>
+
+<div class="q"><p class="qq">Why divide by &radic;d<sub>k</sub>?</p>
+<p>For random vectors with unit-variance components, the dot product's variance grows with d<sub>k</sub>. Large logits push softmax into saturated regions with tiny gradients. Scaling keeps variance ~1.</p></div>
+
+<div class="q"><p class="qq">What is multi-head attention and why use it?</p>
+<p>Run h attention operations in parallel with different learned projections of smaller dimension (d<sub>model</sub>/h), concatenate, and project. Each head can capture different relationships (syntax, coreference, position) at roughly the same cost as one full-size head.</p></div>
+
+<div class="q"><p class="qq">Describe the original Transformer architecture.</p>
+<p><b>Encoder</b> block: multi-head self-attention &rarr; add &amp; norm &rarr; position-wise feed-forward (two linear layers with activation, typically 4&times; hidden size) &rarr; add &amp; norm. <b>Decoder</b> block: masked self-attention &rarr; cross-attention over encoder outputs &rarr; feed-forward, each with residual + norm. Inputs: token embeddings + positional encodings. Output: linear + softmax over vocabulary.</p></div>
+
+<div class="q"><p class="qq">Why are positional encodings needed? What types exist?</p>
+<p>Self-attention is permutation-invariant, so order must be injected. Types: sinusoidal (fixed, can extrapolate somewhat), learned absolute embeddings (BERT, GPT-2), relative position encodings (T5 bias), RoPE (rotary; rotates Q/K by position-dependent angles so dot products depend on relative position; LLaMA), ALiBi (linear distance penalty on attention scores; good extrapolation).</p></div>
+
+<div class="q"><p class="qq">What is masking in Transformers?</p>
+<p><b>Padding mask</b>: ignore pad tokens. <b>Causal (look-ahead) mask</b>: in decoders, set scores for future positions to &minus;&infin; so each token only attends to previous tokens, enabling autoregressive training in parallel.</p></div>
+
+<div class="q"><p class="qq">Self-attention vs cross-attention?</p>
+<p>Self-attention: Q, K, V come from the same sequence. Cross-attention: Q from one sequence (decoder), K and V from another (encoder output, image features, or text conditioning in diffusion models).</p></div>
+
+<div class="q"><p class="qq">What is the computational complexity of self-attention, and how is it reduced?</p>
+<p>O(n&sup2;&middot;d) time and O(n&sup2;) memory in sequence length n. Reductions: sparse/local attention (Longformer, BigBird), low-rank/linear attention (Linformer, Performer), sliding windows, FlashAttention (IO-aware exact attention computed in tiles, avoiding materializing the n&times;n matrix), multi-query and grouped-query attention (fewer K/V heads to shrink KV cache).</p></div>
+
+<div class="q"><p class="qq">Walk through the tensor shapes in multi-head attention. How many parameters does a Transformer layer have?</p>
+<p>Input X: (B, n, d<sub>model</sub>). Project to Q, K, V and split into h heads: (B, h, n, d<sub>k</sub>) with d<sub>k</sub> = d<sub>model</sub>/h. Scores QK<sup>T</sup>: (B, h, n, n) &mdash; the n&sup2; term. Weights &times; V: (B, h, n, d<sub>k</sub>); concatenate heads back to (B, n, d<sub>model</sub>) and apply W<sub>O</sub>. Parameters per layer (ignoring biases and norms): attention 4&middot;d<sub>model</sub>&sup2; (W<sub>Q</sub>, W<sub>K</sub>, W<sub>V</sub>, W<sub>O</sub>) + feed-forward 2&middot;d<sub>model</sub>&middot;d<sub>ff</sub> = 8&middot;d<sub>model</sub>&sup2; when d<sub>ff</sub> = 4&middot;d<sub>model</sub>, so about 12&middot;d<sub>model</sub>&sup2; per layer.</p></div>
+
+<div class="q"><p class="qq">Encoder-only vs decoder-only vs encoder-decoder models?</p>
+<table><tr><th>Type</th><th>Examples</th><th>Pretraining</th><th>Best for</th></tr>
+<tr><td>Encoder-only</td><td>BERT, RoBERTa, DeBERTa</td><td>Masked language modeling (bidirectional)</td><td>Classification, NER, embeddings, retrieval</td></tr>
+<tr><td>Decoder-only</td><td>GPT, LLaMA, Mistral</td><td>Causal next-token prediction</td><td>Text generation, chat, general LLMs</td></tr>
+<tr><td>Encoder-decoder</td><td>T5, BART</td><td>Span corruption / denoising</td><td>Translation, summarization</td></tr></table></div>
+
+<div class="q"><p class="qq">Explain BERT pretraining.</p>
+<p><b>Masked Language Modeling</b>: mask 15% of tokens (of these 80% [MASK], 10% random, 10% unchanged) and predict them using bidirectional context. <b>Next Sentence Prediction</b>: predict if sentence B follows A (later shown to be of little value; RoBERTa dropped it and trained longer with dynamic masking). Uses [CLS] for sentence-level tasks and [SEP] between segments; WordPiece tokenization.</p></div>
+
+<div class="q"><p class="qq">What is the role of the feed-forward network in a Transformer block?</p>
+<p>Applied independently to each position, it adds non-linear transformation capacity and holds most parameters; it is thought to store factual "key-value memories." Variants: GeLU FFN, SwiGLU (gated), and Mixture-of-Experts FFNs.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s18">18. Natural Language Processing</h2>
+
+<div class="q"><p class="qq">What are the common text preprocessing steps?</p>
+<p>Lowercasing, tokenization, removing punctuation/stop words/HTML, handling numbers and emojis, stemming or lemmatization, spelling normalization. For modern Transformers, minimal preprocessing is used: the model's own subword tokenizer handles raw text.</p></div>
+
+<div class="q"><p class="qq">Stemming vs lemmatization?</p>
+<p>Stemming chops suffixes heuristically ("studies" &rarr; "studi"; Porter, Snowball); fast but crude. Lemmatization uses vocabulary and POS to return dictionary forms ("studies" &rarr; "study", "better" &rarr; "good"); more accurate, slower.</p></div>
+
+<div class="q"><p class="qq">Explain Bag-of-Words and TF-IDF.</p>
+<p>BoW represents a document by word counts, ignoring order. TF-IDF weights term frequency by inverse document frequency: tfidf = tf(t,d) &times; log(N/df(t)), down-weighting common words. Both are sparse and lose semantics/order; n-grams capture some local order. Still strong baselines with logistic regression/Naive Bayes; BM25 is a TF-IDF-like ranking function for search.</p></div>
+
+<div class="q"><p class="qq">What are word embeddings and why are they better than one-hot encoding?</p>
+<p>One-hot vectors are sparse, vocabulary-sized, and every pair of words is equally distant, so no meaning is captured. Word embeddings are dense, low-dimensional (e.g., 100&ndash;1024) vectors learned so that words used in similar contexts are close together, capturing semantic and syntactic relationships, generalizing better and using less memory.</p></div>
+
+<div class="q"><p class="qq">Explain word2vec (CBOW and Skip-gram).</p>
+<p>Learns dense word vectors from context. <b>CBOW</b> predicts a word from surrounding words (faster, good for frequent words). <b>Skip-gram</b> predicts context words from the center word (better for rare words). Training efficiency via negative sampling (distinguish true context pairs from random pairs) or hierarchical softmax. Embeddings capture analogies (king &minus; man + woman &asymp; queen).</p></div>
+
+<div class="q"><p class="qq">word2vec vs GloVe vs FastText?</p>
+<p>word2vec: predictive, local context windows. GloVe: factorizes global word co-occurrence statistics (log counts). FastText: represents words as sums of character n-grams, so it handles out-of-vocabulary words and morphology. All produce static embeddings (one vector per word regardless of context).</p></div>
+
+<div class="q"><p class="qq">Static vs contextual embeddings?</p>
+<p>Static embeddings give "bank" the same vector in "river bank" and "bank account". Contextual embeddings (ELMo, BERT, GPT) compute token representations depending on the whole sentence, handling polysemy.</p></div>
+
+<div class="q"><p class="qq">What is cosine similarity and why is it used for text?</p>
+<p><span class="f">cos &theta; = A&middot;B / (||A|| ||B||)</span>, ranging from &minus;1 to 1 (0 to 1 for non-negative vectors like TF-IDF). It measures direction rather than magnitude, so document length doesn't dominate. Used for document similarity, semantic search, deduplication and recommendations. For L2-normalized vectors it equals the dot product.</p></div>
+
+<div class="q"><p class="qq">Explain subword tokenization: BPE, WordPiece, SentencePiece.</p>
+<p>Subwords balance vocabulary size and OOV handling. <b>BPE</b>: start from characters/bytes and iteratively merge the most frequent adjacent pair (GPT uses byte-level BPE). <b>WordPiece</b>: merges pairs that maximize training-data likelihood (BERT; "##" continuation prefix). <b>Unigram LM</b>: starts large and prunes tokens by likelihood. <b>SentencePiece</b>: library that treats text as raw stream including spaces (&#9601;), language-independent, supports BPE and unigram (T5, LLaMA).</p></div>
+
+<div class="q"><p class="qq">What is perplexity?</p>
+<p>exp of the average negative log-likelihood per token; the effective number of choices the model is uncertain among. Lower is better; only comparable across models with the same tokenizer/vocabulary.</p></div>
+
+<div class="q"><p class="qq">What are common NLP tasks?</p>
+<p>Text classification/sentiment, Named Entity Recognition, POS tagging, dependency parsing, question answering (extractive/generative), summarization (extractive/abstractive), machine translation, natural language inference, semantic similarity, coreference resolution, topic modeling, information extraction, text generation.</p></div>
+
+<div class="q"><p class="qq">How is NER modeled?</p>
+<p>As token classification with BIO/BIOES tags (B-PER, I-PER, O). Classic: CRF or BiLSTM-CRF (CRF enforces valid tag transitions). Modern: fine-tuned BERT-style token classifiers or LLM prompting. Evaluate with entity-level precision/recall/F1.</p></div>
+
+<div class="q"><p class="qq">Explain BLEU and ROUGE.</p>
+<p><b>BLEU</b>: geometric mean of modified n-gram precisions (1&ndash;4) against references with a brevity penalty; for translation. <b>ROUGE</b>: recall-oriented n-gram (ROUGE-N) or longest common subsequence (ROUGE-L) overlap; for summarization. Both miss semantics/paraphrases; complemented by BERTScore, COMET, or human/LLM judges.</p></div>
+
+<div class="q"><p class="qq">How would you build a text classifier today?</p>
+<p>Baseline TF-IDF + logistic regression; then fine-tune a pretrained encoder (e.g., DeBERTa/RoBERTa) with a classification head; or use sentence embeddings + light classifier; or zero/few-shot LLM prompting if labeled data is scarce. Handle imbalance, evaluate with F1, and analyze errors.</p></div>
+
+<div class="q"><p class="qq">How are sentence embeddings created and used?</p>
+<p>Sentence-BERT fine-tunes a Siamese BERT with contrastive/NLI objectives and mean pooling so cosine similarity reflects semantic similarity. Used for semantic search, clustering, deduplication, and RAG retrieval. Bi-encoders are fast (precompute embeddings); cross-encoders jointly encode pairs and are more accurate for re-ranking.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s19">19. MLOps, Deployment &amp; Efficiency</h2>
+
+<div class="q"><p class="qq">What is MLOps and what does an ML lifecycle look like?</p>
+<p>Practices that combine ML, DevOps and data engineering to reliably build, deploy and maintain models. Lifecycle: data ingestion/validation &rarr; feature engineering &rarr; training &amp; experiment tracking &rarr; evaluation &amp; validation &rarr; model registry &rarr; deployment &rarr; monitoring &rarr; retraining (CI/CD/CT: continuous training). Tools: MLflow, Kubeflow, Azure ML, SageMaker, Vertex AI, DVC, Airflow, Feast, Weights &amp; Biases.</p></div>
+
+<div class="q"><p class="qq">Batch vs real-time (online) vs streaming vs edge inference?</p>
+<p><b>Batch</b>: scheduled predictions stored for later (nightly churn scores); simple, high throughput. <b>Online</b>: REST/gRPC endpoint with low latency per request (fraud check at payment). <b>Streaming</b>: process events continuously (Kafka + Flink). <b>Edge</b>: run on device for privacy/latency/offline (mobile, IoT) using compressed models.</p></div>
+
+<div class="q"><p class="qq">What is data drift vs concept drift? How do you monitor them?</p>
+<p><b>Data (covariate) drift</b>: P(X) changes (new user demographics). <b>Concept drift</b>: P(Y|X) changes (fraud patterns evolve). <b>Label/prior drift</b>: P(Y) changes. Monitor input feature distributions (PSI, KL/JS divergence, KS test, Wasserstein), prediction distributions, data quality (nulls, schema), and actual performance when labels arrive. Respond with alerts, retraining (scheduled or triggered), and fallbacks.</p></div>
+
+<div class="q"><p class="qq">What is training-serving skew?</p>
+<p>Differences between training and production data or feature computation (different code paths, time windows, preprocessing), causing degraded performance. Prevent with shared feature pipelines, feature stores, logging production features for training, and data validation.</p></div>
+
+<div class="q"><p class="qq">What is a feature store?</p>
+<p>A centralized system to define, compute, store and serve features consistently for training (offline store, point-in-time correct joins) and inference (low-latency online store). Enables reuse and avoids training-serving skew (Feast, Tecton, Databricks, SageMaker Feature Store).</p></div>
+
+<div class="q"><p class="qq">How do you ensure reproducibility in ML?</p>
+<p>Version code (Git), data (DVC, lakeFS, snapshots), and models (registry); track experiments, hyperparameters and metrics; fix random seeds; pin dependency versions and use containers; log environment and hardware details; automate pipelines.</p></div>
+
+<div class="q"><p class="qq">What deployment strategies are used for models?</p>
+<p>Shadow deployment (new model runs on live traffic without affecting users), canary release (small % of traffic), A/B testing, blue-green deployment (switch between environments, quick rollback), multi-armed bandit routing. Always keep rollback paths.</p></div>
+
+<div class="q"><p class="qq">How do you reduce model size and latency?</p>
+<p>Quantization (INT8/INT4), pruning (unstructured weights or structured channels/heads), knowledge distillation, efficient architectures (MobileNet, DistilBERT), operator fusion and compilers (ONNX Runtime, TensorRT, OpenVINO, TorchScript/torch.compile), batching requests, caching, hardware acceleration (GPU/TPU/NPU), and early-exit models.</p></div>
+
+<div class="q"><p class="qq">What is ONNX?</p>
+<p>Open Neural Network Exchange: an open format to represent models so they can move between frameworks (PyTorch, TensorFlow, scikit-learn) and run in optimized runtimes (ONNX Runtime) across hardware.</p></div>
+
+<div class="q"><p class="qq">How would you serve a model as an API?</p>
+<p>Wrap the model in a web service (FastAPI/Flask, TorchServe, Triton, BentoML, KServe), load the model once at startup, validate inputs (schema), batch where possible, containerize with Docker, deploy on Kubernetes/managed endpoints with autoscaling, add authentication, logging, metrics (latency, throughput, errors), and health checks.</p></div>
+
+<div class="q"><p class="qq">What should you monitor for a production ML model?</p>
+<p>Operational: latency, throughput, errors, resource usage, cost. Data: schema, missing values, feature distributions, drift. Model: prediction distribution, confidence, performance metrics vs ground truth, fairness across segments. Business KPIs.</p></div>
+
+<div class="q"><p class="qq">What is CI/CD/CT in machine learning? What is a model registry?</p>
+<p><b>CI</b>: on every change, run code tests plus data validation (schema, ranges), feature unit tests and quick training checks. <b>CD</b>: automatically package and deploy the model service once it passes evaluation gates (e.g., beats the current production model on a holdout set). <b>CT</b> (continuous training): retrain automatically on a schedule or when drift is detected. A <b>model registry</b> stores versioned models with metadata, metrics, lineage and stage (staging/production/archived), enabling approval workflows and rollback.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s20">20. Scenario-Based &amp; System Design Questions</h2>
+
+<div class="q"><p class="qq">Your model performs great offline but poorly in production. What do you check?</p>
+<p>Data leakage in offline evaluation; training-serving skew in feature computation; data/concept drift; different preprocessing or library versions; label definition mismatch; offline metric not aligned with business metric; selection bias in training data; latency timeouts causing fallbacks; bugs in input parsing. Compare logged production features against training distributions and replay production data through the offline pipeline.</p></div>
+
+<div class="q"><p class="qq">Design a fraud detection system.</p>
+<p>Extremely imbalanced, adversarial, and real-time. Features: transaction amount, velocity (counts in last 1h/24h), device/IP, geolocation mismatch, merchant risk, user history aggregates, graph features (shared devices/cards). Model: gradient boosting baseline + rules; possibly graph/sequence models. Handle imbalance with class weights and threshold tuning; optimize precision at a fixed recall or expected cost. Time-based validation. Low-latency online feature store. Delayed labels (chargebacks) &rarr; monitor drift, retrain frequently; human review queue for medium-risk scores; feedback loop.</p></div>
+
+<div class="q"><p class="qq">You have very little labeled data. What do you do?</p>
+<p>Use transfer learning / pretrained models; data augmentation; few-shot or zero-shot LLM prompting; semi-supervised learning and pseudo-labeling; active learning to label the most valuable samples; weak supervision (labeling functions, Snorkel); synthetic data generation; simpler models with strong regularization; cross-validation for reliable estimates.</p></div>
+
+<div class="q"><p class="qq">Your dataset is too big to fit in memory. How do you train?</p>
+<p>Stream data in mini-batches (data loaders, generators), use online/incremental learners (SGD, <code>partial_fit</code>), sample intelligently, use efficient formats (Parquet, memory mapping), out-of-core tools (Dask, Spark MLlib, Vaex), distributed training, or reduce features/precision.</p></div>
+
+<div class="q"><p class="qq">Training loss decreases but validation loss increases. What's happening and what do you do?</p>
+<p>Overfitting. Use early stopping, regularization (dropout, weight decay), augmentation, more data, smaller model, check for train/validation distribution mismatch or leakage between them.</p></div>
+
+<div class="q"><p class="qq">Loss becomes NaN during training. What could cause it?</p>
+<p>Learning rate too high, exploding gradients, log(0) or division by zero in custom losses, FP16 overflow/underflow without loss scaling, bad input data (NaN/inf values), and unstable operations (use log-softmax, BCEWithLogits). Fix with gradient clipping, lower LR, numerical-stable functions, data checks.</p></div>
+
+<div class="q"><p class="qq">Your model's performance has plateaued. How would you improve it?</p>
+<ol><li><b>Error analysis</b>: inspect misclassified samples, slice performance by segment, look at the confusion matrix to find patterns.</li>
+<li><b>Data</b>: fix label noise, collect more or more representative data, augment, rebalance classes.</li>
+<li><b>Features</b>: engineer domain features, interactions, aggregations; remove noisy or leaky ones.</li>
+<li><b>Model</b>: try stronger algorithms, tune hyperparameters, use transfer learning, ensemble diverse models.</li>
+<li><b>Objective</b>: make sure the loss and metric match the business goal; tune the decision threshold.</li>
+<li>Check for underfitting vs overfitting with learning curves to decide which direction to go.</li></ol></div>
+
+<div class="q"><p class="qq">How do you handle unseen categories or missing features at inference time?</p>
+<p>Design for it during training: map rare and unseen categories to an "Other/Unknown" bucket (e.g., <code>OneHotEncoder(handle_unknown='ignore')</code>), use hashing or embeddings with an unknown token, impute missing values with the same fitted imputer and add missing-indicator flags, and validate inputs against a schema. Log and monitor how often this happens, since a rise signals data drift or upstream bugs.</p></div>
+
+<div class="q"><p class="qq">How do you detect and mitigate bias (unfairness) in a model?</p>
+<p><b>Sources</b>: historical bias in data, under-representation of groups, biased labels, proxy features (zip code standing in for ethnicity), feedback loops. <b>Detect</b>: evaluate metrics sliced by group and compare fairness measures such as demographic parity (equal positive rates), equal opportunity (equal recall/TPR) and equalized odds (equal TPR and FPR). <b>Mitigate</b>: collect more representative data, reweight or resample, review proxy features, add fairness constraints during training, or adjust thresholds per group; document with model cards and monitor after deployment. Fairness definitions can conflict, so choose with stakeholders.</p></div>
+
+<div class="q"><p class="qq">How would you explain a complex model to non-technical stakeholders?</p>
+<p>Focus on business impact and decisions, not algorithms. Use simple analogies, global drivers (top features via SHAP), concrete example predictions with reasons, confidence/limitations, error trade-offs in business terms (cost of false positives vs negatives), and visualizations.</p></div>
+
+<div class="q"><p class="qq">Design a search ranking / recommendation system for an e-commerce site.</p>
+<p>Clarify objectives (CTR, conversion, revenue, diversity). Data: queries, impressions, clicks, purchases, item catalog. Architecture: candidate retrieval (BM25 + two-tower embeddings + ANN) &rarr; ranking (learning-to-rank with GBDT/LambdaMART or deep model on user, item, query and context features) &rarr; re-ranking (business rules, diversity, freshness). Handle position bias in click data, cold start, latency budgets. Offline metrics: NDCG, MRR, recall@k; online A/B test on business KPIs.</p></div>
+
+<div class="q"><p class="qq">Design a customer churn prediction system.</p>
+<p>Define churn precisely and the prediction horizon; build snapshot-based training data with features computed only from data before the snapshot (usage trends, support tickets, billing, tenure, engagement). Model with gradient boosting; evaluate with PR-AUC and lift/top-decile capture; calibrate probabilities; use SHAP for reasons to guide retention actions; consider uplift modeling to target customers who can be persuaded; deploy as batch scoring with monitoring.</p></div>
+
+<div class="q"><p class="qq">How would you choose between a simple model and a complex model?</p>
+<p>Compare on validation performance relative to business value, latency and cost constraints, interpretability/regulatory needs, data size, maintenance burden and robustness. If the complex model's gain is marginal, prefer the simpler one.</p></div>
+
+<div class="q"><p class="qq">How do you handle a model whose predictions degrade over time?</p>
+<p>Set up monitoring for drift and performance; investigate root cause (data pipeline bug vs genuine drift); retrain on recent data (sliding window or weighted), consider online learning, add features capturing the change, set retraining triggers, and keep a fallback model or rules.</p></div>
+
+<div class="q"><p class="qq">Your model shows 99% accuracy. Is it a good model?</p>
+<p>Not necessarily. Check class balance (a majority-class baseline may also score 99%), look at per-class precision/recall and the confusion matrix, check for data leakage (results that look too good), verify the split (duplicates across sets, time ordering), test on truly held-out or out-of-time data, and evaluate against the business cost of errors.</p></div>
+
+<div class="q"><p class="qq">You have more features than samples (p &gt;&gt; n). What do you do?</p>
+<p>The model can easily overfit and OLS has no unique solution (X<sup>T</sup>X is singular). Use regularization (Lasso, Ridge, Elastic Net), feature selection, dimensionality reduction (PCA), simpler models, domain knowledge to drop irrelevant features, careful (nested) cross-validation, and collect more data if possible.</p></div>
+
+<div class="q"><p class="qq">Training and test data come from different distributions. How do you detect and handle it?</p>
+<p><b>Detect</b> with adversarial validation: label training rows 0 and test rows 1, train a classifier; AUC near 0.5 means similar distributions, high AUC means shift, and its feature importances show which features drift. <b>Handle</b>: drop or transform shifted features, weight training samples by how test-like they are (importance weighting), build a validation set that resembles the test data, apply domain adaptation, or collect more representative data.</p></div>
+
+<!-- ===================================================== -->
+<h2 id="s21">21. Coding Questions (Implement from Scratch)</h2>
+
+<div class="q"><p class="qq">Perform basic EDA on a dataset with pandas.</p>
+<pre><code>import pandas as pd
+
+df = pd.read_csv("data.csv")
+df.info()
+df.describe(include="all")
+df.isna().mean().sort_values(ascending=False)    # share of missing values per column
+df.duplicated().sum()
+df["target"].value_counts(normalize=True)        # class balance
+df.groupby("city")["price"].agg(["mean", "median", "count"])
+df.select_dtypes("number").corr()</code></pre></div>
+
+<div class="q"><p class="qq">Implement accuracy, precision, recall and F1 from scratch.</p>
+<pre><code>import numpy as np
+
+def classification_metrics(y_true, y_pred):
+    tp = np.sum((y_true == 1) &amp; (y_pred == 1))
+    fp = np.sum((y_true == 0) &amp; (y_pred == 1))
+    fn = np.sum((y_true == 1) &amp; (y_pred == 0))
+    tn = np.sum((y_true == 0) &amp; (y_pred == 0))
+    precision = tp / (tp + fp) if tp + fp else 0.0
+    recall = tp / (tp + fn) if tp + fn else 0.0
+    f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
+    accuracy = (tp + tn) / len(y_true)
+    return accuracy, precision, recall, f1</code></pre></div>
+
+<div class="q"><p class="qq">Implement linear regression with gradient descent.</p>
+<pre><code>def linear_regression_gd(X, y, lr=0.01, epochs=1000):
+    n, d = X.shape
+    w, b = np.zeros(d), 0.0
+    for _ in range(epochs):
+        err = X @ w + b - y
+        w -= lr * (2 / n) * (X.T @ err)
+        b -= lr * (2 / n) * err.sum()
+    return w, b</code></pre>
+<p>Scale features first; otherwise gradient descent converges slowly or diverges.</p></div>
+
+<div class="q"><p class="qq">Implement logistic regression from scratch.</p>
+<pre><code>def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
+def logistic_regression(X, y, lr=0.1, epochs=1000, l2=0.0):
+    n, d = X.shape
+    w, b = np.zeros(d), 0.0
+    for _ in range(epochs):
+        p = sigmoid(X @ w + b)
+        w -= lr * (X.T @ (p - y) / n + l2 * w)
+        b -= lr * (p - y).mean()
+    return w, b
+
+def predict(X, w, b, threshold=0.5):
+    return (sigmoid(X @ w + b) &gt;= threshold).astype(int)</code></pre>
+<p>The gradient X<sup>T</sup>(p &minus; y)/n comes from the derivative of log loss with a sigmoid output.</p></div>
+
+<div class="q"><p class="qq">Implement k-means clustering.</p>
+<pre><code>def kmeans(X, k, iters=100, seed=0):
+    rng = np.random.default_rng(seed)
+    centroids = X[rng.choice(len(X), k, replace=False)]
+    for _ in range(iters):
+        dists = np.linalg.norm(X[:, None, :] - centroids[None, :, :], axis=2)
+        labels = dists.argmin(axis=1)
+        new = np.array([X[labels == j].mean(axis=0) if np.any(labels == j) else centroids[j]
+                        for j in range(k)])
+        if np.allclose(new, centroids):
+            break
+        centroids = new
+    return centroids, labels</code></pre></div>
+
+<div class="q"><p class="qq">Implement K-nearest neighbors classification.</p>
+<pre><code>from collections import Counter
+
+def knn_predict(X_train, y_train, X_test, k=5):
+    preds = []
+    for x in X_test:
+        dists = np.linalg.norm(X_train - x, axis=1)
+        nearest = np.argsort(dists)[:k]
+        preds.append(Counter(y_train[nearest]).most_common(1)[0][0])
+    return np.array(preds)</code></pre></div>
+
+<div class="q"><p class="qq">Compute Gini impurity and find the best split for one feature.</p>
+<pre><code>def gini(y):
+    _, counts = np.unique(y, return_counts=True)
+    p = counts / counts.sum()
+    return 1 - np.sum(p ** 2)
+
+def best_split(x, y):
+    best_t, best_score = None, np.inf
+    for t in np.unique(x)[:-1]:
+        left, right = y[x &lt;= t], y[x &gt; t]
+        score = (len(left) * gini(left) + len(right) * gini(right)) / len(y)
+        if score &lt; best_score:
+            best_t, best_score = t, score
+    return best_t, best_score</code></pre></div>
+
+<div class="q"><p class="qq">Implement ROC-AUC from scratch.</p>
+<pre><code>from scipy.stats import rankdata
+
+def roc_auc(y_true, scores):
+    ranks = rankdata(scores)                      # average ranks handle ties
+    n_pos = np.sum(y_true == 1)
+    n_neg = len(y_true) - n_pos
+    return (ranks[y_true == 1].sum() - n_pos * (n_pos + 1) / 2) / (n_pos * n_neg)</code></pre>
+<p>Uses the Mann-Whitney U statistic: AUC is the probability a random positive outranks a random negative.</p></div>
+
+<div class="q"><p class="qq">Implement a numerically stable softmax and cross-entropy.</p>
+<pre><code>def softmax(z):
+    z = z - z.max(axis=-1, keepdims=True)
+    e = np.exp(z)
+    return e / e.sum(axis=-1, keepdims=True)
+
+def cross_entropy(logits, y):
+    z = logits - logits.max(axis=1, keepdims=True)
+    log_probs = z - np.log(np.exp(z).sum(axis=1, keepdims=True))
+    return -log_probs[np.arange(len(y)), y].mean()</code></pre>
+<p>Subtracting the max avoids overflow in exp without changing the result (log-sum-exp trick).</p></div>
+
+<div class="q"><p class="qq">Implement scaled dot-product attention.</p>
+<pre><code>def scaled_dot_product_attention(Q, K, V, mask=None):
+    d_k = Q.shape[-1]
+    scores = Q @ K.swapaxes(-1, -2) / np.sqrt(d_k)
+    if mask is not None:
+        scores = np.where(mask, scores, -1e9)     # mask: True = may attend
+    weights = softmax(scores)
+    return weights @ V, weights</code></pre>
+<p>For a causal mask use <code>np.tril(np.ones((n, n), dtype=bool))</code>.</p></div>
+
+<div class="q"><p class="qq">Implement IoU and Non-Max Suppression.</p>
+<pre><code>def iou(a, b):                                    # boxes as [x1, y1, x2, y2]
+    x1, y1 = max(a[0], b[0]), max(a[1], b[1])
+    x2, y2 = min(a[2], b[2]), min(a[3], b[3])
+    inter = max(0, x2 - x1) * max(0, y2 - y1)
+    area_a = (a[2] - a[0]) * (a[3] - a[1])
+    area_b = (b[2] - b[0]) * (b[3] - b[1])
+    return inter / (area_a + area_b - inter + 1e-9)
+
+def nms(boxes, scores, iou_thresh=0.5):
+    order = list(np.argsort(scores)[::-1])
+    keep = []
+    while order:
+        i = order.pop(0)
+        keep.append(i)
+        order = [j for j in order if iou(boxes[i], boxes[j]) &lt; iou_thresh]
+    return keep</code></pre></div>
+
+<div class="q"><p class="qq">Build a scikit-learn pipeline with preprocessing and cross-validation.</p>
+<pre><code>from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+
+preprocess = ColumnTransformer([
+    ("num", Pipeline([("impute", SimpleImputer(strategy="median")),
+                      ("scale", StandardScaler())]), num_cols),
+    ("cat", Pipeline([("impute", SimpleImputer(strategy="most_frequent")),
+                      ("onehot", OneHotEncoder(handle_unknown="ignore"))]), cat_cols),
+])
+clf = Pipeline([("prep", preprocess), ("model", LogisticRegression(max_iter=1000))])
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+scores = cross_val_score(clf, X, y, cv=cv, scoring="roc_auc")
+print(scores.mean(), scores.std())</code></pre>
+<p>The pipeline refits preprocessing inside each fold, preventing leakage.</p></div>
+
+<div class="q"><p class="qq">Write a PyTorch model with a training and validation loop.</p>
+<pre><code>import torch
+from torch import nn
+
+model = nn.Sequential(nn.Linear(20, 64), nn.ReLU(), nn.Dropout(0.2), nn.Linear(64, 3))
+loss_fn = nn.CrossEntropyLoss()                   # expects raw logits
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)
+
+for epoch in range(10):
+    model.train()
+    for xb, yb in train_loader:
+        optimizer.zero_grad()
+        loss = loss_fn(model(xb), yb)
+        loss.backward()
+        optimizer.step()
+
+    model.eval()
+    correct = 0
+    with torch.no_grad():
+        for xb, yb in val_loader:
+            correct += (model(xb).argmax(dim=1) == yb).sum().item()
+    print(f"epoch {epoch}: val acc = {correct / len(val_loader.dataset):.3f}")</code></pre></div>
+
+<p style="text-align:center;margin-top:30px;color:#555"><i>&mdash; End of document. Good luck with your interviews! &mdash;</i></p>
+
+<script>
+// Open with ?part=1|2|3 to render only that part (used to generate the split PDFs).
+(function () {
+  const part = new URLSearchParams(location.search).get("part");
+  const parts = {
+    "1": { range: [1, 12], title: "Part 1 &mdash; Machine Learning" },
+    "2": { range: [13, 18], title: "Part 2 &mdash; Deep Learning &amp; NLP" },
+    "3": { range: [19, 21], title: "Part 3 &mdash; MLOps, Scenarios &amp; Coding" }
+  };
+  if (!parts[part]) return;
+  const [lo, hi] = parts[part].range;
+  let current = 0;
+  for (const el of Array.from(document.body.children)) {
+    if (el.tagName === "H2" && /^s\d+$/.test(el.id)) current = parseInt(el.id.slice(1), 10);
+    if (current && (current < lo || current > hi)) el.style.display = "none";
+  }
+  document.querySelectorAll(".toc li").forEach(function (li) {
+    const n = parseInt(li.querySelector("a").getAttribute("href").slice(2), 10);
+    if (n < lo || n > hi) li.style.display = "none";
+  });
+  document.querySelector(".toc ol").start = lo;
+  document.getElementById("part-title").innerHTML = parts[part].title;
+})();
+</script>
+
+</body>
+</html>

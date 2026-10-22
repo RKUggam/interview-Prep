@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI Engineer Interview Prep &ndash; Part 1: LLM Basics, APIs &amp; Prompting</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #1d1d1d; counter-reset: q; }
+  .cover { text-align: center; padding-top: 180px; page-break-after: always; }
+  .cover h1 { font-size: 30pt; color: #0b3d91; margin-bottom: 8px; }
+  .cover h1.sub { font-size: 20pt; color: #333; }
+  .cover p { font-size: 11.5pt; color: #444; max-width: 640px; margin: 10px auto; }
+  .cover .series { font-size: 10pt; color: #777; margin-top: 60px; }
+  h1.part { text-align: center; color: #0b3d91; font-size: 24pt; page-break-before: always; padding-top: 260px; page-break-after: always; }
+  h2 { color: #fff; background: #0b3d91; padding: 6px 10px; border-radius: 4px; page-break-before: always; font-size: 15pt; }
+  h2.pt { background: #c2410c; }
+  h3 { color: #0b3d91; font-size: 12pt; margin: 14px 0 4px 0; border-bottom: 1px solid #d6deeb; }
+  .toc h2 { page-break-before: avoid; }
+  .toc ol { font-size: 10.5pt; }
+  .toc a { color: #0b3d91; text-decoration: none; }
+  .toc h3 { color: #0b3d91; margin: 10px 0 2px 0; border: none; }
+  .howto { background: #eef3fb; border: 1px solid #c9d6ee; border-radius: 4px; padding: 8px 12px; margin: 10px 0; }
+  .q { margin: 8px 0 12px 0; page-break-inside: avoid; }
+  .q.long { page-break-inside: auto; }
+  .qq { font-weight: 600; color: #8a1c1c; margin: 0 0 3px 0; }
+  .qq::before { counter-increment: q; content: "Q" counter(q) ". "; }
+  .lvl { display: inline-block; font-size: 7.5pt; font-weight: 700; padding: 0 5px; border-radius: 3px; margin-left: 6px; vertical-align: 1px; color: #fff; }
+  .b { background: #2e7d32; } .i { background: #b26a00; } .a { background: #8a1c1c; }
+  .q p { margin: 2px 0; }
+  .q ul, .q ol { margin: 2px 0 2px 18px; padding-left: 10px; }
+  .tip { background: #fff7e6; border-left: 3px solid #c2410c; padding: 4px 8px; margin: 5px 0; font-size: 9.6pt; }
+  .tip::before { content: "Interview tip: "; font-weight: 700; color: #c2410c; }
+  .fu { background: #f3f0fa; border-left: 3px solid #5b3fa6; padding: 4px 8px; margin: 5px 0; font-size: 9.6pt; }
+  .fu::before { content: "Likely follow-ups: "; font-weight: 700; color: #5b3fa6; }
+  code { font-family: Consolas, "Courier New", monospace; background: #f2f4f8; padding: 0 3px; border-radius: 3px; font-size: 9.5pt; }
+  pre { font-family: Consolas, "Courier New", monospace; font-size: 8.6pt; background: #f5f7fb; border: 1px solid #d6deeb; border-left: 3px solid #0b3d91; padding: 6px 8px; margin: 4px 0; white-space: pre-wrap; line-height: 1.3; }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  table { border-collapse: collapse; margin: 4px 0; font-size: 9.3pt; width: 100%; }
+  th, td { border: 1px solid #b9c4d8; padding: 3px 6px; text-align: left; vertical-align: top; }
+  th { background: #e8eef9; }
+  .sheet td:first-child { font-weight: 600; width: 28%; }
+  .simple { background: #eef8ef; border-left: 3px solid #2e7d32; padding: 3px 8px; margin: 3px 0 4px 0; }
+  .simple::before { content: "In simple terms: "; font-weight: 700; color: #2e7d32; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <h1>AI Engineer Interview Prep</h1>
+  <h1 class="sub">Part 1 &ndash; LLM Basics, APIs &amp; Prompting</h1>
+  <p>For engineers building applications on top of LLMs</p>
+  <p>What LLMs are &bull; Just-enough intuition for how they work &bull; Tokens, context windows &amp; cost &bull; Choosing a model &bull; Working with LLM APIs (messages, streaming, retries, caching, batching) &bull; Sampling parameters &bull; Reasoning / thinking models &bull; Prompt engineering fundamentals &bull; Advanced &amp; production prompting &bull; Structured outputs &bull; Function / tool calling &bull; Building a chat app end-to-end &bull; Prompting vs RAG vs fine-tuning &bull; Coding round with the OpenAI &amp; Anthropic SDKs &bull; Rapid-fire cheat sheet</p>
+  <p class="series">Series: Part 1 LLM Basics, APIs &amp; Prompting &bull; Part 2 RAG, Agents &amp; Context Engineering &bull; Part 3 Production: Cost, Evals, Safety &amp; System Design<br>For AI Engineers building applications on LLMs &bull; Updated October 2026</p>
+</div>
+<div class="toc"><h2>Table of Contents</h2>
+<ol>
+  <li><a href="#s1">What LLMs Are &ndash; for Application Builders</a></li>
+  <li><a href="#s2">How LLMs Work &ndash; Just Enough Intuition</a></li>
+  <li><a href="#s3">Tokens &amp; Context Windows</a></li>
+  <li><a href="#s4">Choosing a Model</a></li>
+  <li><a href="#s5">Working with LLM APIs</a></li>
+  <li><a href="#s6">Sampling Parameters &amp; Controlling Output</a></li>
+  <li><a href="#s7">Reasoning / "Thinking" Models</a></li>
+  <li><a href="#s8">Prompt Engineering Fundamentals</a></li>
+  <li><a href="#s9">Prompt Engineering &ndash; Advanced &amp; Production</a></li>
+  <li><a href="#s10">Structured Outputs</a></li>
+  <li><a href="#s11">Function / Tool Calling</a></li>
+  <li><a href="#s12">Building a Chat App End-to-End</a></li>
+  <li><a href="#s13">Prompting vs RAG vs Fine-Tuning &amp; LLM App Scenarios</a></li>
+  <li><a href="#s14">Coding Round: OpenAI &amp; Anthropic SDKs</a></li>
+  <li><a href="#s15">Rapid-Fire Cheat Sheet</a></li>
+</ol>
+<div class="howto"><b>How to use this guide:</b> This part assumes you will <i>use</i> models through APIs, not train them. Each question carries a difficulty tag: <span class="lvl b">BASIC</span> (expected of every candidate), <span class="lvl i">INTERMEDIATE</span> (typical AI-engineer screen / onsite), <span class="lvl a">ADVANCED</span> (senior rounds, deeper follow-ups). Green <b>"In simple terms"</b> boxes give the plain-English idea first; the text after it is the interview-grade answer. Read the first sentence of each answer as your "30-second answer". <b>Interview tips</b> flag what strong candidates say and common mistakes; <b>Likely follow-ups</b> are the next questions to be ready for. Model names, prices, context lengths and API parameter details change often &ndash; they are phrased "as of 2025-2026"; in interviews, lead with the durable concept and check current provider docs before coding. Code uses placeholder model names such as <code>"your-model-name"</code>. Part 2 covers RAG, agents and context engineering; Part 3 covers cost, latency, evals, safety and system design.</div>
+</div>
+
+<h2 id="s1">1. What LLMs Are &ndash; for Application Builders</h2>
+
+<div class="q"><p class="qq">What is a large language model (LLM), in plain terms?<span class="lvl b">BASIC</span></p>
+<p class="simple">An LLM is a very advanced autocomplete. Given some text, it predicts the most likely next piece of text, one small chunk at a time, and keeps going until it decides to stop.</p>
+<p>An LLM is a neural network trained on a huge amount of text (web pages, books, code) to predict the next <b>token</b> (a word or word-piece) given all the previous tokens. To answer a question, it repeatedly predicts a token, appends it to the text, and predicts again &ndash; this is called <b>autoregressive generation</b>. Because predicting text well requires picking up grammar, facts, reasoning patterns and coding conventions, the model ends up able to summarize, translate, write code, answer questions and follow instructions. After the initial training, providers further train models on example conversations and human feedback so they behave like helpful assistants. For an application builder, the key mental model is: <b>text in &rarr; probabilistic text out</b>. It has no built-in database lookup, no guaranteed correctness, and it only "knows" what was in its training data plus what you put in the prompt.</p>
+<div class="tip">Avoid saying the model "looks up" or "retrieves" facts. Say it generates likely text based on patterns learned in training and the context you provide &ndash; which is exactly why grounding (RAG) and validation matter.</div>
+</div>
+
+<div class="q"><p class="qq">What does "next-token prediction" mean, and why does it explain so much of LLM behavior?<span class="lvl b">BASIC</span></p>
+<p class="simple">At each step the model gives every possible next word-piece a probability, then one is picked. Everything it writes is a chain of these picks.</p>
+<p>At each step the model outputs a probability distribution over its whole vocabulary (often 100K-200K tokens). The API then <b>samples</b> one token from it (controlled by settings like temperature), appends it, and repeats. This one fact explains many behaviors you design around:</p>
+<ul>
+<li><b>Fluent but wrong answers (hallucination):</b> the model optimizes for plausible text, not truth.</li>
+<li><b>Variability:</b> sampling means the same prompt can give different answers.</li>
+<li><b>Prompt sensitivity:</b> changing the context changes every probability downstream.</li>
+<li><b>Cost and latency scale with output length:</b> each output token is a separate step.</li>
+<li><b>Early mistakes compound:</b> once a wrong token is chosen, later tokens build on it &ndash; one reason "think before answering" helps.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">Base vs instruction-tuned (chat) vs reasoning models &ndash; what is the difference for someone using them?<span class="lvl b">BASIC</span></p>
+<p class="simple">A base model just continues text. A chat model has been taught to follow instructions and hold a conversation. A reasoning model additionally "thinks" for a while before answering hard questions.</p>
+<table>
+<tr><th>Type</th><th>Behavior</th><th>When an app builder uses it</th></tr>
+<tr><td>Base model</td><td>Continues whatever text you give it; does not reliably follow instructions</td><td>Rarely, directly. Mostly a starting point for model developers</td></tr>
+<tr><td>Instruction-tuned / chat</td><td>Follows instructions, uses system/user/assistant roles, supports tool calling, refuses harmful requests</td><td>The default for almost all applications</td></tr>
+<tr><td>Reasoning ("thinking")</td><td>Generates internal reasoning tokens before the answer; much better on multi-step math, code, planning; slower and costs more</td><td>Hard problems, agents, complex analysis; avoid for simple or latency-critical tasks</td></tr>
+</table>
+<p>Chat models are made by further training base models on example conversations and on human preference feedback (often called RLHF). One practical side effect: they are trained to be agreeable, so they can be <b>sycophantic</b> (agree with a user's wrong claim). As of 2025-2026 many frontier models are "hybrid": one model where thinking can be switched on or given a budget/effort level.</p>
+</div>
+
+<div class="q"><p class="qq">What does "a 70-billion-parameter model" mean?<span class="lvl b">BASIC</span></p>
+<p class="simple">Parameters are the numbers inside the model that were tuned during training &ndash; roughly, its "brain size".</p>
+<p>Parameters (weights) are the learned numbers in the network. More parameters generally means more capacity (knowledge and skill), but also more memory and compute per token, so slower and more expensive inference. App-level rules of thumb: a model needs about 2 bytes per parameter at standard 16-bit precision (70B &asymp; 140 GB of GPU memory) or about 0.5 bytes per parameter when compressed to 4 bits (&asymp; 35 GB) &ndash; relevant only if you self-host. Parameter count is not a quality guarantee: newer small models often beat older large ones, and closed providers usually do not publish counts. Some models are <b>Mixture-of-Experts</b> (MoE): they have many total parameters but use only a fraction per token, so they are cheaper to run than their total size suggests.</p>
+</div>
+
+<div class="q"><p class="qq">Open-weight vs closed (API-only) models &ndash; what is the difference and how do you choose?<span class="lvl b">BASIC</span></p>
+<p class="simple">Closed models you can only rent through the provider's API. Open-weight models you can download and run anywhere, including your own servers.</p>
+<table>
+<tr><th></th><th>Closed API (e.g., GPT, Claude, Gemini families)</th><th>Open-weight (e.g., Llama, Qwen, DeepSeek, Mistral, Gemma, gpt-oss families)</th></tr>
+<tr><td>Capability</td><td>Usually at the frontier</td><td>Close behind, sometimes on par for specific tasks</td></tr>
+<tr><td>Ops</td><td>Zero ops; pay per token</td><td>You (or a hosting provider) run the servers</td></tr>
+<tr><td>Data control</td><td>Data goes to the provider (governed by their terms, regions, retention options)</td><td>Can run fully on-prem / in your VPC / air-gapped</td></tr>
+<tr><td>Cost</td><td>Cheap at low volume, scales linearly</td><td>Fixed GPU cost; cheaper only at high, steady utilization</td></tr>
+<tr><td>Risks</td><td>Vendor lock-in, deprecations, price changes</td><td>Serving complexity, scaling, safety tuning is on you; license terms vary</td></tr>
+</table>
+<p>"Open weights" is not the same as "open source": training data and code are usually not released, and some licenses restrict usage. Middle ground: open-weight models hosted by third-party inference providers through an API.</p>
+<div class="tip">Give a back-of-envelope answer: at low or spiky volume an API almost always beats idle GPUs; self-hosting wins with sustained high volume, strict data residency, or a need for deep customization.</div>
+</div>
+
+<div class="q"><p class="qq">What does an AI Engineer do, compared with an ML engineer or a data scientist?<span class="lvl b">BASIC</span></p>
+<p class="simple">An AI Engineer builds products using existing models (like a web developer uses a database), rather than building the models themselves.</p>
+<ul>
+<li><b>AI Engineer:</b> builds applications on top of foundation models &ndash; prompt and context design, RAG, tool calling and agents, structured outputs, evaluation suites, guardrails, cost/latency optimization, and integrating all of it into a product. Core loop: define the task &rarr; build a small eval set &rarr; iterate on prompts/retrieval/model choice &rarr; ship &rarr; monitor and feed failures back.</li>
+<li><b>ML Engineer:</b> trains, deploys and maintains custom models (ranking, recommendations, fraud, vision), owns training pipelines, feature stores and model serving.</li>
+<li><b>Data Scientist:</b> analysis, experimentation, statistical modeling and insights to drive decisions.</li>
+</ul>
+<p>The roles overlap, but the AI engineer's distinctive skills are software engineering + LLM behavior + evaluation discipline.</p>
+<div class="tip">Interviewers love candidates who say "first I'd build a small labeled eval set" before touching prompts. Evaluation-driven development is the AI engineer's signature habit.</div>
+</div>
+
+<div class="q"><p class="qq">Describe the typical "AI application stack".<span class="lvl b">BASIC</span></p>
+<p class="simple">Think of layers: the model at the bottom, then what you send it (prompts and context), then the data and tools you plug in, then your app, and around everything, measurement.</p>
+<ol>
+<li><b>Model layer:</b> a model API (closed or hosted open-weight), sometimes several with a router.</li>
+<li><b>Prompt / context layer:</b> system prompts, templates, conversation history, few-shot examples &ndash; what the model actually sees.</li>
+<li><b>Retrieval &amp; tools:</b> vector/keyword search over your documents (RAG), function calling to APIs and databases, code execution (Part 2).</li>
+<li><b>Orchestration:</b> your code (or a framework) that chains calls, handles retries, validation, state.</li>
+<li><b>Application / UI:</b> chat interface, streaming, auth, user feedback buttons.</li>
+<li><b>Evals, guardrails &amp; monitoring:</b> offline test sets, online metrics, logging/tracing, cost dashboards, safety filters (Part 3).</li>
+</ol>
+<div class="fu">Where would you put caching? Where does prompt injection enter this stack? Which layer do you change first when quality is poor?</div>
+</div>
+
+<div class="q"><p class="qq">What are the main limitations of LLMs that you must design around?<span class="lvl b">BASIC</span></p>
+<p class="simple">They can confidently make things up, they don't know recent events, they don't give the same answer every time, and they don't remember you between calls.</p>
+<table>
+<tr><th>Limitation</th><th>What it means</th><th>Typical mitigation</th></tr>
+<tr><td>Hallucination</td><td>Fluent, confident, false statements (fake citations, invented APIs)</td><td>Ground with retrieved sources (RAG), ask for citations/quotes, allow "I don't know", validate outputs</td></tr>
+<tr><td>Knowledge cutoff</td><td>Knows nothing after its training data ends</td><td>Retrieval, web search tools, pass fresh data in the prompt</td></tr>
+<tr><td>Non-determinism</td><td>Same input can give different outputs</td><td>Low temperature, structured outputs, evals over multiple runs, caching</td></tr>
+<tr><td>No real memory</td><td>APIs are stateless; the model only sees what you send in this request</td><td>Store history in your app; summarize; long-term memory stores</td></tr>
+<tr><td>Finite context</td><td>Limited tokens per request; recall degrades in very long inputs</td><td>Retrieve only relevant content, summarize, structure prompts</td></tr>
+<tr><td>Weak exact computation</td><td>Arithmetic, counting characters, precise date math</td><td>Delegate to tools/code</td></tr>
+<tr><td>Security</td><td>Prompt injection, jailbreaks, data leakage</td><td>Separate data from instructions, least-privilege tools, output filters (Part 3)</td></tr>
+</table>
+</div>
+
+<div class="q"><p class="qq">Why do LLMs hallucinate, and can you eliminate it?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">The model is built to produce text that sounds right, not to check facts, so when it doesn't know, it often produces a plausible guess instead of saying so.</p>
+<p>Hallucination comes from the training objective (predict likely text), gaps or conflicts in training data, questions about rare facts the model saw only a few times, and training that rewards confident answers over abstaining. It also happens when the prompt pressures the model to answer ("list 10 sources" when only 3 exist) or when relevant information is missing from the context. You cannot eliminate it entirely, but you can drive it down: provide the facts in context (RAG) and instruct "answer only from the provided documents"; give an explicit way out ("if not found, say you don't know"); ask for quotes or citations and verify them programmatically; use structured outputs with an "unknown" option; lower temperature for factual tasks; use stronger or reasoning models for hard questions; and measure the hallucination rate with an eval set.</p>
+<div class="tip">Distinguish "intrinsic" hallucination (contradicts the provided source) from "extrinsic" (adds unsupported facts). Different mitigations and metrics apply (faithfulness vs factuality evals, Part 3).</div>
+</div>
+
+<div class="q"><p class="qq">What is in-context learning, and why does it matter for app builders?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">You can teach the model a new task just by describing it or showing a few examples in the prompt &ndash; no retraining needed.</p>
+<p>In-context learning (ICL) is the model's ability to perform a task from instructions and examples placed in the prompt, without changing its weights (popularized by GPT-3 in 2020). This is the foundation of the AI engineer's toolbox: prompting, few-shot examples, and RAG all work by putting information into the context. Practical implications: examples teach format and label boundaries very effectively; the model can use documents it has never seen if you include them; but what you teach in context lasts only for that request &ndash; you must resend it every time (which costs tokens, so prompt caching helps). Examples also bias the model: it copies their length, style and even content, and the order of examples can matter.</p>
+</div>
+
+<h2 id="s2">2. How LLMs Work &ndash; Just Enough Intuition</h2>
+
+<div class="q"><p class="qq">What is a Transformer, at an intuitive level?<span class="lvl b">BASIC</span></p>
+<p class="simple">A Transformer reads all the words of the input together and lets each word "look at" the other words to figure out what it means in this context &ndash; then predicts what comes next.</p>
+<p>The Transformer (introduced in "Attention Is All You Need", 2017) is the neural-network design behind essentially all modern LLMs. Pipeline: (1) text is split into tokens; (2) each token becomes a vector of numbers (an <b>embedding</b>); (3) the vectors pass through many identical layers, each containing an <b>attention</b> step (tokens exchange information with each other) and a feed-forward step (each token's vector is transformed individually, where much of the "knowledge" is stored); (4) the final vector at the last position is turned into probabilities for the next token. LLMs like GPT, Claude, Llama are "decoder-only" Transformers: each token can only look at tokens before it, which is what lets them generate text left to right. You don't need the math for app interviews, but you should know that attention is what lets the model use your context, and its cost grows with context length.</p>
+</div>
+
+<div class="q"><p class="qq">Explain attention intuitively. Why is it important for using context?<span class="lvl b">BASIC</span></p>
+<p class="simple">Attention is like each word asking "which other words in this text are relevant to me?" and blending in information from them. In "The trophy didn't fit in the suitcase because it was too big", attention helps "it" connect to "trophy".</p>
+<p>For every token, attention computes a relevance score against every earlier token and takes a weighted mix of their information. Many attention "heads" run in parallel, each learning different relationships (grammar, references, which document a fact came from, copying patterns). Why it matters to you:</p>
+<ul>
+<li>It is how the model uses instructions, examples and retrieved documents you put in the prompt.</li>
+<li>Every token can in principle attend to any earlier token, so information anywhere in the context is reachable &ndash; but not equally well in practice (see lost-in-the-middle).</li>
+<li>Cost: naive attention compute grows with the square of context length, and the model must keep a memory (the <b>KV cache</b>) for every token in context &ndash; why long prompts cost more and are slower, and why providers can cache repeated prefixes.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">Why is the input processed "all at once" but the output generated token by token? What does that mean for latency?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Reading is fast because the model can read the whole prompt in parallel. Writing is slower because each new word depends on the one before it, so it must be produced one at a time.</p>
+<p>Generation has two phases. <b>Prefill</b>: the whole prompt is processed in one parallel pass (GPUs are great at this), producing the first output token. <b>Decode</b>: each subsequent token needs its own pass because it depends on the previously generated token. Consequences for app builders:</p>
+<ul>
+<li><b>Time to first token (TTFT)</b> grows with prompt length (prefill) plus queueing; long RAG contexts increase TTFT.</li>
+<li><b>Total latency &asymp; TTFT + output_tokens &divide; tokens-per-second.</b> Typical API decode speeds are tens to a few hundred tokens/second depending on model size and provider. 500 output tokens at 50 tok/s &asymp; 10 s.</li>
+<li>Output tokens are usually priced several times higher than input tokens, partly because decode is less efficient.</li>
+<li>So: shorter outputs are the biggest latency lever; streaming improves <i>perceived</i> latency; prompt caching reduces prefill time and cost.</li>
+</ul>
+<div class="fu">How would you cut latency of a 20-second response? (Shorter output, smaller/faster model, streaming, caching, parallel calls, less reasoning effort.)</div>
+</div>
+
+<div class="q"><p class="qq">What are embeddings, intuitively, and where do they show up in LLM apps?<span class="lvl b">BASIC</span></p>
+<p class="simple">An embedding turns text into a list of numbers so that texts with similar meaning end up close together &ndash; like coordinates on a "meaning map".</p>
+<p>Inside an LLM, every token is represented as a vector, and the layers refine these into context-aware representations. Separately, <b>embedding models</b> (provider embedding APIs or open models) turn a whole sentence or document into a single fixed-length vector (often hundreds to a few thousand numbers). Similar meaning &rarr; high cosine similarity. Uses: semantic search and RAG retrieval (Part 2), clustering, deduplication, recommendations, routing queries to the right handler, few-shot example selection, and simple classification. Notes: embeddings from different models are not comparable (re-embed everything if you switch models); embedding models have their own token limits; they capture topical similarity well but can miss exact details like negation, numbers or IDs (which is why hybrid keyword + vector search is common).</p>
+</div>
+
+<div class="q"><p class="qq">Why are LLMs bad at counting letters ("how many r's in strawberry?") and at exact arithmetic?<span class="lvl b">BASIC</span></p>
+<p class="simple">The model never sees individual letters &ndash; it sees chunks of words (tokens). Asking it to count letters is like asking someone to count letters in a word they only ever heard spoken.</p>
+<p>"strawberry" might be 2-3 tokens, so counting characters requires the model to have memorized how each token is spelled. Numbers are also split into chunks inconsistently ("12345" may be "123"+"45"), which makes digit-by-digit arithmetic like carrying unreliable, and long multiplications require many exact steps where one slip ruins the answer. Reasoning models do much better because they spell things out step by step, but in production the right answer is architectural: <b>delegate exact computation to tools</b> (a calculator function, code execution, a database query, date libraries) and let the model decide what to compute.</p>
+<div class="tip">Connect this to system design: "for exact math, string operations or date arithmetic, I'd route to a tool rather than trust the model".</div>
+</div>
+
+<div class="q"><p class="qq">What is a knowledge cutoff, and how does it affect application design?<span class="lvl b">BASIC</span></p>
+<p class="simple">The model learned from data up to a certain date and knows nothing after it, like someone who has been off the grid since then.</p>
+<p>A model's weights are frozen after training, so it lacks events, prices, product changes, new library versions and your private data from after the cutoff (and never had your private data at all). It may not even know its own cutoff precisely, and it may confidently state outdated facts. Design responses: inject current facts via retrieval or tools (web search, your database, APIs); put the current date in the system prompt when time matters; instruct the model to prefer provided context over its own memory; and for coding assistants, supply current library docs, since models often generate deprecated API calls. Also note that provider model updates change behavior &ndash; pin versions and re-run evals when upgrading.</p>
+</div>
+
+<div class="q"><p class="qq">If a model has a 1M-token context window, can you just put everything in the prompt? What is "lost in the middle"?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">A big context window means the model can accept a lot of text, not that it will pay equal attention to all of it. Like a person skimming a huge binder, it notices the beginning and end more than the middle.</p>
+<p>Liu et al. (2023, "Lost in the Middle") showed that models answer best when the relevant information is at the start or end of a long context and worst when it is in the middle (a U-shaped curve). Later work on "context rot" observed that accuracy tends to degrade as inputs grow longer and contain more distractors, even when the needle is findable. Simple "needle in a haystack" tests overstate real ability, because real tasks require combining many facts. Also, long prompts cost more (you pay per input token every call) and increase latency. So: retrieve only the relevant pieces (RAG) rather than stuffing everything; put key instructions and the question at the end of long prompts; structure documents with tags; ask the model to quote relevant passages first; and evaluate on your actual long inputs. Long context is great for whole-document tasks (summarize this contract) and as a complement to retrieval, not a replacement.</p>
+<div class="fu">When would you choose long context over RAG? How does prompt caching change the economics of long context?</div>
+</div>
+
+<div class="q"><p class="qq">Why does the same model give better answers when you ask it to "think step by step"?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Each word the model writes is a bit of thinking time. Letting it write out the steps gives it more room to work the problem, and it can build on its own notes.</p>
+<p>A model does a fixed amount of computation per generated token. If it must answer immediately, all the reasoning must happen "in its head" within one token. Writing intermediate steps (chain-of-thought) gives it more computation and an external scratchpad: intermediate results are in the context where attention can use them. This helps on multi-step math, logic and planning; it adds cost and latency and can be unnecessary for simple lookups or classification. Reasoning models are trained to do this automatically (Section 7), so you don't need to ask them.</p>
+</div>
+<h2 id="s3">3. Tokens &amp; Context Windows</h2>
+
+<div class="q"><p class="qq">What is a token, and why do LLMs use tokens instead of words or characters?<span class="lvl b">BASIC</span></p>
+<p class="simple">A token is a chunk of text &ndash; often a whole common word, or a piece of a rarer word. "unbelievable" might become "un" + "believ" + "able". Tokens are the unit the model reads, writes and bills you for.</p>
+<p>A <b>tokenizer</b> splits text into tokens from a fixed vocabulary (typically ~100K-260K entries for modern models), using algorithms such as Byte-Pair Encoding (BPE) that keep frequent strings whole and split rare ones into reusable pieces. Words alone wouldn't work (infinite names, typos, code identifiers); single characters would make sequences 3-5&times; longer, which is slower and more expensive. Modern tokenizers work over raw bytes, so any text &ndash; emoji, any language, garbled input &ndash; can be encoded. Things to know: a leading space is usually part of the token (" the" differs from "the"); different model families use different tokenizers, so the same text has different token counts across providers; and everything is measured in tokens: pricing, context limits, max output length, rate limits.</p>
+</div>
+
+<div class="q"><p class="qq">What are the rules of thumb for converting between tokens and words?<span class="lvl b">BASIC</span></p>
+<p class="simple">For English, 1 token is roughly 4 characters or three-quarters of a word. So 1,000 tokens is about 750 words &ndash; one to two pages.</p>
+<ul>
+<li>English prose: 1 token &asymp; 4 characters &asymp; 0.75 words; 100 words &asymp; 130-135 tokens.</li>
+<li>A single-spaced page &asymp; 500-700 tokens; a 300-page book &asymp; 100K-150K tokens.</li>
+<li>Code: often more tokens per line than prose (symbols, indentation, identifiers); JSON is token-heavy (quotes, braces, repeated keys).</li>
+<li>Non-English text often uses more tokens for the same content (see below).</li>
+</ul>
+<p>Use rules of thumb for quick estimates and capacity planning; use the actual tokenizer or the provider's token-counting endpoint for precise budgets.</p>
+</div>
+
+<div class="q"><p class="qq">How do you count tokens precisely before calling an API?<span class="lvl b">BASIC</span></p>
+<p class="simple">Use the same tokenizer the model uses, or ask the provider's API to count for you.</p>
+<ul>
+<li><b>OpenAI models:</b> the <code>tiktoken</code> library (e.g., encoding <code>o200k_base</code> for GPT-4o-era and later models; <code>cl100k_base</code> for GPT-4/3.5).</li>
+<li><b>Anthropic:</b> a token-counting endpoint (<code>client.messages.count_tokens(model=..., messages=...)</code>) &ndash; Claude's tokenizer differs from tiktoken, so don't use tiktoken for Claude.</li>
+<li><b>Google Gemini:</b> a count-tokens method in its SDK.</li>
+<li><b>Open-weight models:</b> the model's Hugging Face tokenizer.</li>
+<li><b>After the call:</b> every response includes a <code>usage</code> object (input/prompt tokens, output/completion tokens, cached tokens, reasoning tokens) &ndash; log it for billing and monitoring.</li>
+</ul>
+<pre><code>import tiktoken
+enc = tiktoken.get_encoding("o200k_base")
+print(len(enc.encode("How many tokens is this sentence?")))</code></pre>
+<p>Remember the hidden tokens: chat formatting overhead per message, the system prompt, tool definitions (JSON schemas can be thousands of tokens), retrieved documents, and the full conversation history you resend.</p>
+</div>
+
+<div class="q"><p class="qq">Why is output usually priced higher than input, and what are "cached" and "reasoning" tokens on the bill?<span class="lvl b">BASIC</span></p>
+<p class="simple">Reading your prompt is cheap for the provider because it happens in parallel; writing the answer is expensive because it happens one token at a time. So output tokens cost more.</p>
+<ul>
+<li><b>Input tokens:</b> everything you send (system prompt, history, documents, tool definitions).</li>
+<li><b>Output tokens:</b> everything generated; typically priced around 3-5&times; (sometimes more) the input price, as of 2025-2026.</li>
+<li><b>Cached input tokens:</b> a repeated prompt prefix the provider has cached; billed at a large discount (often 50-90% off, depending on provider) and faster.</li>
+<li><b>Reasoning/thinking tokens:</b> internal reasoning by thinking models; billed as output tokens even if you don't see them.</li>
+<li><b>Batch API</b> requests are typically ~50% cheaper in exchange for asynchronous completion (within ~24 hours).</li>
+</ul>
+<div class="tip">When estimating cost, always separate input and output and ask "how long is the typical answer?" &ndash; output length often dominates both cost and latency.</div>
+</div>
+
+<div class="q"><p class="qq">Worked example: estimate the monthly cost of a support chatbot.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Multiply: number of requests &times; tokens per request &times; price per token, doing input and output separately.</p>
+<p>Assume 20,000 conversations/day, 5 model calls each = 100,000 calls/day. Each call: 1,500-token system prompt + tools, 2,000 tokens of retrieved docs, ~1,000 tokens of history = 4,500 input tokens; 300 output tokens. Hypothetical prices: $1 per million input tokens, $5 per million output tokens.</p>
+<ul>
+<li>Input: 100,000 &times; 4,500 = 450M tokens/day &rarr; 450 &times; $1 = <b>$450/day</b>.</li>
+<li>Output: 100,000 &times; 300 = 30M tokens/day &rarr; 30 &times; $5 = <b>$150/day</b>.</li>
+<li>Total &asymp; $600/day &asymp; <b>$18,000/month</b>.</li>
+</ul>
+<p>Optimization: the 1,500-token static prefix is the same on every call &rarr; prompt caching at a 90% discount saves about 100,000 &times; 1,500 &times; 0.9 = 135M tokens' worth &asymp; $135/day. Trimming history via summarization and retrieving 3 chunks instead of 6 could cut another third of input. Routing simple questions to a model 5&times; cheaper might halve the bill again.</p>
+<div class="fu">How does cost change if you switch to a reasoning model that emits 2,000 thinking tokens per call? (Output becomes 2,300 tokens &rarr; 230M/day &rarr; $1,150/day for output alone.)</div>
+</div>
+
+<div class="q"><p class="qq">What is a context window, and what happens when you exceed it?<span class="lvl b">BASIC</span></p>
+<p class="simple">The context window is the maximum amount of text (in tokens) the model can handle in one request &ndash; prompt and answer together. It's the model's short-term working memory.</p>
+<p>The context window is the maximum number of tokens per request, covering input <i>and</i> output (with a separate, smaller cap on output tokens, e.g., several thousand to tens of thousands, configurable via <code>max_tokens</code>). As of 2025-2026, 128K-200K is common and several models offer around 1M tokens. If you exceed it, most APIs return an error (e.g., HTTP 400 "context length exceeded") rather than silently truncating &ndash; though some frameworks and chat UIs truncate old messages for you, which can silently drop important instructions. If <code>input + max_tokens</code> exceeds the limit, some APIs error and others shrink the allowed output. Defensive design: count tokens before sending, reserve room for the output, and have an explicit strategy for long inputs (truncate, summarize, retrieve, or split into chunks).</p>
+</div>
+
+<div class="q"><p class="qq">How do you manage long conversations that would outgrow the context window?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Keep the important bits and compress or drop the rest &ndash; like keeping meeting notes instead of the full recording.</p>
+<table>
+<tr><th>Strategy</th><th>How</th><th>Trade-off</th></tr>
+<tr><td>Sliding window</td><td>Keep the system prompt + the last N turns</td><td>Simple; forgets early facts (user's name, constraints)</td></tr>
+<tr><td>Token-budget truncation</td><td>Drop oldest turns until under a token budget</td><td>Predictable cost; same forgetting problem</td></tr>
+<tr><td>Running summary</td><td>Periodically have an LLM summarize older turns into a short "conversation so far" note</td><td>Keeps key facts; summaries lose detail and cost an extra call</td></tr>
+<tr><td>Summary + recent window</td><td>Summary of old turns + verbatim recent turns</td><td>Most common production pattern</td></tr>
+<tr><td>Retrieval memory</td><td>Store past turns/facts in a database; retrieve relevant ones per query</td><td>Scales to very long histories; more complex (Part 2)</td></tr>
+<tr><td>Provider-managed</td><td>Some APIs offer server-side conversation state or automatic compaction (as of 2025-2026)</td><td>Less code; less control and portability</td></tr>
+</table>
+<p>Also trim bulky content: large tool results, pasted documents and old retrieved chunks can be dropped or replaced with short references once used. Always keep the system prompt and critical user constraints.</p>
+</div>
+
+<div class="q"><p class="qq">Why does chat cost grow faster than linearly over a long conversation?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Each new message resends the whole conversation so far, so later turns cost more than early ones.</p>
+<p>Chat APIs are stateless: turn k sends all previous k&minus;1 exchanges plus the new message. If each exchange adds ~500 tokens, turn k sends &asymp; 500k input tokens, so the total over n turns is &asymp; 500 &times; n(n+1)/2 &ndash; quadratic in the number of turns. A 40-turn conversation sends &asymp; 500 &times; 820 = 410K input tokens in total, versus 20K if each turn were standalone. Mitigations: prompt caching (the earlier history is an unchanged prefix, so later turns hit the cache), summarizing old history, capping turns, and dropping large tool outputs once used.</p>
+</div>
+
+<div class="q"><p class="qq">Why do non-English languages and code often cost more tokens?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">The tokenizer was built mostly from English text, so English words are stored as big chunks, while other languages get split into many small pieces &ndash; more pieces, higher bill.</p>
+<p>Tokenizer vocabularies are learned from their training mix; scripts and languages that are less represented get fewer merged chunks, so the same meaning takes more tokens (often 1.5-3&times;, sometimes more for low-resource languages, though newer tokenizers with larger vocabularies have narrowed the gap). Consequences: higher cost, less effective context, slower generation, and sometimes lower quality. Code and JSON are token-dense due to symbols, whitespace and repeated keys. Practical advice: measure tokens-per-word on your real data for each candidate model before estimating budgets; for JSON outputs, keep keys short and avoid unnecessary nesting; for multilingual apps, compare tokenizers across providers, since it can materially change cost.</p>
+</div>
+
+<div class="q"><p class="qq">What other limits besides the context window affect an LLM app?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Max output tokens:</b> per-response cap; hitting it truncates the answer (finish reason "length"/"max_tokens").</li>
+<li><b>Rate limits:</b> requests per minute (RPM), tokens per minute (TPM, input and/or output), sometimes tokens per day; tiered by account spend. Large prompts hit TPM limits before RPM limits.</li>
+<li><b>Request size limits:</b> maximum payload size, number of images, PDF pages, file sizes.</li>
+<li><b>Concurrency:</b> how many simultaneous requests your client and provider tier allow.</li>
+<li><b>Timeouts:</b> long generations can exceed HTTP timeouts &ndash; use streaming for long outputs.</li>
+<li><b>Embedding model limits:</b> embedding models have their own (often much smaller) input limits.</li>
+</ul>
+<div class="tip">In capacity planning, compute peak TPM = peak requests/min &times; (input + output tokens). It is usually the binding constraint, and a reason to request limit increases or spread load across regions/providers.</div>
+</div>
+
+<h2 id="s4">4. Choosing a Model</h2>
+
+<div class="q"><p class="qq">How do you choose an LLM for a new feature?<span class="lvl b">BASIC</span></p>
+<p class="simple">Don't pick the "best" model from a leaderboard &ndash; test a few candidates on examples of your actual task and pick the cheapest, fastest one that's good enough.</p>
+<ol>
+<li><b>Define the task and success criteria</b> (accuracy, format validity, tone, latency budget, cost budget).</li>
+<li><b>Build a small eval set</b> (30-200 realistic examples with expected outputs or grading rubrics).</li>
+<li><b>Start with a strong model</b> to see what's achievable, then try cheaper/faster models to see where quality drops.</li>
+<li>Compare on the criteria below, not on one number.</li>
+</ol>
+<table>
+<tr><th>Criterion</th><th>Questions to ask</th></tr>
+<tr><td>Quality on YOUR task</td><td>Eval score, failure types, instruction following</td></tr>
+<tr><td>Latency</td><td>Time to first token, tokens/second, reasoning overhead</td></tr>
+<tr><td>Cost</td><td>Input/output prices, caching discounts, batch pricing</td></tr>
+<tr><td>Context length</td><td>Fits your documents + history? Quality at long lengths?</td></tr>
+<tr><td>Modality</td><td>Images, PDFs, audio, video in or out?</td></tr>
+<tr><td>Tool calling &amp; structured output</td><td>Reliable function calls, strict JSON schema support</td></tr>
+<tr><td>Data privacy / residency</td><td>Retention, training-on-data policies, regions, compliance (SOC 2, HIPAA, GDPR)</td></tr>
+<tr><td>Rate limits &amp; reliability</td><td>Throughput at your peak, uptime history, available regions/clouds</td></tr>
+</table>
+<div class="tip">Say "I'd pick by eval on my own data, then optimize cost" &ndash; it is the answer interviewers want.</div>
+</div>
+
+<div class="q"><p class="qq">Frontier models vs small/fast models &ndash; when do you use each?<span class="lvl b">BASIC</span></p>
+<p class="simple">Big models are smarter but slower and pricier; small models are fast and cheap but make more mistakes on hard tasks. Use the smallest model that does the job well.</p>
+<p>Providers typically offer tiers (e.g., large/"pro"/"opus", mid/"sonnet"-like, small/"mini"/"flash"/"haiku"-like). Small models can be 5-20&times; cheaper and noticeably faster. <b>Use small models</b> for classification, routing, extraction from clean text, simple summarization, query rewriting, guardrail checks, and high-volume background jobs. <b>Use frontier models</b> for complex reasoning, coding, long-document synthesis, agentic tool use with many steps, nuanced writing, and anything where an error is expensive. Many systems combine them: a small model handles most traffic and escalates hard cases; a frontier model writes evaluation data or acts as a judge.</p>
+</div>
+
+<div class="q"><p class="qq">Compare closed APIs, hosted open-weight models and self-hosting.<span class="lvl i">INTERMEDIATE</span></p>
+<table>
+<tr><th>Option</th><th>Pros</th><th>Cons</th><th>Good for</th></tr>
+<tr><td>Closed API (provider direct or via a cloud platform such as Azure, AWS Bedrock, Google Vertex)</td><td>Best capability, zero ops, enterprise agreements available</td><td>Per-token cost, vendor lock-in, deprecations, data leaves your infra</td><td>Most products, prototyping, frontier quality</td></tr>
+<tr><td>Hosted open-weight (inference providers)</td><td>Cheap per token, model choice, can switch providers, OpenAI-compatible endpoints</td><td>Quality varies by host (quantization, settings), still third-party data handling</td><td>Cost-sensitive volume, avoiding a single vendor</td></tr>
+<tr><td>Self-hosted open-weight (vLLM, TGI, SGLang, Ollama/llama.cpp locally)</td><td>Full data control, fixed cost at scale, deep customization</td><td>GPU procurement, scaling, monitoring, upgrades, on-call</td><td>Strict privacy/air-gapped, very high steady volume</td></tr>
+</table>
+<p>Cloud platforms often let you use closed models inside your existing cloud account and region, which simplifies compliance and billing.</p>
+</div>
+
+<div class="q"><p class="qq">How should you read public benchmarks and leaderboards?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Benchmarks are like standardized test scores: a useful hint, but they don't tell you how someone will do at your specific job.</p>
+<ul>
+<li><b>Contamination:</b> test questions may have leaked into training data, inflating scores.</li>
+<li><b>Saturation:</b> older benchmarks (e.g., MMLU, GSM8K) are near the ceiling for frontier models; small differences are noise.</li>
+<li><b>Mismatch:</b> a math or trivia benchmark says little about your support-ticket classifier or your RAG tone.</li>
+<li><b>Setup differences:</b> prompts, number of attempts, reasoning budget and tool use vary across reported numbers.</li>
+<li><b>Preference arenas</b> (human votes between two answers) reward style and length as well as correctness.</li>
+<li><b>Vendor-reported numbers</b> are chosen to look good.</li>
+</ul>
+<p>Use benchmarks to shortlist (e.g., coding benchmarks like SWE-bench for coding agents, long-context or tool-use benchmarks for those features), then decide with your own eval.</p>
+</div>
+
+<div class="q"><p class="qq">Give a general overview of the major model families as of 2025-2026.<span class="lvl i">INTERMEDIATE</span></p>
+<table>
+<tr><th>Provider</th><th>Families (general)</th><th>Typically known for</th></tr>
+<tr><td>OpenAI</td><td>GPT-4o / 4.1, GPT-5 series, o-series reasoning models, gpt-oss (open weights)</td><td>Broad ecosystem, early reasoning models, widely copied API format</td></tr>
+<tr><td>Anthropic</td><td>Claude (Haiku / Sonnet / Opus tiers, 4.x and later generations)</td><td>Coding and agentic tasks, long context, extended/adaptive thinking</td></tr>
+<tr><td>Google</td><td>Gemini (Flash / Pro tiers), Gemma (open)</td><td>Native multimodality, very long context</td></tr>
+<tr><td>Meta</td><td>Llama 3.x, Llama 4</td><td>Popularized open weights</td></tr>
+<tr><td>Alibaba</td><td>Qwen (many sizes)</td><td>Strong open models, multilingual</td></tr>
+<tr><td>DeepSeek</td><td>DeepSeek V3 line, R1 (reasoning)</td><td>Strong open-weight models at low cost</td></tr>
+<tr><td>Mistral</td><td>Mistral / Mixtral, small and large models</td><td>European provider, open and commercial models</td></tr>
+<tr><td>Others</td><td>xAI Grok, Moonshot Kimi, Zhipu GLM, Microsoft Phi (small), Cohere</td><td>Various strengths</td></tr>
+</table>
+<div class="tip">Rankings change monthly. Talk about tiers, open vs closed, and choosing by eval; don't recite leaderboard positions.</div>
+</div>
+
+<div class="q"><p class="qq">What is multi-model routing, and when is it worth it?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Send easy questions to a cheap model and hard ones to an expensive model, like a help desk where junior staff handle routine calls and escalate the hard ones.</p>
+<p>A <b>router</b> chooses a model per request. Approaches: (1) rules (by feature, user tier, input length); (2) a classifier or small LLM that predicts difficulty/intent; (3) <b>cascade</b> &ndash; try the cheap model first, check confidence or validation, escalate on failure; (4) fallback routing for reliability (if provider A errors or is slow, use provider B). Benefits: large cost savings when most traffic is easy, lower latency, and resilience. Costs: more evals (each route must be tested), inconsistent tone across models, prompts may need per-model tuning, prompt caches are per model, and a mis-routing classifier hurts quality. Worth it at meaningful volume with a clear easy/hard split; premature for an early prototype.</p>
+<div class="fu">How would you evaluate the router itself? What signal would trigger escalation in a cascade?</div>
+</div>
+
+<div class="q"><p class="qq">Why should you pin model versions, and how do you handle deprecations?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">If you just ask for "the latest model", the provider may swap it under you and your app's behavior changes overnight. Pin an exact version and upgrade on purpose.</p>
+<p>Providers usually offer <b>aliases</b> (pointing to the latest version) and <b>pinned/dated versions</b>. Aliases can change behavior silently: different formatting, refusals, verbosity, tool-calling habits. Best practice: pin exact versions in production; log the model version with every request; when a new version arrives, run your eval suite, compare cost/latency, shadow or A/B test, then switch via configuration (not code). Providers deprecate and retire models on announced schedules (often months of notice) &ndash; track the deprecation pages, keep the model name in config, and keep the eval suite ready so migrations take days, not weeks. Note that prompts tuned for one model may need adjustment for its successor, and API parameters sometimes change between generations (e.g., some newer models no longer accept certain sampling parameters).</p>
+</div>
+
+<div class="q"><p class="qq">Scenario: legal says customer data must not leave the EU and must not be used for training. How does that affect model choice?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li>Check each provider's <b>data usage policy</b>: business/API data is commonly not used for training by default, but confirm in the contract.</li>
+<li><b>Residency:</b> use providers or cloud platforms offering EU regions / EU data-processing options for the specific model; verify where inference, logging and any caching happen.</li>
+<li><b>Retention:</b> ask about zero-data-retention options or short retention windows; note that some features (stored conversation state, files, batch) may require retention.</li>
+<li>Sign a <b>DPA</b> and confirm sub-processors.</li>
+<li>If no compliant hosted option exists for the needed quality, consider open-weight models self-hosted in an EU region.</li>
+<li>Minimize what you send: redact PII before the call where possible; avoid logging raw prompts in non-compliant systems.</li>
+</ul>
+<div class="tip">Show you know privacy is a hard filter applied before quality/cost comparisons, not a trade-off you optimize later.</div>
+</div>
+
+<div class="q"><p class="qq">How do you avoid vendor lock-in when building on LLM APIs?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li>Wrap model calls behind your own thin interface (<code>generate(messages, tools, schema)</code>) so swapping providers touches one module.</li>
+<li>Keep model names, parameters and prompts in configuration, versioned.</li>
+<li>Use OpenAI-compatible endpoints (many providers and open-model servers support them) or a gateway/proxy library (e.g., LiteLLM-style) to normalize APIs &ndash; but beware lowest-common-denominator features.</li>
+<li>Keep your own eval suite &ndash; it is what makes switching safe.</li>
+<li>Store conversation history in your own database, not only in provider-side state.</li>
+<li>Accept some lock-in for valuable provider-specific features (prompt caching, specific tool types) and isolate them.</li>
+</ul>
+</div>
+<h2 id="s5">5. Working with LLM APIs</h2>
+
+<div class="q"><p class="qq">Explain the chat message format: system, user and assistant roles.<span class="lvl b">BASIC</span></p>
+<p class="simple">You send the model a list of messages, each labelled with who said it: the system (your app's standing instructions), the user, or the assistant (the model's earlier replies).</p>
+<ul>
+<li><b>System</b> (called "system" or "developer"/"instructions" in some APIs): persistent instructions from the application &ndash; role, rules, format, tone. Models are trained to give it higher priority than user messages.</li>
+<li><b>User:</b> the end user's input (and often documents or data you inject).</li>
+<li><b>Assistant:</b> the model's previous replies, which you send back to give it conversation history.</li>
+<li><b>Tool / tool-result</b> messages: results of function calls (Section 11).</li>
+</ul>
+<pre><code># OpenAI Chat Completions style
+messages = [
+    {"role": "system", "content": "You are a concise support assistant for Acme."},
+    {"role": "user", "content": "How do I reset my password?"},
+]
+# Anthropic Messages style: system is a separate top-level parameter
+# client.messages.create(model=..., max_tokens=1024, system="You are ...",
+#                        messages=[{"role": "user", "content": "How do I reset my password?"}])</code></pre>
+<p>Content can be a string or a list of content blocks (text, images, documents, tool calls/results). Under the hood the provider renders these messages into the special token format the model was trained on.</p>
+</div>
+
+<div class="q"><p class="qq">What does it mean that LLM APIs are stateless?<span class="lvl b">BASIC</span></p>
+<p class="simple">The model doesn't remember your previous request. Every call, you must send the whole conversation again &ndash; like talking to someone with no short-term memory who reads the full transcript each time.</p>
+<p>Classic chat endpoints (OpenAI Chat Completions, Anthropic Messages, Gemini generateContent) keep no conversation state: your application stores the history and resends the relevant messages on each call. Implications: you control exactly what the model sees (you can trim, summarize, inject retrieved context); cost grows with history length; and "memory" across sessions is something you build (database + retrieval). Some APIs (as of 2025-2026) also offer optional server-side state &ndash; e.g., OpenAI's Responses API can chain turns with <code>previous_response_id</code> or a stored conversation &ndash; which is convenient but ties your data to the provider and gives you less control. Either way, you still pay for the tokens of the history the model processes.</p>
+<div class="tip">A common junior mistake is assuming the model "remembers" earlier calls. Say explicitly: "the app owns state".</div>
+</div>
+
+<div class="q"><p class="qq">What are the key request parameters you set on almost every call?<span class="lvl b">BASIC</span></p>
+<table>
+<tr><th>Parameter</th><th>Meaning</th><th>Typical guidance</th></tr>
+<tr><td><code>model</code></td><td>Which model/version</td><td>Pin a version in production; keep it in config</td></tr>
+<tr><td><code>messages</code> / <code>input</code></td><td>The conversation</td><td>System + history + new user message</td></tr>
+<tr><td><code>max_tokens</code> (or <code>max_completion_tokens</code> / <code>max_output_tokens</code>)</td><td>Cap on generated tokens</td><td>Required on Anthropic; set high enough not to truncate, low enough to bound cost</td></tr>
+<tr><td><code>temperature</code></td><td>Randomness</td><td>Low (0-0.3) for extraction/classification, higher for creative; some newer reasoning models fix or ignore it</td></tr>
+<tr><td><code>top_p</code></td><td>Nucleus sampling cutoff</td><td>Usually adjust temperature <i>or</i> top_p, not both</td></tr>
+<tr><td><code>stop</code> / <code>stop_sequences</code></td><td>Strings that end generation</td><td>Enforce structure, save tokens</td></tr>
+<tr><td><code>tools</code>, <code>tool_choice</code></td><td>Function calling</td><td>Section 11</td></tr>
+<tr><td><code>response_format</code> / structured-output settings</td><td>JSON / schema output</td><td>Section 10</td></tr>
+<tr><td><code>stream</code></td><td>Stream tokens as generated</td><td>On for user-facing chat</td></tr>
+</table>
+<p>Parameter names and support differ by provider and even by model; always check the current docs.</p>
+</div>
+
+<div class="q"><p class="qq">What is streaming, how does it work (SSE), and why use it?<span class="lvl b">BASIC</span></p>
+<p class="simple">Instead of waiting for the whole answer, you receive it word by word as it's written &ndash; like watching someone type. The answer takes the same total time, but the user sees progress right away.</p>
+<p>With <code>stream=True</code> (or a streaming helper), the API keeps the HTTP connection open and sends <b>Server-Sent Events (SSE)</b>: a sequence of <code>data: {...}</code> lines, each containing a small delta (a few tokens of text, a piece of a tool call's JSON, usage info), ending with a final event. Why: perceived latency drops from "total generation time" to "time to first token" (often under a second or two); long generations avoid HTTP timeouts; users can cancel early (saving tokens). Costs/complexity: you must assemble deltas, handle mid-stream errors and disconnects, parse partial tool-call JSON only when complete, and moderate or validate content that is already on screen. Usage (token counts) arrives at the end of the stream (on OpenAI Chat Completions you request it with <code>stream_options={"include_usage": True}</code>).</p>
+<div class="fu">How do you stream to a browser through your backend? (SSE or WebSockets from FastAPI, Section 12/14.) How do you apply output moderation when streaming?</div>
+</div>
+
+<div class="q"><p class="qq">What errors should you expect from LLM APIs, and which should you retry?<span class="lvl b">BASIC</span></p>
+<p class="simple">Some errors mean "try again later" (busy, rate limited, network blip); others mean "your request is wrong" and retrying won't help.</p>
+<table>
+<tr><th>Error</th><th>Meaning</th><th>Retry?</th></tr>
+<tr><td>400 Bad Request</td><td>Invalid parameters, context too long, malformed messages</td><td>No &ndash; fix the request</td></tr>
+<tr><td>401 / 403</td><td>Bad API key / no permission</td><td>No</td></tr>
+<tr><td>404</td><td>Unknown model or endpoint</td><td>No</td></tr>
+<tr><td>408 / timeouts / connection errors</td><td>Network or slow generation</td><td>Yes (consider streaming for long outputs)</td></tr>
+<tr><td>429 Too Many Requests</td><td>Rate limit (RPM/TPM) or quota</td><td>Yes, with backoff; honor <code>retry-after</code> header. Not for "insufficient quota/billing"</td></tr>
+<tr><td>500 / 502 / 503</td><td>Provider-side failure</td><td>Yes, with backoff</td></tr>
+<tr><td>529 Overloaded (Anthropic) / 503 overloaded</td><td>Provider capacity</td><td>Yes, with backoff; consider fallback model/provider</td></tr>
+</table>
+<p>Also handle "soft" failures that return 200: truncation (<code>finish_reason="length"</code> / <code>stop_reason="max_tokens"</code>), refusals, invalid JSON, or content filtered. Official SDKs raise typed exceptions (e.g., <code>RateLimitError</code>, <code>APIConnectionError</code>, <code>APIStatusError</code>) and include built-in retries (default 2 on both OpenAI and Anthropic Python SDKs, configurable with <code>max_retries</code>).</p>
+</div>
+
+<div class="q"><p class="qq">Explain exponential backoff with jitter. Why jitter?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">After a failure, wait a little before retrying, and wait longer each time. Add some randomness so all your clients don't retry at the exact same moment and overload the server again.</p>
+<p>Delay for attempt n: <code>delay = min(cap, base &times; 2<sup>n</sup>)</code>, e.g., 1 s, 2 s, 4 s, 8 s... capped at ~30-60 s, with a maximum number of attempts (3-6). <b>Jitter</b> randomizes the delay ("full jitter": <code>random.uniform(0, delay)</code>) so that many clients that failed together don't retry in lockstep (the "thundering herd"), which would re-trigger the rate limit. If the server sends <code>retry-after</code>, wait at least that long. Also: set a total deadline so a user request doesn't hang for minutes; retry only retryable errors; log every retry; and add a <b>circuit breaker</b> or fallback model when a provider is failing persistently. Keep transport retries (429/5xx) separate from content retries (invalid JSON), which should resend with error feedback (Section 10). See Section 14 for code.</p>
+<div class="tip">Mention that the SDKs already retry; in an interview, explain when you'd wrap your own (custom deadlines, fallback providers, metrics) and that stacking SDK retries with your own multiplies attempts.</div>
+</div>
+
+<div class="q"><p class="qq">What is idempotency, and why does it matter for LLM calls and tool actions?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">An idempotent operation is safe to repeat: doing it twice has the same effect as doing it once. Retries are only safe if what you're retrying is idempotent.</p>
+<p>A plain generation call has no side effects &ndash; retrying just costs tokens (and may return a different answer). The danger is in what your app does around it: if a timeout occurs after the model decided to call <code>send_refund</code> and you executed it, a blind retry might refund twice. Practices: give each logical operation an <b>idempotency key</b> (e.g., a request or tool-call ID) and have side-effecting services deduplicate on it; record executed tool-call IDs; make tool handlers idempotent where possible ("set status = shipped" rather than "increment"); separate "plan" from "execute" with confirmations for risky actions; and in streaming, don't re-charge the user or re-execute tools if the client reconnects.</p>
+</div>
+
+<div class="q"><p class="qq">How do you make many LLM calls concurrently without hitting rate limits?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Send several requests at once instead of one after another, but put a cap on how many are in flight so you don't trip the provider's speed limits.</p>
+<p>LLM calls are I/O-bound (mostly waiting on the network), so use async clients (<code>AsyncOpenAI</code>, <code>AsyncAnthropic</code>) with <code>asyncio.gather</code>, or a thread pool for sync clients. Bound concurrency with an <code>asyncio.Semaphore</code> (e.g., 10-50 in flight) sized from your RPM/TPM limits: max concurrency &asymp; allowed requests per second &times; average latency (seconds). For TPM limits, a token-bucket limiter that accounts for estimated tokens per request is more accurate. Handle partial failures (use <code>return_exceptions=True</code> or per-task try/except), keep results matched to inputs, and add retries with backoff. For large offline jobs, prefer the provider's <b>Batch API</b> instead (Section 14 shows the semaphore pattern).</p>
+</div>
+
+<div class="q"><p class="qq">What are batch APIs, and when should you use them?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">If you don't need answers right away, you can submit a big pile of requests and collect the results later at about half the price.</p>
+<p>OpenAI's Batch API and Anthropic's Message Batches API (and similar offerings elsewhere) accept many requests in one job (a JSONL file or a list, each with a <code>custom_id</code>), process them asynchronously &ndash; typically within 24 hours, often much sooner &ndash; at roughly a 50% discount, with separate, higher throughput limits. Use for: offline classification or extraction over a dataset, generating embeddings or summaries for a corpus, running evaluation suites, nightly reports, synthetic test data. Don't use for anything user-facing or latency-sensitive. Practicalities: results may come back in any order &ndash; match on <code>custom_id</code>; some requests can fail individually and need resubmission; and prompt caching can stack with batch discounts on some providers.</p>
+</div>
+
+<div class="q"><p class="qq">What is prompt caching, and how do you design prompts to benefit from it?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">If many requests start with the same long text (instructions, documents), the provider can remember the work it did reading that part and reuse it &ndash; making those requests cheaper and faster.</p>
+<p>Providers cache the processed state (KV cache) of a prompt <b>prefix</b>. When a later request starts with exactly the same tokens, the cached part is billed at a large discount and prefill is faster. Implementations as of 2025-2026: OpenAI caches automatically for prompts above ~1,024 tokens; Anthropic uses explicit <code>cache_control</code> breakpoints on content blocks (or an automatic mode), with cache writes costing a bit more than normal input and cache reads ~10% of the normal price, and a default lifetime of about 5 minutes (extendable on some options); Gemini offers implicit and explicit context caching. Design rules: put <b>static content first</b> (system prompt, tool definitions, few-shot examples, large documents) and <b>dynamic content last</b> (user question, timestamps); keep the prefix byte-for-byte identical (no timestamps or random IDs in the system prompt, stable tool order, deterministic JSON serialization); and verify with the usage fields (e.g., cached tokens / <code>cache_read_input_tokens</code>).</p>
+<div class="fu">Why does a timestamp at the start of the system prompt destroy cache hits? How do caches interact with model routing? (Caches are per model.)</div>
+</div>
+
+<div class="q"><p class="qq">Provider SDKs vs OpenAI-compatible endpoints vs frameworks &ndash; which should you use?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Official provider SDKs</b> (<code>openai</code>, <code>anthropic</code>, <code>google-genai</code>): full feature access, typed responses, built-in retries/timeouts, streaming helpers. Best default for production on a primary provider.</li>
+<li><b>OpenAI-compatible endpoints:</b> many providers and servers (vLLM, Ollama, many inference hosts, some closed providers' compatibility layers) accept the Chat Completions format, so you can point the <code>openai</code> SDK at a different <code>base_url</code>. Great for portability; but provider-specific features (caching controls, thinking settings, special tool types) may be missing or behave differently.</li>
+<li><b>Gateways / abstraction libraries</b> (LiteLLM-style proxies, framework model wrappers in LangChain, LlamaIndex): one interface to many models, central logging, keys and budgets. Watch for abstraction lag behind new features and harder debugging.</li>
+</ul>
+<div class="tip">A balanced answer: "Official SDK behind my own thin interface, with a gateway if we use many providers" shows you value both features and portability.</div>
+</div>
+
+<div class="q"><p class="qq">How do you handle API keys and secrets safely?<span class="lvl b">BASIC</span></p>
+<p class="simple">Treat the API key like a password to your company credit card: never put it in code, never send it to the browser, and keep it in a secure secrets store.</p>
+<ul>
+<li>Load keys from environment variables or a secrets manager (cloud secret managers, Vault); never commit them; add secret scanning to CI.</li>
+<li><b>Never call LLM APIs directly from browser or mobile clients with your key</b> &ndash; proxy through your backend, which authenticates the user and enforces quotas.</li>
+<li>Use separate keys/projects per environment and service; least privilege; rotate regularly and immediately on leaks.</li>
+<li>Set spend limits and alerts on the provider dashboard; per-user rate limits in your backend to prevent abuse (someone using your chatbot as a free LLM).</li>
+<li>Prefer short-lived credentials / workload identity where the platform supports it.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">What should you log for every LLM call?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li>Request ID (yours and the provider's), timestamp, user/tenant ID (pseudonymized), feature name.</li>
+<li>Model and version, parameters, prompt template version.</li>
+<li>Token usage: input, output, cached, reasoning tokens &rarr; computed cost.</li>
+<li>Latency: time to first token and total; retries; errors and finish/stop reason.</li>
+<li>Tool calls made and their outcomes.</li>
+<li>Inputs/outputs themselves &ndash; subject to privacy policy (redaction, retention limits, access control).</li>
+<li>User feedback (thumbs up/down) linked to the request ID.</li>
+</ul>
+<p>Use an LLM observability/tracing tool (e.g., Langfuse, LangSmith, Arize Phoenix, or OpenTelemetry-based tracing) to see nested calls in chains and agents. These logs feed cost dashboards, debugging, and new eval cases (Part 3).</p>
+</div>
+
+<h2 id="s6">6. Sampling Parameters &amp; Controlling Output</h2>
+
+<div class="q"><p class="qq">What does temperature do?<span class="lvl b">BASIC</span></p>
+<p class="simple">Temperature is a creativity dial. Low temperature: the model almost always picks its top choice (focused, repeatable). High temperature: it more often picks less likely words (varied, creative, but more mistakes).</p>
+<p>The model produces a score for every possible next token; temperature T divides these scores before they're turned into probabilities. T &lt; 1 sharpens the distribution (the top token gets even more probability; T &rarr; 0 approaches always picking the top token, called <b>greedy</b>); T &gt; 1 flattens it (more randomness). Typical ranges: OpenAI accepts 0-2, Anthropic 0-1 (where supported). Guidance: 0-0.3 for extraction, classification, code, factual Q&amp;A; 0.5-0.8 for conversational assistants; 0.8-1.0+ for brainstorming and creative writing. Very high values produce incoherent text. Note: as of 2025-2026, some reasoning-focused models fix their sampling settings and reject or ignore temperature, and providers often recommend default settings for thinking models.</p>
+</div>
+
+<div class="q"><p class="qq">Explain top-p and top-k simply. How do they relate to temperature?<span class="lvl b">BASIC</span></p>
+<p class="simple">Top-k: only consider the k most likely next words. Top-p: only consider the smallest group of words that together cover, say, 90% of the probability. Both cut off the weird long tail of unlikely words.</p>
+<ul>
+<li><b>Top-k</b> keeps a fixed number of candidates (e.g., 40). Weakness: k is too many when the model is confident and too few when many options are reasonable. Exposed by Anthropic and Gemini and most open-model servers, not by OpenAI.</li>
+<li><b>Top-p (nucleus)</b> keeps the smallest set whose probabilities sum to at least p (e.g., 0.9). Adapts automatically to the model's confidence.</li>
+<li><b>Temperature</b> reshapes the probabilities; top-p/top-k then truncate them. They interact, so providers recommend changing <b>one</b> of temperature or top_p, not both.</li>
+<li>Open-model servers also offer <b>min-p</b> (keep tokens at least some fraction as likely as the top token).</li>
+</ul>
+<p>In practice, most app builders tune only temperature and leave top-p at the default.</p>
+</div>
+
+<div class="q"><p class="qq">When would you use low vs high temperature? Give examples.<span class="lvl b">BASIC</span></p>
+<table>
+<tr><th>Task</th><th>Setting</th><th>Why</th></tr>
+<tr><td>Classification, extraction, routing</td><td>0-0.2</td><td>One right answer; consistency matters</td></tr>
+<tr><td>Code generation</td><td>0-0.3 (higher if generating several candidates to test)</td><td>Correctness over variety</td></tr>
+<tr><td>RAG question answering</td><td>0-0.3</td><td>Stay close to the sources</td></tr>
+<tr><td>General assistant chat</td><td>0.5-0.8 / provider default</td><td>Natural but not erratic</td></tr>
+<tr><td>Brainstorming, marketing copy, fiction</td><td>0.8-1.0+</td><td>Diversity is the goal</td></tr>
+<tr><td>Generating multiple samples to vote or rank</td><td>0.7-1.0</td><td>Need diverse candidates</td></tr>
+</table>
+<div class="tip">Low temperature reduces randomness but does not fix hallucination &ndash; a model can be consistently wrong. Pair it with grounding and validation.</div>
+</div>
+
+<div class="q"><p class="qq">Why isn't temperature 0 fully deterministic?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Even at temperature 0, tiny numerical differences on the provider's servers can flip which word comes out on top when two are nearly tied, and from there the answers diverge.</p>
+<p>Temperature 0 means "always pick the highest-probability token", which is deterministic only if the probabilities are bit-identical on every run. In practice they aren't: GPU floating-point arithmetic gives slightly different results depending on the order of operations; your request is batched with other users' requests, and the batch size and composition change the computation (a major cause, as analyzed in Thinking Machines' 2025 work on nondeterminism); some architectures route tokens in batch-dependent ways; and providers update hardware and software. When two candidate tokens are nearly tied, a tiny difference flips the choice and the rest of the output diverges. Practical consequences: don't promise reproducibility; pin model versions; use <code>seed</code> where offered (best-effort only); cache outputs if you need identical responses; and design evals to run multiple samples and tolerate variance.</p>
+</div>
+
+<div class="q"><p class="qq">What is <code>max_tokens</code>, and how do you detect and handle truncated outputs?<span class="lvl b">BASIC</span></p>
+<p class="simple"><code>max_tokens</code> is a hard ceiling on how long the answer can be. If the model hits it, the answer is cut off mid-sentence &ndash; and the API tells you that's why it stopped.</p>
+<p>Every response reports why generation stopped: OpenAI <code>finish_reason</code> (<code>"stop"</code>, <code>"length"</code>, <code>"tool_calls"</code>, <code>"content_filter"</code>); Anthropic <code>stop_reason</code> (<code>"end_turn"</code>, <code>"max_tokens"</code>, <code>"stop_sequence"</code>, <code>"tool_use"</code>, and on newer models <code>"refusal"</code>). Always check it: a "length"/"max_tokens" stop means truncation &ndash; JSON will be invalid, code incomplete, and an answer may lack its conclusion. Handling: raise the limit; ask for shorter output (word limits, fewer items); paginate ("return the first 20 items"); or, for free text, continue generation by sending the partial answer back and asking to continue. Remember that max_tokens is not a "target length" &ndash; the model does not know about it (to make answers shorter, say so in the prompt). For reasoning models, thinking tokens also count against the output budget, so set it generously.</p>
+</div>
+
+<div class="q"><p class="qq">What are stop sequences used for?<span class="lvl b">BASIC</span></p>
+<p class="simple">A stop sequence is a "magic word" that makes the model stop writing as soon as it produces it.</p>
+<p>You pass strings (OpenAI <code>stop</code>, up to a few; Anthropic <code>stop_sequences</code>); generation halts when one appears, and the stop string is typically not included in the output (Anthropic reports which one matched). Uses: end after one item in a structured format (e.g., stop at <code>"&lt;/answer&gt;"</code> or <code>"\n\n"</code>); prevent the model from writing the next user turn in completion-style prompts; cap list length; save output tokens. Caveats: choose strings that can't appear legitimately in the content; some APIs or models (e.g., certain reasoning models) don't support them; with structured outputs or tool calling they're rarely needed.</p>
+</div>
+
+<div class="q"><p class="qq">What are logprobs, and what can you use them for?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Logprobs tell you how confident the model was about each word it chose, and what its runner-up choices were.</p>
+<p>Some APIs (e.g., OpenAI Chat Completions with <code>logprobs=True, top_logprobs=5</code>, and many open-model servers) return the log-probability of each generated token and the top alternatives. Not all providers or models expose them (e.g., Anthropic's API does not, as of 2025-2026; many reasoning models don't). Uses:</p>
+<ul>
+<li><b>Classification with confidence:</b> ask for a single label token and read its probability; route low-confidence cases to a human or a stronger model.</li>
+<li><b>Flagging uncertain fields</b> in extraction (low-probability tokens in a value).</li>
+<li><b>Ranking candidate answers</b> by likelihood; autocomplete suggestions.</li>
+<li><b>LLM-as-judge</b> scores: expected score from the probabilities of "1"-"5" instead of one sampled number.</li>
+</ul>
+<p>Caveat: chat models are often over-confident (poorly calibrated), so calibrate thresholds on labeled data.</p>
+</div>
+
+<div class="q"><p class="qq">What do <code>seed</code>, frequency penalty and presence penalty do?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b><code>seed</code></b> (OpenAI and some others): fixes the random number generator for sampling so repeated identical requests are <i>mostly</i> the same; best-effort only &ndash; backend changes (tracked by <code>system_fingerprint</code> on OpenAI) can still change outputs. Useful for debugging and evals.</li>
+<li><b>Frequency penalty</b> (OpenAI-style, &minus;2 to 2): lowers the chance of a token in proportion to how many times it has already appeared &ndash; reduces verbatim repetition.</li>
+<li><b>Presence penalty</b>: a flat penalty once a token has appeared at all &ndash; nudges toward new topics.</li>
+</ul>
+<p>Penalties work on tokens, not ideas, so they can damage outputs that must repeat things (code, JSON keys, names) &ndash; avoid them for structured output. Open-model servers offer a similar <code>repetition_penalty</code>. Not all providers support these.</p>
+</div>
+
+<div class="q"><p class="qq">Scenario: the model's answers are far too long. What do you do?<span class="lvl b">BASIC</span></p>
+<ol>
+<li>State the desired length concretely in the prompt: "Answer in at most 3 sentences" or "under 80 words", and say why ("shown in a mobile notification").</li>
+<li>Show an example of a good, short answer.</li>
+<li>Ask to skip preambles and recaps ("No introduction, no summary at the end").</li>
+<li>Use structured output with a length-limited field, or ask for bullet points.</li>
+<li>Set <code>max_tokens</code> as a safety cap (not as the main control &ndash; it truncates rather than shortens).</li>
+<li>For reasoning models, lower the reasoning effort; check whether a smaller model is naturally less verbose.</li>
+<li>Measure average output tokens in your eval before and after.</li>
+</ol>
+</div>
+
+<h2 id="s7">7. Reasoning / "Thinking" Models</h2>
+
+<div class="q"><p class="qq">What is a reasoning ("thinking") model?<span class="lvl b">BASIC</span></p>
+<p class="simple">A reasoning model works through the problem privately, like a student using scratch paper, before writing its final answer. That makes it much better at hard problems, but slower and more expensive.</p>
+<p>Reasoning models (first popularized by OpenAI's o1 in 2024, then DeepSeek-R1, Claude's extended/adaptive thinking, Gemini thinking models, and others as of 2025-2026) generate a long internal chain of reasoning tokens before the visible answer. They are trained so that this reasoning includes planning, trying approaches, checking work and backtracking. Accuracy on math, coding, logic, planning and complex analysis improves substantially, and generally increases with more thinking. The reasoning tokens are billed as output tokens and add latency (seconds to minutes). Many current models are hybrid: thinking can be turned on/off or scaled with an effort/budget setting.</p>
+</div>
+
+<div class="q"><p class="qq">When should you use a reasoning model vs a standard model?<span class="lvl b">BASIC</span></p>
+<table>
+<tr><th>Use a reasoning model (or higher effort)</th><th>Use a standard model (or low/no thinking)</th></tr>
+<tr><td>Multi-step math, logic puzzles, scheduling with many constraints</td><td>Simple Q&amp;A, chit-chat, rewriting, translation</td></tr>
+<tr><td>Complex coding, debugging, code review</td><td>Classification, extraction, routing</td></tr>
+<tr><td>Agent planning with many tool calls</td><td>Latency-critical UX (autocomplete, voice)</td></tr>
+<tr><td>Analysis across long documents with many conditions</td><td>High-volume, cost-sensitive pipelines</td></tr>
+<tr><td>When correctness matters more than speed</td><td>Retrieval-bound tasks where the hard part is finding info, not reasoning</td></tr>
+</table>
+<p>Reasoning models can also "overthink" simple questions, wasting tokens and occasionally talking themselves out of a correct answer. A common architecture routes most traffic to a fast model and escalates hard queries to a reasoning model or higher effort.</p>
+</div>
+
+<div class="q"><p class="qq">What are thinking budgets and reasoning-effort settings?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">They are dials for how long the model is allowed to think. More thinking usually means better answers on hard problems, but more cost and waiting.</p>
+<p>As of 2025-2026: OpenAI reasoning models take a reasoning-effort setting (e.g., <code>reasoning={"effort": "low"}</code> in the Responses API or <code>reasoning_effort</code> in Chat Completions; levels like minimal/low/medium/high depending on model). Anthropic originally used an explicit token budget (<code>thinking={"type": "enabled", "budget_tokens": N}</code>); newer Claude models move to <b>adaptive thinking</b> (the model decides how much to think) controlled by an <b>effort</b> level (low/medium/high and above), and some newest models no longer accept fixed budgets. Gemini exposes a thinking budget or level. Common rules: thinking tokens count as output tokens for billing and against <code>max_tokens</code>; the model may use less than the budget; measure accuracy vs effort on your eval &ndash; the curve usually flattens, so the cheapest adequate level wins; set effort per route (low for simple chat, high for hard analysis).</p>
+<div class="tip">Parameter names change across model generations &ndash; say "effort or budget knob" in interviews and check docs when coding.</div>
+</div>
+
+<div class="q"><p class="qq">Estimate the cost and latency impact of switching a feature to a reasoning model.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Count the extra "thinking" words: they are billed and they take time, often far more than the answer itself.</p>
+<p>Standard model: 300 output tokens at 80 tokens/s &asymp; 4 s. Reasoning model: 4,000 thinking + 300 answer tokens at the same speed &asymp; 54 s, and output cost &asymp; 14&times; higher. At 100K requests/day &times; 4,300 output tokens = 430M output tokens/day; at a hypothetical $10 per million output tokens that is $4,300/day vs $300/day. Mitigations: lower effort; route only hard queries (if 10% of traffic needs reasoning: 0.9 &times; $300 + 0.1 &times; $4,300 &asymp; $700/day); stream progress or thinking summaries to the UI; run reasoning asynchronously where the product allows (reports, background jobs); cache results for repeated questions.</p>
+<div class="tip">Quantifying the "thinking tax" and proposing routing instead of a blanket switch is what interviewers look for.</div>
+</div>
+
+<div class="q"><p class="qq">How should you prompt reasoning models differently?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Tell a reasoning model <i>what</i> you want and how you'll judge it, not <i>how</i> to think. It already knows how to work step by step.</p>
+<ul>
+<li>Give a clear goal, all relevant context, constraints and success criteria up front.</li>
+<li>Don't add "think step by step" or rigid step-by-step procedures &ndash; they're redundant and can make results worse; high-level guidance ("consider edge cases X and Y") is fine.</li>
+<li>Start zero-shot; few-shot examples help less and can over-constrain.</li>
+<li>Be explicit about the final output format and length &ndash; reasoning models can be verbose.</li>
+<li>Control depth with the effort/budget setting, not with prompt text like "think harder".</li>
+<li>Don't ask them to print their hidden reasoning; ask for a brief justification in the answer if you need one.</li>
+<li>In tool-use loops, pass back thinking/reasoning items the API returns, as the provider requires.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">Visible vs hidden reasoning: what do providers return, and can you trust the reasoning text?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Some providers show you the model's thinking (or a summary), some hide it. Either way, treat it as a helpful hint, not as a guaranteed explanation of why the model answered as it did.</p>
+<p>As of 2025-2026: OpenAI's reasoning models hide the raw reasoning and can return summaries; Claude returns thinking blocks, summarized (or omitted by default) on newer models; open models like DeepSeek-R1 expose full reasoning text. You are billed for the full reasoning either way. Research shows reasoning text is not always <b>faithful</b>: Anthropic's 2025 study "Reasoning Models Don't Always Say What They Think" found models often used a planted hint without mentioning it in their reasoning. Practical guidance: use visible reasoning for debugging prompts and for showing progress to users (as summaries); don't treat it as an audit log or a correctness proof; verify final outputs with tests, validation or evals; and don't display raw reasoning to end users without review, since it may contain half-formed or off-policy content.</p>
+</div>
+
+<div class="q"><p class="qq">What is self-consistency, and is it still useful with reasoning models?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Ask the same question several times and go with the most common answer &ndash; like polling several experts.</p>
+<p>Self-consistency (Wang et al., 2022) samples N reasoning paths at temperature &gt; 0 and takes a majority vote on the final answer. Correct reasoning tends to converge while errors scatter, so accuracy rises on math and logic tasks, at N&times; the cost. Variants: best-of-N with a verifier (unit tests for code, a validator, or an LLM judge) for open-ended outputs. With reasoning models, single-sample accuracy is already high and each sample is expensive, so use voting selectively: high-stakes decisions, answers that are easy to compare (numbers, labels), or to estimate confidence (disagreement between samples is a useful "uncertain, escalate" signal).</p>
+</div>
+<h2 id="s8">8. Prompt Engineering Fundamentals</h2>
+
+<div class="q"><p class="qq">What is prompt engineering, and why does it still matter with very capable models?<span class="lvl b">BASIC</span></p>
+<p class="simple">Prompt engineering is writing clear instructions and providing the right information so the model does what you need &ndash; like writing a good brief for a smart contractor who knows nothing about your project.</p>
+<p>Prompt engineering is designing the inputs (instructions, context, examples, output format) to get reliable, high-quality outputs, and iterating on them against an evaluation set. Even strong models can't read your mind: they don't know your audience, business rules, edge-case policies, output format, or what "good" means for your product. Small changes in instructions often swing quality, format compliance and safety significantly. In production, prompts are also code: versioned, tested, and tied to a model version. The modern view (often called "context engineering", Part 2) widens this to everything in the context window: retrieved documents, tool definitions, memory and history.</p>
+</div>
+
+<div class="q"><p class="qq">What is the anatomy of a good prompt?<span class="lvl b">BASIC</span></p>
+<p class="simple">Say who the model is helping, what to do, what information to use, what rules to follow, what the answer should look like, and show an example if the format is tricky.</p>
+<ol>
+<li><b>Role / context:</b> who the assistant is and who the audience is.</li>
+<li><b>Task:</b> a clear, specific instruction of what to do.</li>
+<li><b>Context / data:</b> the documents, user data, or retrieved passages to use (clearly delimited).</li>
+<li><b>Rules and constraints:</b> policies, what to do in edge cases, what not to do (phrased positively where possible).</li>
+<li><b>Examples:</b> one or more input &rarr; output examples for tricky formats or judgments.</li>
+<li><b>Output format:</b> structure, length, schema, language, tone.</li>
+<li><b>An "out":</b> what to do if the task can't be done ("If the answer is not in the documents, say so").</li>
+</ol>
+<pre><code>System: You are a support assistant for Acme's billing product. Users are small-business
+owners; write in plain language.
+Answer ONLY using the help-center articles in &lt;articles&gt;. If they don't contain the answer,
+say "I'm not sure - let me connect you with a human agent." and stop.
+Format: at most 4 short sentences, then "Source: &lt;article title&gt;".
+
+User: &lt;articles&gt;...retrieved articles...&lt;/articles&gt;
+Question: Why was I charged twice this month?</code></pre>
+</div>
+
+<div class="q"><p class="qq">What belongs in the system prompt vs the user message?<span class="lvl b">BASIC</span></p>
+<p class="simple">The system prompt is the standing job description that applies to every conversation; the user message is the specific request right now.</p>
+<p><b>System prompt:</b> role and audience, task description, rules and policies, output format, tool-use guidance, safety boundaries, and stable reference material. <b>User message:</b> the per-request input &ndash; the question, uploaded documents, retrieved context for this query. Reasons to separate: models are trained to give system/developer instructions higher priority than user instructions (an "instruction hierarchy"), which helps resist users overriding your rules; the system prompt is a stable prefix that benefits from prompt caching; and it keeps untrusted user content apart from your instructions (this helps against prompt injection but does not solve it). Keep the system prompt focused &ndash; a sprawling list of hundreds of rules leads to some being ignored.</p>
+</div>
+
+<div class="q"><p class="qq">What are the principles of writing clear instructions?<span class="lvl b">BASIC</span></p>
+<ul>
+<li><b>Be explicit and specific:</b> "Summarize in 3 bullet points for a CFO, focusing on cost risks" beats "Summarize this". Imagine briefing a brilliant new hire with zero context.</li>
+<li><b>Explain why:</b> "Keep it under 50 words because it's shown in an SMS" &ndash; models generalize better when they know the reason.</li>
+<li><b>Define terms and edge cases:</b> what counts as "urgent"? What if the input is empty or in another language?</li>
+<li><b>Order and structure:</b> use headings, numbered steps and delimiters for long prompts.</li>
+<li><b>One task per prompt</b> when tasks are unrelated or complex; chain calls instead (Section 9).</li>
+<li><b>Avoid ambiguity and contradictions:</b> "be brief" + "be thorough" confuses the model.</li>
+<li><b>Iterate with data:</b> test against a set of real examples, not one favorite input.</li>
+</ul>
+<div class="tip">A great habit to mention: "I ask a colleague (or the model) to read the prompt and explain the task back; if they're confused, the model will be too."</div>
+</div>
+
+<div class="q"><p class="qq">Zero-shot vs few-shot prompting: when do examples help?<span class="lvl b">BASIC</span></p>
+<p class="simple">Zero-shot means just giving instructions. Few-shot means also showing a few worked examples. Examples are the fastest way to show exactly the format or judgment you want.</p>
+<p>Modern instruction-tuned models handle many tasks zero-shot. Few-shot examples (typically 2-8) help most for specific output formats or styles, subtle classification boundaries, domain conventions and consistent tone. Best practices: make examples diverse and representative (cover edge cases and every label); keep their format identical to what you want; wrap them in tags such as <code>&lt;example&gt;</code>; balance labels and vary their order (models favor recent and majority labels); and say examples are illustrative so the model doesn't copy their content. Models over-copy surface features &ndash; length, phrasing, even specific facts. For large example banks, <b>dynamic few-shot</b> retrieves the examples most similar to the current input using embeddings. Reasoning models often need fewer or no examples.</p>
+</div>
+
+<div class="q"><p class="qq">Does role prompting ("You are an expert X") work?<span class="lvl b">BASIC</span></p>
+<p class="simple">Telling the model who it is sets the tone and focus, a bit like telling an actor which character they are playing &ndash; useful, but it doesn't make the model know more.</p>
+<p>Role prompting helps with tone, vocabulary, level of detail and focus ("You are a pediatric nurse explaining to worried parents" changes register and what's emphasized), and it helps the model infer unstated expectations. It does not add knowledge the model lacks, and studies show inconsistent accuracy gains on factual tasks from persona lines alone. The details matter far more: audience, task, constraints, success criteria. A good role line is specific and includes the context: "You are a senior security reviewer at a fintech company; you review pull requests for OWASP Top 10 issues and explain them to junior developers".</p>
+</div>
+
+<div class="q"><p class="qq">Why use delimiters and XML tags in prompts?<span class="lvl b">BASIC</span></p>
+<p class="simple">Tags are like labelled folders: they make it obvious which part is your instructions and which part is the document or user data.</p>
+<p>Delimiters (triple quotes, markdown headings, XML-style tags like <code>&lt;document&gt;</code>, <code>&lt;instructions&gt;</code>, <code>&lt;example&gt;</code>) separate instructions from data. Benefits: less confusion when inputs contain instruction-like text; easy references ("using the contract in &lt;contract&gt;"); multiple documents with metadata (<code>&lt;document index="1"&gt;&lt;source&gt;...&lt;/source&gt;&lt;content&gt;...&lt;/content&gt;&lt;/document&gt;</code>); and parseable outputs when you ask the model to answer inside tags (<code>&lt;answer&gt;</code>). Anthropic explicitly recommends XML tags; any consistent scheme works for most models. Security note: delimiters alone do not stop prompt injection &ndash; an attacker can include closing tags in their text; escape or strip tag-like strings from untrusted input and use defense in depth (Part 3).</p>
+</div>
+
+<div class="q"><p class="qq">What is chain-of-thought prompting, and when should you use it?<span class="lvl b">BASIC</span></p>
+<p class="simple">Ask the model to work through the problem before giving the answer. Showing its work makes it more accurate on multi-step problems.</p>
+<p>Chain-of-thought (CoT) prompting elicits intermediate reasoning, via examples that include reasoning (Wei et al., 2022) or an instruction like "think step by step" (Kojima et al., 2022). It helps on math, multi-step logic, and decisions that combine several rules; it adds tokens and latency and doesn't help simple lookups or classification much. Production tips: separate reasoning from the answer so you can parse it (<code>&lt;thinking&gt;...&lt;/thinking&gt;&lt;answer&gt;...&lt;/answer&gt;</code>, or a <code>reasoning</code> field placed <i>before</i> the <code>answer</code> field in a JSON schema); don't show the reasoning to users if it's messy; and with reasoning models, skip explicit CoT &ndash; they do it internally, and you control it with effort settings.</p>
+</div>
+
+<div class="q"><p class="qq">Why give the model an "out", and what does that look like?<span class="lvl b">BASIC</span></p>
+<p class="simple">If you don't tell the model it's OK to say "I don't know", it will usually try to answer anyway &ndash; and may make something up.</p>
+<p>Models are trained to be helpful, so when information is missing they tend to guess. An explicit escape hatch reduces hallucination: "If the answer is not contained in the documents, reply exactly: <code>NOT_FOUND</code>"; "If the request is ambiguous, ask one clarifying question instead of answering"; in a JSON schema, include <code>"status": "ok" | "insufficient_information"</code> or nullable fields with instructions to use null rather than invent values. Make the "out" easy to detect programmatically (a fixed token or enum) so your app can route to a fallback (human agent, search, clarification). Measure both sides: the rate of correct abstentions and the rate of unnecessary refusals.</p>
+</div>
+
+<div class="q"><p class="qq">Positive vs negative instructions &ndash; why is "do X" often better than "don't do Y"?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Telling someone "don't think of a pink elephant" puts the elephant in their head. Telling the model what to do instead is clearer.</p>
+<p>Negative instructions ("Don't use markdown", "Never mention competitors") are sometimes ignored or even prime the unwanted behavior, and they leave the model guessing what to do instead. Positive framing gives a concrete target: "Write in plain prose paragraphs" instead of "no markdown"; "If asked about other vendors, say you can only discuss Acme products" instead of "never mention competitors". Negative constraints are still appropriate for hard rules, ideally paired with the desired alternative and a reason. Also, emphatic shouting ("NEVER", "CRITICAL!!!") was common for older models but can cause over-application in newer, more instruction-sensitive models &ndash; state rules calmly and clearly.</p>
+</div>
+
+<div class="q"><p class="qq">How do you specify output format reliably?<span class="lvl b">BASIC</span></p>
+<ul>
+<li>State the exact structure: sections, bullet vs prose, length, language, and whether to include preambles.</li>
+<li>Show an example of the exact output.</li>
+<li>For machine-readable output, use the API's structured-output / JSON-schema feature rather than prompt-only instructions (Section 10).</li>
+<li>Ask for answers inside tags (<code>&lt;answer&gt;</code>) when mixing reasoning and answer, then parse.</li>
+<li>Match the prompt's own style to the desired output (a prompt written in heavy markdown tends to produce markdown).</li>
+<li>Validate in code and retry with the error message if the format is wrong.</li>
+</ul>
+</div>
+
+<h2 id="s9">9. Prompt Engineering &ndash; Advanced &amp; Production</h2>
+
+<div class="q"><p class="qq">What is prompt chaining, and when is it better than one big prompt?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Break a big job into steps, with one model call per step, feeding each step's result into the next &ndash; like an assembly line.</p>
+<p>Prompt chaining splits a task into sequential LLM calls (e.g., extract facts &rarr; analyze &rarr; draft &rarr; check &rarr; format). Benefits: each prompt is simpler and more reliable; you can use a different model per step (cheap model for extraction, strong model for reasoning); intermediate outputs can be validated, cached and debugged; independent branches can run in parallel. Better than a single prompt when the task has distinct subtasks, when one giant prompt gives inconsistent results, or when you need checkpoints (validation, human approval). Costs: more latency for sequential steps, error propagation, and more code. Chains are fixed workflows defined in code; <b>agents</b> decide their own next steps (Part 2). Anthropic's "Building effective agents" (2024) recommends starting with simple workflows like chaining, routing and parallelization before reaching for agents.</p>
+</div>
+
+<div class="q"><p class="qq">Does asking the model to critique and revise its own output work?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Sometimes &ndash; it works best when the model has something concrete to check against, like test results or a checklist, rather than just "is this good?".</p>
+<p>Self-Refine (Madaan et al., 2023) showed generate &rarr; critique &rarr; revise loops improve outputs where quality criteria are clear (rewriting, code optimization, dialogue). But Huang et al. (2023, "Large Language Models Cannot Self-Correct Reasoning Yet") found that self-correction on reasoning without external feedback often doesn't help and can turn right answers wrong. Self-critique works best when: there is an external signal (code execution, unit tests, a schema validator, retrieval to check facts); the critic uses an explicit rubric or checklist ("Does the answer cite a source for every claim? Is it under 100 words?"); or a separate critic prompt or different model reviews the output. Always measure whether the extra calls actually improve your eval &ndash; they double cost and latency.</p>
+</div>
+
+<div class="q"><p class="qq">What is prefilling the assistant response?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">You write the first few words of the model's answer yourself, and it continues from there &ndash; a strong way to steer format.</p>
+<p>Prefilling supplies the start of the assistant turn so the model continues from it: e.g., prefill <code>{</code> to force JSON immediately, <code>&lt;answer&gt;</code> to skip preambles, or the first words of a persona's reply. Historically supported by Anthropic's Messages API (final message as a partial assistant turn) and by any open model where you control the raw template. Caveats: as of 2026, several newer Claude models no longer accept assistant prefill &ndash; providers point you to structured outputs and system instructions instead; it doesn't combine with extended thinking on some APIs; trailing whitespace in the prefill can cause odd tokenization; and it is a known jailbreak vector, which is one reason providers restrict it. Treat prefill as a legacy/open-model technique and prefer native structured outputs where available.</p>
+</div>
+
+<div class="q"><p class="qq">What are best practices for prompting with long documents?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Put the big documents first and your question at the end, label each document clearly, and ask the model to pull out the relevant quotes before answering.</p>
+<ul>
+<li>Place long documents at the <b>top</b> and the instructions/question at the <b>end</b> (Anthropic reports notable quality gains on long multi-document inputs).</li>
+<li>Wrap each document in tags with metadata (title, source, date) so the model can distinguish and cite them.</li>
+<li>Ask the model to first extract relevant quotes (e.g., in <code>&lt;quotes&gt;</code>) and then answer based on them &ndash; this cuts through noise and enables grounding checks.</li>
+<li>Remove irrelevant content: more context is not free (distractors, lost-in-the-middle, cost, latency).</li>
+<li>Keep stable content first for prompt caching; restate key instructions near the end of very long prompts.</li>
+<li>For many documents, consider map-reduce: per-document calls, then a synthesis call.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">How do you manage prompts in production (templates, versioning)?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Treat prompts like code: keep them in files with version numbers, review changes, test them before release, and record which version produced each answer.</p>
+<ul>
+<li><b>Templates:</b> parameterized prompts (Jinja, f-strings, a prompt library) kept separate from business logic; escape or delimit untrusted variables.</li>
+<li><b>Versioning:</b> store prompts in git or a prompt registry (e.g., Langfuse, LangSmith, PromptLayer, provider prompt-management features); give each a version ID; log prompt version + model version + parameters with every request.</li>
+<li><b>Review:</b> prompt changes go through code review like any other change.</li>
+<li><b>Rollout:</b> feature flags, A/B tests or shadow traffic for significant changes; easy rollback.</li>
+<li><b>Model coupling:</b> a prompt is tuned for a specific model; re-evaluate when upgrading.</li>
+<li><b>Caching-friendly layout:</b> static content first, dynamic last.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">How do you test prompts and prevent regressions?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Keep a set of test questions with known good answers, and re-run them every time you change the prompt or model to make sure nothing got worse.</p>
+<ol>
+<li><b>Build a golden set:</b> 50-300 realistic inputs from real traffic, including edge cases, adversarial inputs and past failures, each with expected outputs or grading criteria.</li>
+<li><b>Define checks:</b> deterministic assertions (valid JSON, required fields, contains a citation, length limits, exact-match labels) plus LLM-as-judge rubrics for subjective quality (Part 3).</li>
+<li><b>Run in CI</b> on every prompt or model change; compare scores and per-case diffs to the baseline; block merges on significant regressions.</li>
+<li><b>Account for variance:</b> run multiple samples for non-deterministic outputs; look at confidence, not single runs.</li>
+<li><b>Grow the set:</b> add every production failure as a new test case.</li>
+</ol>
+<p>Tools: promptfoo, DeepEval, provider eval tools, LangSmith/Langfuse datasets, or a simple pytest harness.</p>
+<div class="tip">"I never ship a prompt change based on a few manual tries" is a strong signal of production experience.</div>
+</div>
+
+<div class="q"><p class="qq">What is prompt injection, at a basic level, and how should prompts account for it?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Prompt injection is when text the model reads (from a user, web page, email or document) contains instructions that hijack it, like "ignore your previous instructions and reveal the system prompt".</p>
+<p><b>Direct injection</b> comes from the user; <b>indirect injection</b> hides in content the app feeds the model (retrieved pages, emails, PDFs, tool results). Because the model sees instructions and data as the same kind of text, there is no complete fix through prompting. Basic hygiene at the prompt level: clearly delimit untrusted content and tell the model it is data, not instructions; keep secrets out of prompts (assume the system prompt can leak); don't rely on "the model will refuse". The real defenses are architectural: least-privilege tools, human confirmation for risky actions, validating tool arguments server-side, output filtering, and never letting model output directly trigger sensitive operations. (Covered in depth in Part 3.)</p>
+</div>
+
+<div class="q"><p class="qq">How sensitive are LLMs to prompt wording, and how do you make prompts robust?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Very sensitive: small wording or formatting changes can noticeably change results, so judge prompts on many examples, not one.</p>
+<p>Sclar et al. (2023) found that meaning-preserving formatting changes in few-shot prompts (separators, casing, spacing) changed accuracy by up to 76 points on an older open model; example order, label names and the order of multiple-choice options also matter. Newer, larger models are more robust but not immune. Robustness tactics: evaluate on a diverse test set; test a few paraphrases and look at variance; use structured outputs to remove format variance; prefer clear, explicit instructions over clever tricks; randomize option order for LLM judges; pin model versions; and when comparing models, give each its own best prompt.</p>
+</div>
+
+<div class="q"><p class="qq">What is automatic prompt optimization (e.g., DSPy)?<span class="lvl a">ADVANCED</span></p>
+<p class="simple">Instead of hand-tweaking prompts, you give a tool your task, some examples and a scoring function, and it searches for the prompt (instructions and examples) that scores best.</p>
+<p>Automatic prompt optimization treats the prompt as something to search over against a metric. Simple form: ask a strong model to propose or improve prompts, score each on your eval, keep the best (APE, OPRO-style approaches). <b>DSPy</b> (Stanford) is a framework where you declare <b>signatures</b> (typed input &rarr; output specs like <code>"question, context -&gt; answer"</code>) and compose <b>modules</b> (Predict, ChainOfThought, ReAct); its <b>optimizers</b> (e.g., BootstrapFewShot, MIPROv2, GEPA) automatically select few-shot demos and rewrite instructions to maximize your metric on a training set. Benefits: prompts become reproducible artifacts that can be re-optimized when you switch models. Requirements: a trustworthy metric and some labeled data; without them it overfits. Many teams use lightweight versions: model-assisted prompt rewriting plus their regression suite.</p>
+</div>
+
+<div class="q"><p class="qq">What are common prompt failure modes and their fixes?<span class="lvl i">INTERMEDIATE</span></p>
+<table>
+<tr><th>Failure</th><th>Fix</th></tr>
+<tr><td>Hallucinated facts / fake citations</td><td>Ground with retrieved sources, require quotes, allow "I don't know", verify citations programmatically</td></tr>
+<tr><td>Ignores some instructions in long prompts</td><td>Prioritize and shorten; structure with headings; restate critical rules at the end; split into chained calls</td></tr>
+<tr><td>Wrong or inconsistent format</td><td>Structured outputs / schema, examples, validation + retry</td></tr>
+<tr><td>Too verbose or preachy</td><td>Specify length and audience; show an example; ask for no preamble</td></tr>
+<tr><td>Over-copies few-shot examples</td><td>Diversify examples; state they are illustrative</td></tr>
+<tr><td>Inconsistent answers across runs</td><td>Lower temperature, clearer criteria, structured output, examples for edge cases</td></tr>
+<tr><td>Follows injected instructions in documents</td><td>Delimit data, least-privilege tools, confirmations, output filtering</td></tr>
+<tr><td>Sycophancy (agrees with the user's wrong claim)</td><td>Instruct to correct mistakes politely; ask for evidence; avoid leading questions</td></tr>
+<tr><td>Works in testing, fails in production</td><td>Eval on real traffic samples; monitor; add failures to the test set</td></tr>
+</table>
+</div>
+
+<div class="q"><p class="qq">Walk me through how you would debug a prompt that gives bad results.<span class="lvl i">INTERMEDIATE</span></p>
+<ol>
+<li><b>Collect failures:</b> gather 20-50 concrete bad outputs (from logs or the eval) and categorize them (wrong facts, wrong format, ignored rule, wrong tone, refusal).</li>
+<li><b>Check the inputs actually sent:</b> render the final prompt the model saw (templates, retrieved chunks, history, truncation). Many "prompt" bugs are really missing context, wrong documents or silently truncated history.</li>
+<li><b>Ask whether a human could do it</b> from that exact prompt. If not, the instructions or context are insufficient.</li>
+<li><b>Fix the biggest category first:</b> clarify instructions, add a targeted example, add an "out", restructure with tags, move the question to the end.</li>
+<li><b>Check settings:</b> temperature, max_tokens/truncation, model version.</li>
+<li><b>Try a stronger model</b> to see whether it's a capability limit; if the strong model succeeds, consider chaining, examples or routing.</li>
+<li><b>Re-run the full eval</b> to confirm improvement and no regressions.</li>
+</ol>
+<div class="tip">Starting with "look at the actual rendered prompt and the failing examples" shows real debugging experience.</div>
+</div>
+
+<h2 id="s10">10. Structured Outputs</h2>
+
+<div class="q"><p class="qq">Why do applications need structured outputs?<span class="lvl b">BASIC</span></p>
+<p class="simple">Your code can't easily read a friendly paragraph. It needs data in a fixed shape (like JSON with known fields) so it can store it, display it or act on it.</p>
+<p>Many LLM features feed other code: extraction into a database, classification for routing, UI components, tool arguments, multi-step pipelines. Free text is hard to parse reliably (markdown fences, preambles like "Sure! Here is the JSON:", missing fields, wrong types). Structured outputs give you machine-readable responses that conform to a schema, which you then validate and use. They also make evaluation easier (compare fields exactly) and reduce prompt complexity (the schema describes the format).</p>
+</div>
+
+<div class="q"><p class="qq">JSON mode vs strict schema-constrained structured outputs: what is the difference?<span class="lvl b">BASIC</span></p>
+<p class="simple">JSON mode guarantees you get valid JSON, but not that it has the fields you wanted. Strict structured outputs guarantee the JSON matches your exact schema.</p>
+<table>
+<tr><th>Approach</th><th>Guarantee</th><th>Notes</th></tr>
+<tr><td>Prompt only ("respond in JSON")</td><td>None</td><td>Often wrapped in code fences, extra commentary, missing fields</td></tr>
+<tr><td>JSON mode (e.g., OpenAI <code>response_format={"type": "json_object"}</code>)</td><td>Syntactically valid JSON</td><td>No guarantee of keys, types, required fields</td></tr>
+<tr><td>Strict structured outputs (OpenAI <code>json_schema</code> with <code>strict: true</code>; Anthropic structured outputs via <code>output_config</code> format / <code>messages.parse</code>; Gemini response schema; vLLM/SGLang guided decoding)</td><td>Output conforms to the supplied JSON Schema</td><td>Implemented by <b>constrained decoding</b>: tokens that would break the schema are blocked during generation. Supports a subset of JSON Schema (e.g., OpenAI strict mode requires all fields listed as required and <code>additionalProperties: false</code>; optional fields become nullable)</td></tr>
+<tr><td>Forced tool call with a schema</td><td>Arguments match the tool schema (when strict)</td><td>Older but common pattern for extraction</td></tr>
+</table>
+<p>Even with strict schemas you still need <b>semantic validation</b> (plausible values, cross-field rules, IDs that exist) and handling for refusals and truncation: schema-valid does not mean correct.</p>
+</div>
+
+<div class="q"><p class="qq">How do Pydantic models fit into structured output?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Pydantic lets you describe the data shape as a Python class; the SDK turns it into a schema for the model and then checks and converts the reply into a typed Python object.</p>
+<p>Define the target as a Pydantic model (types, enums via <code>Literal</code>, constraints with <code>Field</code>, and field descriptions that act as mini-prompts). SDK helpers convert it to JSON Schema and parse the response: e.g., OpenAI <code>client.chat.completions.parse(..., response_format=Model)</code> &rarr; <code>message.parsed</code> (and <code>client.responses.parse(..., text_format=Model)</code>), Anthropic <code>client.messages.parse(..., output_format=Model)</code> &rarr; <code>parsed_output</code>, as of 2025-2026. Without helpers: send <code>Model.model_json_schema()</code> and validate with <code>Model.model_validate_json(text)</code>. Custom validators enforce business rules.</p>
+<pre><code>from typing import Literal
+from pydantic import BaseModel, Field, field_validator
+
+class Ticket(BaseModel):
+    category: Literal["billing", "bug", "feature_request", "other"]
+    priority: int = Field(ge=1, le=5, description="1 = lowest, 5 = outage")
+    summary: str = Field(description="One sentence, under 25 words")
+
+    @field_validator("summary")
+    @classmethod
+    def not_empty(cls, v: str) -&gt; str:
+        if not v.strip():
+            raise ValueError("summary must not be empty")
+        return v</code></pre>
+<div class="tip">Field order matters: the model generates fields in order, so put a short <code>reasoning</code> or <code>evidence</code> field before the final <code>answer</code>/<code>label</code> if you want it to think first.</div>
+</div>
+
+<div class="q"><p class="qq">What do Instructor-style libraries do?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">They wrap the LLM client so you can say "give me back a <code>Ticket</code> object" and the library handles the schema, parsing, validation and automatic retries.</p>
+<p><b>Instructor</b> (and similar libraries such as PydanticAI, or framework features like LangChain's <code>with_structured_output</code>) patch or wrap provider clients: you pass <code>response_model=Ticket</code> and <code>max_retries=2</code>; the library sends the schema (via tool calling or native structured outputs), parses the response into the Pydantic model, and on a validation error automatically re-asks the model with the error message so it can correct itself. They support many providers with one interface and add streaming of partial objects. Trade-offs: extra dependency and abstraction; hidden retries add cost and latency (log them); and native strict structured outputs may make retries rare, though semantic validators still benefit from the re-ask loop.</p>
+<pre><code># import instructor
+# from openai import OpenAI
+# client = instructor.from_openai(OpenAI())
+# ticket = client.chat.completions.create(model="your-model-name", response_model=Ticket,
+#     max_retries=2, messages=[{"role": "user", "content": email_text}])</code></pre>
+</div>
+
+<div class="q"><p class="qq">How do you validate structured output and retry robustly?<span class="lvl i">INTERMEDIATE</span></p>
+<ol>
+<li><b>Prevent:</b> strict schema / constrained decoding where available, low temperature, clear field descriptions.</li>
+<li><b>Check the stop reason</b> first: truncated (<code>length</code>/<code>max_tokens</code>) means invalid output &ndash; don't parse it as final.</li>
+<li><b>Parse and validate</b> syntactically (Pydantic) and semantically (business rules; grounding, e.g., the extracted value must appear in the source text).</li>
+<li><b>Retry with feedback:</b> send the validation error back ("field 'date' must be ISO-8601; got 'next Tuesday'") and ask for a corrected output; cap at 2-3 attempts; optionally escalate to a stronger model.</li>
+<li><b>Fallback:</b> partial result with flags, human review queue, or a safe default.</li>
+<li><b>Monitor</b> validity rate, retry rate and error types per prompt/model version.</li>
+</ol>
+<p>Keep this separate from transport retries: exponential backoff is for 429/5xx errors, not for content errors.</p>
+</div>
+
+<div class="q"><p class="qq">How do you handle refusals and truncated JSON in structured outputs?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Sometimes the model declines, or runs out of room mid-answer. Your code must check for both before trusting the JSON.</p>
+<p><b>Refusals:</b> with strict schemas, a safety refusal may not fit your schema. OpenAI returns a separate <code>refusal</code> field on the message instead of schema content; newer Claude models can stop with <code>stop_reason="refusal"</code>. Check these before parsing. Also design schemas with an explicit escape (e.g., <code>status: "ok" | "cannot_extract"</code> plus <code>reason</code>) so the model isn't forced to fabricate data when the input lacks it.</p>
+<p><b>Truncation:</b> hitting max_tokens cuts JSON mid-object. Detect via the stop reason; then raise the limit, reduce output size (fewer fields, shorter strings, pagination: "return the first 50 items"), or split the input. "Partial JSON" parsers are fine for streaming previews in a UI but never for final data. With reasoning models, remember thinking tokens consume the output budget too.</p>
+</div>
+
+<div class="q"><p class="qq">How would you build a reliable extraction pipeline (e.g., invoices &rarr; database rows)?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Schema design:</b> Pydantic model with clear field names, descriptions, units and formats (ISO dates, currency codes), nullable fields for "not present", enums for closed sets, and a list type for line items.</li>
+<li><b>Input prep:</b> good text extraction / OCR, or send the PDF/image directly to a multimodal model; chunk very long documents.</li>
+<li><b>Prompt:</b> "Extract only what is explicitly stated; use null if missing; do not infer."</li>
+<li><b>Validation:</b> types and formats; cross-field checks (line items sum to the total, dates in range); grounding check (values appear in the source text).</li>
+<li><b>Confidence routing:</b> failures, low logprob fields or disagreement between two runs/models go to human review.</li>
+<li><b>Evaluation:</b> a labeled set with field-level precision/recall and exact-match per field; track by document type.</li>
+<li><b>Scale:</b> batch APIs for backlogs, concurrency with rate limiting for live traffic, idempotent writes keyed by document ID.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">Why use enums for classification, and how do you design labels?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">If you give the model a fixed list of allowed answers, it can't invent new categories or spell them differently.</p>
+<p>With an enum (<code>Literal["billing", "bug", "feature_request", "other"]</code>) in a strict schema, the output is guaranteed to be one of the allowed labels &ndash; no "Billing issue", "BILLING" or invented categories. Label design tips: use descriptive, unambiguous names; define each label with a short description and boundary rules in the prompt or field description ("bug = product behaves incorrectly; not how-to questions"); always include an <code>other</code>/<code>unknown</code> label so the model isn't forced into a wrong category; optionally output a short <code>reasoning</code> field first, then the label; and for multi-label tasks use a list of enums. Evaluate with a confusion matrix to find label pairs the model confuses, and refine definitions or add examples for those.</p>
+</div>
+<h2 id="s11">11. Function / Tool Calling</h2>
+
+<div class="q"><p class="qq">What is function (tool) calling?<span class="lvl b">BASIC</span></p>
+<p class="simple">You describe some functions your app can run (like "get_weather(city)"). When the model needs one, it replies with "please call get_weather with city=Paris" instead of text. Your code runs it and gives the result back.</p>
+<p>Tool calling lets a model ask your application to run code: look up data (order status, weather, database queries), take actions (create a ticket, send an email), or compute exactly (calculator, code execution). The model never executes anything itself &ndash; it outputs a structured request (tool name + JSON arguments), and your code decides whether and how to run it. This is how LLMs get fresh data, access private systems and do precise operations, and it is the building block of agents (Part 2). Providers fine-tune models to decide when a tool is needed and to produce well-formed arguments.</p>
+</div>
+
+<div class="q"><p class="qq">Walk through the tool-calling flow end to end.<span class="lvl b">BASIC</span></p>
+<p class="simple">Describe the tools &rarr; model asks for a tool &rarr; your code runs it &rarr; you send the result back &rarr; model writes the final answer (or asks for another tool).</p>
+<ol>
+<li><b>Define tools:</b> send each tool's name, description and a JSON Schema for its parameters along with the messages.</li>
+<li><b>Model returns a tool call:</b> instead of (or alongside) text, the response contains one or more tool calls, each with an ID, the tool name and JSON arguments. Stop reason: <code>finish_reason="tool_calls"</code> (OpenAI) / <code>stop_reason="tool_use"</code> (Anthropic).</li>
+<li><b>Your code executes:</b> parse and validate the arguments, check permissions, run the function, handle errors and timeouts.</li>
+<li><b>Send the result back:</b> append the assistant's tool-call message to the history, then a tool-result message referencing the call ID (OpenAI: <code>{"role": "tool", "tool_call_id": ..., "content": ...}</code>; Anthropic: a user message with <code>{"type": "tool_result", "tool_use_id": ..., "content": ...}</code>).</li>
+<li><b>Call the model again:</b> it uses the result to answer, or requests more tools. Loop until it gives a final answer, with a maximum-iterations cap.</li>
+</ol>
+<p>Tool definitions are rendered into the prompt and consume input tokens on every call. See Section 14 for a complete loop.</p>
+<div class="fu">What if the tool returns 50K tokens? How do you prevent dangerous calls? How do you choose among 100+ tools?</div>
+</div>
+
+<div class="q"><p class="qq">What do the tool_choice options (auto, required, none, specific tool) do?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">tool_choice says whether the model may, must, or must not use tools on this turn.</p>
+<table>
+<tr><th>Option</th><th>OpenAI</th><th>Anthropic</th><th>Use</th></tr>
+<tr><td>Model decides</td><td><code>"auto"</code></td><td><code>{"type": "auto"}</code></td><td>Default for assistants</td></tr>
+<tr><td>Must call some tool</td><td><code>"required"</code></td><td><code>{"type": "any"}</code></td><td>Pipelines where a tool call is the only valid output</td></tr>
+<tr><td>Must call a specific tool</td><td><code>{"type": "function", "function": {"name": "x"}}</code></td><td><code>{"type": "tool", "name": "x"}</code></td><td>Classic trick for structured extraction</td></tr>
+<tr><td>No tools</td><td><code>"none"</code></td><td><code>{"type": "none"}</code></td><td>Force a text answer (e.g., final summary turn)</td></tr>
+</table>
+<p>Caveats as of 2025-2026: forced tool use may conflict with extended thinking, and some of the newest Claude models reject forced <code>any</code>/<code>tool</code> choices &ndash; providers recommend <code>auto</code> plus a clear instruction, strict tool schemas, or native structured outputs for the extraction use case.</p>
+</div>
+
+<div class="q"><p class="qq">What are parallel tool calls, and when would you disable them?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">The model can ask for several tools at once (e.g., weather in three cities). Your code runs them together and returns all the results, saving round trips.</p>
+<p>In one turn the model may emit multiple independent tool calls. Execute them concurrently (e.g., <code>asyncio.gather</code>), then return <b>all</b> results &ndash; each matched to its call ID &ndash; before the next model call (on Anthropic, all <code>tool_result</code> blocks in a single user message). Benefits: fewer model round trips and lower latency. Disable (OpenAI <code>parallel_tool_calls=False</code>; Anthropic <code>disable_parallel_tool_use</code> inside tool_choice) when calls have side effects or ordering dependencies (e.g., "create account" then "add user"), when you want step-by-step confirmation, or when your execution layer can't handle concurrency. If one parallel call fails, still return a result for it with an error message rather than dropping it.</p>
+</div>
+
+<div class="q"><p class="qq">How do you write good tool definitions?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">The tool's name and description are a prompt. Write them like documentation for a new teammate: what it does, when to use it, and what each input means.</p>
+<ul>
+<li><b>Names and descriptions:</b> what the tool does, when to use it and when not to, what it returns, caveats ("searches internal docs only, updated nightly").</li>
+<li><b>Parameters:</b> clear names, types, enums for closed sets, formats (ISO dates), units, examples in descriptions; mark required fields; avoid vague free-form strings.</li>
+<li><b>Granularity:</b> fewer, task-shaped tools (<code>schedule_meeting</code>) rather than many low-level ones the model must orchestrate &ndash; but not a do-everything tool.</li>
+<li><b>Return values:</b> concise and relevant; include IDs needed for follow-up calls; truncate/paginate large results; return actionable errors ("date must be in the future") so the model can self-correct.</li>
+<li><b>Strict schemas</b> (OpenAI <code>strict: true</code>, Anthropic <code>strict: true</code> on the tool) guarantee arguments match the schema.</li>
+<li><b>Keep the tool list small</b> per request; with many tools, select relevant ones dynamically (tool search/retrieval).</li>
+</ul>
+<pre><code>{"name": "get_order_status",
+ "description": "Look up the current status of ONE customer order by its order ID. Use when the "
+                "user asks where their order is. Returns status, carrier and ETA. Do not guess IDs; "
+                "if the user hasn't given one, ask for it.",
+ "input_schema": {"type": "object",
+   "properties": {"order_id": {"type": "string", "description": "Format ORD-12345678"}},
+   "required": ["order_id"]}}</code></pre>
+</div>
+
+<div class="q"><p class="qq">How should you handle errors in tool execution?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Invalid arguments:</b> validate against the schema and business rules; return an error result explaining what was wrong so the model can retry (Anthropic supports <code>"is_error": true</code> on tool results).</li>
+<li><b>Tool failures/timeouts:</b> catch exceptions, set timeouts, return a clear error message ("inventory service unavailable, try again later") rather than crashing the loop.</li>
+<li><b>Unknown tool names:</b> return an error listing valid tools.</li>
+<li><b>Loops:</b> cap the number of iterations and repeated identical calls; stop and answer gracefully.</li>
+<li><b>Huge outputs:</b> truncate, summarize or paginate before returning to the model.</li>
+<li><b>Never leak internals</b> (stack traces, credentials) into tool results the model may repeat to users.</li>
+<li><b>Log</b> every call, arguments, result size, latency and errors.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">What are the security rules for tool calling?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Treat the model's tool requests like requests from an untrusted user: check everything before running it, and never give it more power than it needs.</p>
+<ul>
+<li><b>Least privilege:</b> expose only the tools needed for the feature, with the narrowest permissions (read-only where possible, scoped to the current user's data).</li>
+<li><b>Authorization from the session, not from arguments:</b> derive user identity and tenant from the authenticated request; never trust a <code>user_id</code> the model supplies.</li>
+<li><b>Server-side validation</b> of every argument; parameterized queries (never let the model write raw SQL against production without strict sandboxing).</li>
+<li><b>Human confirmation</b> for destructive or costly actions (payments, deletes, sending emails).</li>
+<li><b>Prompt injection awareness:</b> content from documents, emails or web pages can trick the model into calling tools; be especially careful when a single agent has both access to private data and the ability to send data out.</li>
+<li><b>Sandbox</b> code execution; rate-limit and audit-log tool usage.</li>
+</ul>
+<div class="tip">Say: "the model proposes, my code disposes" &ndash; the application is always the policy enforcement point.</div>
+</div>
+
+<div class="q"><p class="qq">Scenario: the assistant sometimes invents tool arguments, like a customer ID that doesn't exist. How do you fix it?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Diagnose with traces:</b> was the ID absent from the context (guessing) or present but mis-copied?</li>
+<li><b>Instruct:</b> "Never guess identifiers. If you don't have the customer ID, call <code>search_customer</code> or ask the user." Provide a lookup tool so the correct path exists.</li>
+<li><b>Constrain:</b> enums when the valid set is small and known; patterns/formats in the schema; strict mode.</li>
+<li><b>Validate server-side:</b> reject unknown IDs with an informative error so the model can recover; never use model-supplied IDs for authorization.</li>
+<li><b>Evaluate:</b> add test cases where the ID is missing and measure how often the model asks or looks it up; try a stronger model if needed.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">What is the difference between tool calling and an agent?<span class="lvl b">BASIC</span></p>
+<p class="simple">Tool calling is a single skill: the model can ask for a function. An agent is a loop where the model keeps choosing tools and next steps on its own until the goal is done.</p>
+<p>A single tool call (or a fixed sequence your code controls) is a <b>workflow</b>: predictable, easy to test. An <b>agent</b> wraps tool calling in a loop where the model decides what to do next, observes results, and continues for many steps &ndash; planning, recovering from errors, and deciding when it's finished. Agents handle open-ended tasks (research, coding, multi-system support cases) but are harder to evaluate, slower, costlier and riskier. Rule of thumb: use the simplest thing that works &ndash; one call, then a workflow, and only then an agent. Agent design, memory, MCP (Model Context Protocol, a standard for connecting tools), and multi-agent patterns are covered in Part 2.</p>
+</div>
+
+<h2 id="s12">12. Building a Chat App End-to-End</h2>
+
+<div class="q long"><p class="qq">Design a minimal but production-ready chat assistant backend.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">The browser talks to your server; your server keeps the conversation, builds the prompt, calls the model, streams the answer back, and saves everything.</p>
+<pre><code>Browser/UI --(HTTPS, auth token)--&gt; FastAPI backend
+   POST /chat/{conversation_id}  (SSE stream back)
+      1. Authenticate user, check rate limit / quota
+      2. Load conversation (summary + recent messages) from DB
+      3. Input moderation / basic validation
+      4. Build prompt: system prompt (versioned) + summary + recent turns + new message
+         (+ retrieved context, tool definitions)
+      5. Call LLM API with streaming, timeout, retries/fallback
+      6. Stream tokens to client as SSE; handle tool calls if any
+      7. On completion: save assistant message, usage, latency, model/prompt version
+      8. Async: update summary if history is long; log trace; output checks
+   POST /feedback  (thumbs up/down + comment linked to message ID)
+Storage: Postgres (users, conversations, messages, feedback), Redis (rate limits, cache)
+Observability: tracing, cost dashboard, error alerts</code></pre>
+<ul>
+<li><b>Stateless app servers</b> (state in the DB) so you can scale horizontally.</li>
+<li><b>Async endpoints</b> (LLM calls are slow I/O) and per-user concurrency limits.</li>
+<li><b>Config-driven</b> model and prompt versions; feature flags for rollouts.</li>
+<li><b>Graceful degradation:</b> fallback model/provider, friendly error messages, cancellation when the client disconnects.</li>
+</ul>
+<div class="fu">How do you handle a user closing the tab mid-stream? How would you add RAG? How do you support 10&times; traffic?</div>
+</div>
+
+<div class="q"><p class="qq">How do you store conversation state?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Tables:</b> <code>conversations</code> (id, user_id, tenant_id, title, created_at, summary, model, prompt_version), <code>messages</code> (id, conversation_id, role, content as JSON blocks to support tool calls/images, token counts, created_at), <code>feedback</code>.</li>
+<li>Store the <b>exact</b> messages sent to the model, including tool calls and results, so you can reproduce and debug any response.</li>
+<li>Keep a running summary column for long conversations; load summary + last N messages to build the prompt.</li>
+<li>Index by user and conversation; paginate history in the UI.</li>
+<li>Apply retention and deletion policies (user "delete my data" requests, legal retention limits); encrypt sensitive content.</li>
+<li>Even if the provider offers server-side conversation state, keep your own copy as the source of truth for portability and audit.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">How do you implement "memory" in a chat app?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">There are two kinds: remembering earlier in this chat (keep or summarize the history) and remembering across chats (save key facts about the user and bring them back when relevant).</p>
+<ul>
+<li><b>Short-term (within a conversation):</b> recent messages verbatim + a rolling summary of older turns, regenerated every N turns or when a token threshold is crossed (often with a cheaper model).</li>
+<li><b>Long-term (across conversations):</b> extract durable facts and preferences ("prefers metric units", "works on the Android app") into a user-profile store; inject them into the system prompt or retrieve relevant ones via embeddings.</li>
+<li><b>Controls:</b> let users view, edit and delete memories; never store sensitive data without consent; avoid stale or wrong memories by timestamping and allowing overrides.</li>
+<li><b>Evaluate:</b> does memory actually improve answers, and does it ever surface the wrong user's data (multi-tenant isolation)?</li>
+</ul>
+<p>Memory architectures for agents are covered in more depth in Part 2.</p>
+</div>
+
+<div class="q"><p class="qq">How do you stream LLM output to a web UI?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li>Backend: call the provider with streaming and forward each text delta to the client as <b>Server-Sent Events</b> (<code>text/event-stream</code>, e.g., FastAPI <code>StreamingResponse</code>) or over a WebSocket.</li>
+<li>Send structured events (<code>{"type": "delta", "text": ...}</code>, <code>{"type": "tool_status", ...}</code>, <code>{"type": "done", "message_id": ...}</code>, <code>{"type": "error", ...}</code>) so the UI can show progress and errors.</li>
+<li>Accumulate the full text server-side and save it when the stream ends (and partially on disconnect).</li>
+<li>Detect client disconnects and cancel the upstream request to stop paying for tokens nobody reads.</li>
+<li>Disable proxy buffering (e.g., Nginx <code>X-Accel-Buffering: no</code>) or the stream arrives all at once.</li>
+<li>Render markdown incrementally and safely (sanitize HTML to prevent XSS from model output).</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">Where does moderation fit in a chat app?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Check what users send in and what the model sends out, so harmful or off-limits content is caught before it causes trouble.</p>
+<ul>
+<li><b>Input moderation:</b> a moderation API (e.g., OpenAI's free moderation endpoint) or a small classifier model to flag harassment, self-harm, illegal requests; plus checks for prompt-injection patterns and off-topic use.</li>
+<li><b>Output moderation:</b> check generated text for policy violations, PII leaks, or unsafe advice; with streaming, check in chunks or hold back sensitive categories, and be able to retract a message.</li>
+<li><b>Topic guardrails:</b> system prompt scope rules plus a lightweight classifier for "is this in scope?"</li>
+<li><b>Responses:</b> safe completions or refusals with helpful redirection; escalation paths (e.g., crisis resources) for sensitive topics.</li>
+<li><b>Trade-off:</b> every check adds latency and false positives; run cheap checks in parallel with the main call where possible.</li>
+</ul>
+<p>Guardrail frameworks and safety evaluation are covered in Part 3.</p>
+</div>
+
+<div class="q"><p class="qq">How do you collect and use user feedback?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Explicit:</b> thumbs up/down with optional reason tags ("incorrect", "too long", "didn't answer"), free-text comments, regenerate clicks.</li>
+<li><b>Implicit:</b> copy/paste of the answer, follow-up rephrasing (a sign of failure), conversation abandonment, escalation to a human, task completion.</li>
+<li>Link every feedback event to the message ID, and thus to the full prompt, model and prompt version.</li>
+<li>Review negative feedback regularly, cluster failure types, and add representative cases to the eval set.</li>
+<li>Track metrics per prompt/model version to validate releases (feedback is sparse and biased, so combine it with offline evals).</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">What are the multi-tenant considerations for an LLM chat product?<span class="lvl a">ADVANCED</span></p>
+<p class="simple">When many companies share your app, you must make sure one customer's data never shows up in another customer's answers, and that one heavy customer can't slow down everyone else.</p>
+<ul>
+<li><b>Data isolation:</b> tenant ID on every row; filter retrieval and memory by tenant at the database/vector-store level (not by asking the model); separate indexes or namespaces per tenant for sensitive customers.</li>
+<li><b>Caching safety:</b> response caches and semantic caches must be keyed by tenant (and permission scope) so answers don't leak across customers.</li>
+<li><b>Per-tenant configuration:</b> system prompt customizations, allowed tools, model choice, data-retention settings.</li>
+<li><b>Fairness and cost:</b> per-tenant rate limits, token quotas and cost attribution; queue or throttle noisy neighbors; possibly separate provider API keys/projects for large tenants.</li>
+<li><b>Compliance:</b> region-specific processing, BYO-key or dedicated deployments for enterprise customers, audit logs.</li>
+<li><b>Prompt injection across tenants:</b> content uploaded by one user must never reach another tenant's context.</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">Scenario: users complain the chatbot is slow. How do you improve latency?<span class="lvl i">INTERMEDIATE</span></p>
+<ol>
+<li><b>Measure first:</b> break down time into auth/DB, retrieval, moderation, model TTFT, generation time, tool calls.</li>
+<li><b>Stream</b> responses so the first words appear in about a second.</li>
+<li><b>Shorten output</b> (most of the time is token generation) and reduce reasoning effort.</li>
+<li><b>Use a faster model</b> for simple turns (routing).</li>
+<li><b>Shrink the prompt</b> and use <b>prompt caching</b> for static prefixes to cut TTFT.</li>
+<li><b>Parallelize</b> independent steps: retrieval and moderation concurrently; parallel tool calls.</li>
+<li><b>Cache</b> answers to frequent questions; precompute where possible.</li>
+<li>Check provider region proximity and connection reuse (keep HTTP clients alive).</li>
+</ol>
+</div>
+
+<h2 id="s13">13. Prompting vs RAG vs Fine-Tuning &amp; LLM App Scenarios</h2>
+
+<div class="q"><p class="qq">Prompting vs RAG vs fine-tuning &ndash; when would you use which?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Prompting is giving better instructions. RAG is giving the model the right reference documents for each question. Fine-tuning is further training a model on your examples so it behaves a certain way by default. Try them in that order.</p>
+<table>
+<tr><th>Approach</th><th>What it changes</th><th>Best for</th><th>Limits</th></tr>
+<tr><td>Prompt engineering</td><td>Instructions, examples, format in each request</td><td>Behavior, tone, format, task definition; fast iteration</td><td>Prompt length/cost; can't add large or changing knowledge</td></tr>
+<tr><td>RAG (retrieval-augmented generation)</td><td>Adds relevant documents to the prompt at query time</td><td>Knowledge: private, large or frequently changing data; citations; access control per user</td><td>Quality depends on retrieval; more moving parts (Part 2)</td></tr>
+<tr><td>Fine-tuning</td><td>The model's weights, via training on many example input/output pairs</td><td>Consistent style/format at scale, narrow specialized tasks, making a smaller model match a bigger one to cut cost/latency</td><td>Needs quality data and evals, ongoing maintenance, poor way to add facts (they go stale, hallucination persists)</td></tr>
+</table>
+<p>Key distinction: RAG is for <b>knowledge</b> ("what the model knows"); fine-tuning is for <b>behavior</b> ("how the model responds"). They combine: a fine-tuned model can still use RAG. App teams usually exhaust prompting + RAG first; fine-tuning is a later, specialized step.</p>
+<div class="tip">Strong answer structure: "Start with prompting and a good eval; if failures are about missing knowledge, add RAG; if they're about consistent behavior at scale or cost, consider fine-tuning &ndash; and justify it with eval numbers".</div>
+</div>
+
+<div class="q"><p class="qq">Scenario: the model ignores your format instructions some of the time. What do you do?<span class="lvl i">INTERMEDIATE</span></p>
+<ol>
+<li><b>Quantify:</b> what percentage of outputs violate the format, and how (extra prose, missing fields, markdown fences)?</li>
+<li><b>Use native structured outputs / strict JSON schema</b> if the output is machine-read &ndash; this removes most format failures outright.</li>
+<li><b>Make instructions clearer and positive:</b> one explicit format section, an exact example of the output, format instructions near the end of a long prompt.</li>
+<li><b>Check conflicts:</b> does the system prompt or a few-shot example contradict the format? Do retrieved documents contain formats the model is copying?</li>
+<li><b>Check truncation</b> (finish reason length) &ndash; often mistaken for format failure.</li>
+<li><b>Validate and retry</b> with the error message; lower temperature.</li>
+<li><b>Simplify the task</b> (split into chained calls) or try a model with better instruction following.</li>
+</ol>
+</div>
+
+<div class="q"><p class="qq">Scenario: answers are inconsistent between runs for the same question. How do you address it?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Is variation actually a problem?</b> Different wording is fine; different facts or decisions are not. Measure which.</li>
+<li><b>Lower temperature</b> (0-0.2) for factual/decision tasks; use <code>seed</code> where supported (best effort).</li>
+<li><b>Reduce ambiguity:</b> inconsistency often means the prompt leaves the decision under-specified &ndash; add explicit criteria and examples for borderline cases.</li>
+<li><b>Ground answers</b> in retrieved documents so the model isn't relying on fuzzy memory; ensure retrieval itself is deterministic.</li>
+<li><b>Structured outputs</b> with enums for decisions.</li>
+<li><b>Pin the model version</b>; check whether a provider alias changed.</li>
+<li><b>Cache</b> responses for identical inputs where consistency is required (e.g., FAQ answers).</li>
+<li>For high-stakes decisions, sample several times and use majority vote; treat disagreement as "low confidence &rarr; escalate".</li>
+</ul>
+</div>
+
+<div class="q"><p class="qq">Scenario: a customer asks why the bot made something up. How do you respond and fix it?<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Be honest with the customer, find exactly what the bot saw and why it went wrong, fix the cause, and add a test so it doesn't happen again.</p>
+<ol>
+<li><b>Immediate:</b> acknowledge, correct the information, and explain plainly that the assistant generates answers and can be wrong; escalate if harm occurred (refund, legal, policy).</li>
+<li><b>Investigate the trace:</b> the exact prompt, retrieved documents, tool results, model version and parameters. Was the right information retrieved? Was it missing (retrieval failure), present but ignored (generation failure), or outdated (stale source)?</li>
+<li><b>Fix the root cause:</b> improve retrieval or update the knowledge base; instruct "answer only from sources, otherwise say you don't know"; require citations; add claim-verification or confidence routing to a human for risky topics (pricing, refunds, legal, medical).</li>
+<li><b>Prevent recurrence:</b> add the case to the eval set; monitor hallucination/faithfulness metrics; add UI disclaimers and source links so users can verify.</li>
+</ol>
+<div class="tip">Mention the business angle: in some jurisdictions companies have been held responsible for what their chatbots promise, so high-stakes answers need grounding, guardrails or human review.</div>
+</div>
+
+<div class="q"><p class="qq">Scenario: your LLM feature works in the demo but fails with real users. Why, and what do you do?<span class="lvl i">INTERMEDIATE</span></p>
+<ul>
+<li><b>Distribution shift:</b> real users write short, vague, misspelled, multilingual or off-topic messages unlike your hand-made test cases.</li>
+<li><b>Context differences:</b> real documents are longer and messier; history grows; retrieval returns noise.</li>
+<li><b>Adversarial and edge cases:</b> jailbreak attempts, empty inputs, huge pastes.</li>
+<li><b>Scale effects:</b> rate limits, timeouts, latency spikes.</li>
+</ul>
+<p>Response: sample and label real traffic; build the eval set from it; categorize failures; add clarifying-question behavior for vague inputs; improve retrieval; add input validation and length limits; and set up monitoring dashboards (quality signals, feedback, errors, cost) so issues surface early.</p>
+</div>
+
+<div class="q"><p class="qq">Scenario: your monthly LLM bill doubled. How do you investigate and reduce it?<span class="lvl i">INTERMEDIATE</span></p>
+<ol>
+<li><b>Attribute cost</b> by feature, model, tenant and token type (input / output / cached / reasoning) from usage logs.</li>
+<li><b>Look for causes:</b> traffic growth, longer prompts (history not trimmed, more retrieved chunks), a prompt change that made outputs longer, a model switch, reasoning effort raised, retry storms, an abusive user or a runaway agent loop.</li>
+<li><b>Fix:</b> prompt caching for static prefixes; trim history and context; cap output length; route easy traffic to cheaper models; lower reasoning effort; batch offline jobs; cache frequent answers; per-user quotas; loop limits for agents.</li>
+<li><b>Guard:</b> cost alerts, budgets per feature, and cost-per-request tracked in CI evals alongside quality.</li>
+</ol>
+</div>
+<h2 id="s14">14. Coding Round: OpenAI &amp; Anthropic SDKs</h2>
+
+<div class="howto"><b>How to approach these:</b> write the simplest correct version first, say out loud what you'd add for production (timeouts, retries, logging, validation), and check the stop/finish reason. Examples use the official Python SDKs (<code>pip install openai anthropic</code>), with keys read from the <code>OPENAI_API_KEY</code> / <code>ANTHROPIC_API_KEY</code> environment variables. Model names are placeholders (<code>"your-model-name"</code>, <code>"your-claude-model"</code>) &ndash; use a current model from the provider's docs. API shapes shown are the stable, widely used ones as of 2025-2026; parameter support (e.g., <code>temperature</code> on reasoning models) varies by model. For Anthropic, the helper <code>text_of()</code> (defined in the first answer) collects text blocks, because responses can also contain thinking or tool-use blocks.</div>
+
+<div class="q long"><p class="qq">Make a basic LLM call with each SDK and read the text, stop reason and token usage.<span class="lvl b">BASIC</span></p>
+<p class="simple">Create a client, send a model name and a list of messages, then pull the answer text and the token counts out of the response.</p>
+<pre><code>from openai import OpenAI
+import anthropic
+
+OPENAI_MODEL = "your-model-name"
+CLAUDE_MODEL = "your-claude-model"
+
+# --- OpenAI: Chat Completions ---
+oa = OpenAI()  # reads OPENAI_API_KEY
+resp = oa.chat.completions.create(
+    model=OPENAI_MODEL,
+    messages=[
+        {"role": "system", "content": "You are a concise assistant."},
+        {"role": "user", "content": "Explain what a context window is in 2 sentences."},
+    ],
+    max_tokens=200,   # newer/reasoning models use max_completion_tokens instead
+)
+choice = resp.choices[0]
+print(choice.message.content)
+print(choice.finish_reason)                                     # "stop", "length", ...
+print(resp.usage.prompt_tokens, resp.usage.completion_tokens)
+
+# --- OpenAI: Responses API (newer, also stable) ---
+r = oa.responses.create(model=OPENAI_MODEL,
+                        instructions="You are a concise assistant.",
+                        input="Explain what a context window is in 2 sentences.")
+print(r.output_text)
+
+# --- Anthropic: Messages API ---
+ac = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
+
+def text_of(message) -&gt; str:
+    """Join the text blocks of an Anthropic response (skips thinking / tool_use blocks)."""
+    return "".join(block.text for block in message.content if block.type == "text")
+
+msg = ac.messages.create(
+    model=CLAUDE_MODEL,
+    max_tokens=1024,                     # required on Anthropic
+    system="You are a concise assistant.",
+    messages=[{"role": "user", "content": "Explain what a context window is in 2 sentences."}],
+)
+print(text_of(msg))
+print(msg.stop_reason)                                          # "end_turn", "max_tokens", ...
+print(msg.usage.input_tokens, msg.usage.output_tokens)</code></pre>
+<div class="tip">Differences interviewers like you to know: Anthropic takes <code>system</code> as a top-level parameter and requires <code>max_tokens</code>; OpenAI puts the system message in <code>messages</code>. Both return usage you should log.</div>
+</div>
+
+<div class="q long"><p class="qq">Write a multi-turn chat loop that keeps conversation history.<span class="lvl b">BASIC</span></p>
+<p class="simple">Because the API forgets everything between calls, keep a list of all messages and send the whole list each time.</p>
+<pre><code>import anthropic
+
+client = anthropic.Anthropic()
+MODEL = "your-claude-model"
+SYSTEM = "You are a friendly travel assistant. Keep answers under 120 words."
+
+def text_of(message) -&gt; str:
+    return "".join(b.text for b in message.content if b.type == "text")
+
+def chat() -&gt; None:
+    history: list[dict] = []
+    while True:
+        user_input = input("You: ").strip()
+        if user_input.lower() in {"quit", "exit"}:
+            break
+        history.append({"role": "user", "content": user_input})
+        response = client.messages.create(
+            model=MODEL, max_tokens=1024, system=SYSTEM, messages=history,
+        )
+        reply = text_of(response)
+        # Store the assistant turn so the next call has full context.
+        # (In tool-use loops, append response.content instead of plain text.)
+        history.append({"role": "assistant", "content": reply})
+        print("Bot:", reply)
+        if response.stop_reason == "max_tokens":
+            print("[warning: reply was truncated]")
+
+if __name__ == "__main__":
+    chat()</code></pre>
+<p>OpenAI version: identical loop, with <code>{"role": "system", ...}</code> as the first element of <code>history</code> and <code>client.chat.completions.create(model=..., messages=history)</code>, reading <code>resp.choices[0].message.content</code>.</p>
+<div class="fu">How would you stop history growing forever? (Next question / summarization.) Where would you store history in a web app? (Database keyed by conversation ID.)</div>
+</div>
+
+<div class="q long"><p class="qq">Trim conversation history to fit a token budget.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Drop the oldest messages until the conversation fits in the budget, but always keep the system prompt and the newest message.</p>
+<pre><code>import tiktoken
+
+enc = tiktoken.get_encoding("o200k_base")   # OpenAI-family tokenizer; approximate for others
+PER_MESSAGE_OVERHEAD = 4                       # rough allowance for role/formatting tokens
+
+def message_tokens(m: dict) -&gt; int:
+    return len(enc.encode(m["content"])) + PER_MESSAGE_OVERHEAD
+
+def trim_history(messages: list[dict], budget: int) -&gt; list[dict]:
+    """messages[0] is the system prompt; keep it and the most recent turns that fit."""
+    system, rest = messages[0], messages[1:]
+    used = message_tokens(system)
+    kept: list[dict] = []
+    for m in reversed(rest):                   # walk from newest to oldest
+        t = message_tokens(m)
+        if used + t &gt; budget and kept:         # always keep at least the newest message
+            break
+        kept.append(m)
+        used += t
+    kept.reverse()
+    # Avoid starting the window with an orphaned assistant reply.
+    while kept and kept[0]["role"] == "assistant":
+        kept.pop(0)
+    return [system] + kept
+
+# Usage: reserve room for the answer, e.g. budget = context_limit - max_output_tokens
+# messages = trim_history(messages, budget=8_000)</code></pre>
+<p>Production upgrade: instead of discarding old turns, summarize them with a cheap model into a "conversation so far" note inserted after the system prompt.</p>
+</div>
+
+<div class="q long"><p class="qq">Stream a response token by token with each SDK.<span class="lvl b">BASIC</span></p>
+<p class="simple">Ask for a stream, then loop over the chunks as they arrive and print each piece immediately.</p>
+<pre><code>from openai import OpenAI
+import anthropic
+
+# --- OpenAI ---
+oa = OpenAI()
+stream = oa.chat.completions.create(
+    model="your-model-name",
+    messages=[{"role": "user", "content": "Write a haiku about rate limits."}],
+    stream=True,
+    stream_options={"include_usage": True},   # final chunk carries token usage
+)
+for chunk in stream:
+    if chunk.choices and chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+    if chunk.usage:                            # only on the last chunk
+        print(f"\n[tokens in={chunk.usage.prompt_tokens} out={chunk.usage.completion_tokens}]")
+
+# --- Anthropic (streaming helper) ---
+ac = anthropic.Anthropic()
+with ac.messages.stream(
+    model="your-claude-model",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "Write a haiku about rate limits."}],
+) as s:
+    for text in s.text_stream:
+        print(text, end="", flush=True)
+    final = s.get_final_message()              # full message incl. usage and stop_reason
+print(f"\n[stop={final.stop_reason} out={final.usage.output_tokens}]")</code></pre>
+<div class="tip">Mention that streaming is also the way to avoid HTTP timeouts on long generations, and that you must still check the final stop reason.</div>
+</div>
+
+<div class="q long"><p class="qq">Implement retries with exponential backoff and jitter around an LLM call.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">If the call fails with a temporary error, wait a random amount of time that grows with each attempt, then try again; give up after a few tries. Don't retry errors that mean your request is wrong.</p>
+<pre><code>import random
+import time
+import openai
+from openai import OpenAI
+
+client = OpenAI(max_retries=0)   # disable SDK retries so we don't multiply attempts
+
+RETRYABLE = (
+    openai.RateLimitError,        # 429
+    openai.APITimeoutError,       # request timed out
+    openai.APIConnectionError,    # network problems
+    openai.InternalServerError,   # 5xx
+)
+
+def _retry_after_seconds(err: Exception) -&gt; float | None:
+    response = getattr(err, "response", None)
+    if response is None:
+        return None
+    value = response.headers.get("retry-after")
+    try:
+        return float(value) if value else None
+    except ValueError:
+        return None
+
+def call_with_backoff(messages: list[dict], max_attempts: int = 5,
+                      base: float = 1.0, cap: float = 30.0):
+    for attempt in range(max_attempts):
+        try:
+            return client.chat.completions.create(
+                model="your-model-name", messages=messages, timeout=60,
+            )
+        except RETRYABLE as err:
+            if attempt == max_attempts - 1:
+                raise                                   # out of attempts
+            delay = random.uniform(0, min(cap, base * 2 ** attempt))   # full jitter
+            server_hint = _retry_after_seconds(err)
+            if server_hint is not None:
+                delay = max(delay, server_hint)         # honor retry-after
+            print(f"attempt {attempt + 1} failed ({type(err).__name__}); sleeping {delay:.1f}s")
+            time.sleep(delay)
+        # Non-retryable errors (BadRequestError 400, AuthenticationError 401, NotFoundError 404)
+        # propagate immediately.</code></pre>
+<p>Anthropic equivalents: <code>anthropic.RateLimitError</code>, <code>anthropic.APIConnectionError</code>, <code>anthropic.InternalServerError</code>, and <code>anthropic.APIStatusError</code> with <code>status_code &gt;= 500</code> (includes 529 "overloaded"). In practice, the SDKs' built-in <code>max_retries</code> covers simple cases; write your own when you need custom deadlines, metrics or a fallback model.</p>
+<div class="fu">How would you add a fallback provider after N failures? How would you make this async? What total deadline would you set for a user-facing request?</div>
+</div>
+
+<div class="q long"><p class="qq">Get structured output into a Pydantic model, with a validation-retry loop.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Describe the shape you want as a Pydantic class, ask for JSON, check it with Pydantic, and if it fails, show the model the error and ask it to fix it.</p>
+<pre><code>import json
+from typing import Literal
+from openai import OpenAI
+from pydantic import BaseModel, Field, ValidationError
+
+client = OpenAI()
+MODEL = "your-model-name"
+
+class Ticket(BaseModel):
+    category: Literal["billing", "bug", "feature_request", "other"]
+    priority: int = Field(ge=1, le=5)
+    summary: str = Field(max_length=200)
+
+def extract_ticket(email_text: str, max_attempts: int = 3) -&gt; Ticket:
+    messages = [
+        {"role": "system", "content":
+            "Extract a support ticket from the email. Respond with JSON only, matching this "
+            "JSON Schema:\n" + json.dumps(Ticket.model_json_schema())},
+        {"role": "user", "content": email_text},
+    ]
+    for _ in range(max_attempts):
+        resp = client.chat.completions.create(
+            model=MODEL, messages=messages,
+            response_format={"type": "json_object"},   # JSON mode: valid JSON, schema not enforced
+            temperature=0,
+        )
+        choice = resp.choices[0]
+        if choice.finish_reason == "length":
+            raise RuntimeError("Output truncated; raise max_tokens or shorten the output")
+        raw = choice.message.content or ""
+        try:
+            return Ticket.model_validate_json(raw)     # syntactic + type + constraint checks
+        except ValidationError as err:
+            # Feed the error back so the model can correct itself.
+            messages.append({"role": "assistant", "content": raw})
+            messages.append({"role": "user", "content":
+                f"That JSON failed validation:\n{err}\nReturn corrected JSON only."})
+    raise ValueError("Could not get valid output after retries")
+
+# Native strict alternatives (schema enforced during generation), as of 2025-2026:
+# OpenAI:    c = client.chat.completions.parse(model=MODEL, messages=msgs, response_format=Ticket)
+#            m = c.choices[0].message;  if m.refusal: ...;  ticket = m.parsed
+# Anthropic: r = anthropic_client.messages.parse(model=..., max_tokens=1024,
+#                                                messages=msgs, output_format=Ticket)
+#            ticket = r.parsed_output
+# Keep Pydantic validators for business rules even with strict mode.</code></pre>
+<div class="tip">Point out the two failure paths you handle before validation: truncation (finish reason) and refusals; and that content retries are separate from transport retries.</div>
+</div>
+
+<div class="q long"><p class="qq">Implement a tool-calling loop (weather + calculator) with the Anthropic SDK.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Give the model two tools. Each time it asks for one, run it and send the result back; stop when it gives a normal answer or after too many rounds.</p>
+<pre><code>import ast
+import json
+import operator as op
+import anthropic
+
+client = anthropic.Anthropic()
+MODEL = "your-claude-model"
+
+TOOLS = [
+    {"name": "get_weather",
+     "description": "Get the current weather for a city. Returns temperature in Celsius and conditions.",
+     "input_schema": {"type": "object",
+                      "properties": {"city": {"type": "string", "description": "City name, e.g. 'Paris'"}},
+                      "required": ["city"]}},
+    {"name": "calculator",
+     "description": "Evaluate an arithmetic expression with + - * / ** and parentheses. "
+                    "Use for any exact arithmetic.",
+     "input_schema": {"type": "object",
+                      "properties": {"expression": {"type": "string", "description": "e.g. '(18 * 9 / 5) + 32'"}},
+                      "required": ["expression"]}},
+]
+
+_OPS = {ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul,
+        ast.Div: op.truediv, ast.Pow: op.pow, ast.USub: op.neg}
+
+def safe_eval(expr: str) -&gt; float:
+    """Evaluate arithmetic safely (never call eval() on model output)."""
+    def ev(node):
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            return node.value
+        if isinstance(node, ast.BinOp) and type(node.op) in _OPS:
+            return _OPS[type(node.op)](ev(node.left), ev(node.right))
+        if isinstance(node, ast.UnaryOp) and type(node.op) in _OPS:
+            return _OPS[type(node.op)](ev(node.operand))
+        raise ValueError("unsupported expression")
+    return ev(ast.parse(expr, mode="eval").body)
+
+def get_weather(city: str) -&gt; dict:
+    return {"city": city, "temp_c": 18, "conditions": "cloudy"}   # stub: call a real API here
+
+def run_tool(name: str, args: dict) -&gt; dict:
+    if name == "get_weather":
+        return get_weather(args["city"])
+    if name == "calculator":
+        return {"result": safe_eval(args["expression"])}
+    raise ValueError(f"Unknown tool: {name}")
+
+def answer(question: str, max_turns: int = 6) -&gt; str:
+    messages = [{"role": "user", "content": question}]
+    for _ in range(max_turns):
+        resp = client.messages.create(model=MODEL, max_tokens=1024,
+                                      tools=TOOLS, messages=messages)
+        if resp.stop_reason != "tool_use":
+            return "".join(b.text for b in resp.content if b.type == "text")
+        # Keep the assistant turn exactly as returned (tool_use + any thinking blocks).
+        messages.append({"role": "assistant", "content": resp.content})
+        results = []
+        for block in resp.content:
+            if block.type != "tool_use":
+                continue
+            try:
+                output = run_tool(block.name, block.input)
+                results.append({"type": "tool_result", "tool_use_id": block.id,
+                                "content": json.dumps(output)})
+            except Exception as err:   # report errors to the model instead of crashing
+                results.append({"type": "tool_result", "tool_use_id": block.id,
+                                "content": f"Error: {err}", "is_error": True})
+        # All results for parallel calls go back in ONE user message.
+        messages.append({"role": "user", "content": results})
+    return "Sorry, I couldn't finish this request."
+
+print(answer("What's the weather in Paris, and what is that temperature in Fahrenheit?"))</code></pre>
+<div class="fu">How would you add a confirmation step before a tool that sends email? How do you test this loop without calling the real API? (Mock the client; record/replay responses.)</div>
+</div>
+
+<div class="q long"><p class="qq">Write the same tool-calling loop with the OpenAI Chat Completions API.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Same idea, different message shapes: tools are wrapped as "function" entries, arguments arrive as a JSON string, and results go back as "tool" role messages.</p>
+<pre><code>import json
+from openai import OpenAI
+# reuses run_tool() and safe_eval() from the previous answer
+
+client = OpenAI()
+MODEL = "your-model-name"
+
+OPENAI_TOOLS = [
+    {"type": "function", "function": {
+        "name": "get_weather",
+        "description": "Get the current weather for a city (Celsius).",
+        "parameters": {"type": "object",
+                       "properties": {"city": {"type": "string"}},
+                       "required": ["city"]}}},
+    {"type": "function", "function": {
+        "name": "calculator",
+        "description": "Evaluate an arithmetic expression exactly.",
+        "parameters": {"type": "object",
+                       "properties": {"expression": {"type": "string"}},
+                       "required": ["expression"]}}},
+]
+
+def answer(question: str, max_turns: int = 6) -&gt; str:
+    messages = [{"role": "user", "content": question}]
+    for _ in range(max_turns):
+        resp = client.chat.completions.create(model=MODEL, messages=messages,
+                                              tools=OPENAI_TOOLS, tool_choice="auto")
+        msg = resp.choices[0].message
+        if not msg.tool_calls:
+            return msg.content or ""
+        messages.append(msg.model_dump(exclude_none=True))   # assistant turn with tool_calls
+        for call in msg.tool_calls:
+            try:
+                args = json.loads(call.function.arguments)    # arguments are a JSON string
+                content = json.dumps(run_tool(call.function.name, args))
+            except Exception as err:
+                content = json.dumps({"error": str(err)})
+            messages.append({"role": "tool", "tool_call_id": call.id, "content": content})
+    return "Sorry, I couldn't finish this request."</code></pre>
+<p>Responses API variant: tools are declared flat (<code>{"type": "function", "name": ..., "parameters": ...}</code>), calls arrive as <code>function_call</code> output items, and results go back as <code>function_call_output</code> items with the matching <code>call_id</code>.</p>
+</div>
+
+<div class="q long"><p class="qq">Count tokens and estimate the cost of a request.<span class="lvl b">BASIC</span></p>
+<p class="simple">Count the tokens with the model's tokenizer, then multiply input and output tokens by their separate prices.</p>
+<pre><code>import tiktoken
+
+# Hypothetical prices in USD per 1M tokens - always load real prices from config.
+PRICES = {"input": 1.00, "cached_input": 0.10, "output": 5.00}
+
+enc = tiktoken.get_encoding("o200k_base")   # OpenAI GPT-4o-era and later models
+
+def count_tokens(text: str) -&gt; int:
+    return len(enc.encode(text))
+
+def estimate_chat_input_tokens(messages: list[dict]) -&gt; int:
+    # Approximation: content tokens + small per-message formatting overhead.
+    return sum(count_tokens(m["content"]) + 4 for m in messages) + 3
+
+def cost_usd(input_tokens: int, output_tokens: int, cached_tokens: int = 0) -&gt; float:
+    uncached = input_tokens - cached_tokens
+    return (uncached * PRICES["input"]
+            + cached_tokens * PRICES["cached_input"]
+            + output_tokens * PRICES["output"]) / 1_000_000
+
+msgs = [{"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Summarize our refund policy in 3 bullets."}]
+est_in = estimate_chat_input_tokens(msgs)
+print(est_in, f"${cost_usd(est_in, output_tokens=150):.6f}")
+
+# Exact numbers come back on every response - log these:
+#   OpenAI:    resp.usage.prompt_tokens, resp.usage.completion_tokens,
+#              resp.usage.prompt_tokens_details.cached_tokens
+#   Anthropic: resp.usage.input_tokens, resp.usage.output_tokens,
+#              resp.usage.cache_read_input_tokens
+# Anthropic pre-call count (Claude's tokenizer differs from tiktoken):
+#   n = anthropic_client.messages.count_tokens(model="your-claude-model",
+#                                              messages=msgs_without_system).input_tokens</code></pre>
+<div class="tip">Scale it up in the interview: "cost per request &times; requests per day &times; 30", and point out that reasoning tokens bill as output.</div>
+</div>
+
+<div class="q long"><p class="qq">Write a FastAPI endpoint that streams LLM output to the browser.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">The server opens a streaming call to the model and forwards each piece to the browser as Server-Sent Events, stopping if the user disconnects.</p>
+<pre><code>import json
+from fastapi import FastAPI, Request
+from fastapi.responses import StreamingResponse
+from openai import AsyncOpenAI
+from pydantic import BaseModel
+
+app = FastAPI()
+client = AsyncOpenAI()
+MODEL = "your-model-name"
+SYSTEM_PROMPT = "You are a helpful support assistant for Acme."
+
+class ChatRequest(BaseModel):
+    message: str
+    history: list[dict] = []   # production: load history from the DB by conversation_id
+
+def sse(event: dict) -&gt; str:
+    return f"data: {json.dumps(event)}\n\n"
+
+@app.post("/chat")
+async def chat(req: ChatRequest, request: Request):
+    # Only accept user/assistant roles from the client - never a client-supplied system prompt.
+    history = [m for m in req.history if m.get("role") in {"user", "assistant"}]
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}, *history,
+                {"role": "user", "content": req.message}]
+
+    async def event_stream():
+        full_text = []
+        try:
+            stream = await client.chat.completions.create(
+                model=MODEL, messages=messages, stream=True)
+            async for chunk in stream:
+                if await request.is_disconnected():
+                    await stream.close()            # stop paying for unread tokens
+                    return
+                if chunk.choices and chunk.choices[0].delta.content:
+                    piece = chunk.choices[0].delta.content
+                    full_text.append(piece)
+                    yield sse({"type": "delta", "text": piece})
+            # save "".join(full_text) + usage to the DB here
+            yield sse({"type": "done"})
+        except Exception:
+            yield sse({"type": "error", "message": "Generation failed, please retry."})
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+# Run: uvicorn app:app --reload</code></pre>
+<div class="fu">Where do auth and rate limiting go? (Dependencies/middleware before the stream starts.) How does the browser consume this? (<code>fetch</code> with a stream reader, or <code>EventSource</code> for GET endpoints.)</div>
+</div>
+
+<div class="q long"><p class="qq">Run many LLM calls concurrently with asyncio.gather and a semaphore.<span class="lvl i">INTERMEDIATE</span></p>
+<p class="simple">Start all the requests together, but let only a fixed number run at the same time so you stay under the provider's rate limits.</p>
+<pre><code>import asyncio
+import anthropic
+from anthropic import AsyncAnthropic
+
+client = AsyncAnthropic(max_retries=3)    # SDK retries 429/5xx with backoff
+MODEL = "your-claude-model"
+MAX_CONCURRENCY = 10                       # size from your RPM/TPM limits
+LABELS = {"positive", "negative", "neutral"}
+
+async def classify(text: str, sem: asyncio.Semaphore) -&gt; str:
+    async with sem:                        # at most MAX_CONCURRENCY calls in flight
+        resp = await client.messages.create(
+            model=MODEL, max_tokens=16,
+            system="Classify the sentiment as positive, negative or neutral. Reply with one word.",
+            messages=[{"role": "user", "content": text}],
+        )
+    label = "".join(b.text for b in resp.content if b.type == "text").strip().lower()
+    return label if label in LABELS else "unknown"
+
+async def classify_all(texts: list[str]) -&gt; list[str]:
+    sem = asyncio.Semaphore(MAX_CONCURRENCY)
+    results = await asyncio.gather(*(classify(t, sem) for t in texts),
+                                   return_exceptions=True)   # one failure doesn't cancel the rest
+    out = []
+    for text, result in zip(texts, results):                 # gather preserves input order
+        if isinstance(result, anthropic.APIError):
+            print(f"failed: {text[:30]!r}: {result}")
+            out.append("error")
+        elif isinstance(result, Exception):
+            raise result
+        else:
+            out.append(result)
+    return out
+
+if __name__ == "__main__":
+    reviews = ["Loved it!", "Terrible support.", "It arrived on Tuesday."]
+    print(asyncio.run(classify_all(reviews)))</code></pre>
+<p>For thousands of items with no latency requirement, the Batch API is cheaper (~50%) and avoids rate-limit juggling.</p>
+<div class="tip">Explain the sizing: concurrency &asymp; allowed requests per second &times; average latency. With 600 RPM (10 rps) and 2 s latency, about 20 in flight saturates the limit.</div>
+</div>
+
+<h2 id="s15">15. Rapid-Fire Cheat Sheet</h2>
+<p>One-liners to have at your fingertips. Model-specific figures and parameter names are as of 2025-2026 &ndash; check current docs.</p>
+<table class="sheet">
+<tr><th>Term / quantity</th><th>What to remember</th></tr>
+<tr><td>LLM</td><td>Next-token predictor; text in &rarr; probabilistic text out</td></tr>
+<tr><td>Base vs chat vs reasoning</td><td>Continues text / follows instructions / thinks before answering (slower, pricier, better on hard tasks)</td></tr>
+<tr><td>Parameters</td><td>Learned weights; ~2 bytes each at 16-bit (70B &asymp; 140 GB), ~0.5 byte at 4-bit</td></tr>
+<tr><td>Open-weight vs closed</td><td>Download and self-host vs API-only; open weights &ne; open source</td></tr>
+<tr><td>AI app stack</td><td>Model API &rarr; prompts/context &rarr; retrieval/tools &rarr; app/UI &rarr; evals/monitoring</td></tr>
+<tr><td>Token rule of thumb</td><td>1 token &asymp; 4 chars &asymp; 0.75 English words; 1,000 tokens &asymp; 750 words</td></tr>
+<tr><td>Token counting</td><td>tiktoken (OpenAI), count_tokens endpoint (Anthropic), HF tokenizer (open models); log <code>usage</code></td></tr>
+<tr><td>Pricing</td><td>Input and output billed separately; output several &times; pricier; reasoning tokens bill as output</td></tr>
+<tr><td>Cost formula</td><td>requests &times; (in_tokens &times; in_price + out_tokens &times; out_price) / 1M</td></tr>
+<tr><td>Chat cost growth</td><td>History resent every turn &rarr; total input grows ~quadratically with turns</td></tr>
+<tr><td>Context window</td><td>Max input + output tokens per request; exceeding usually &rarr; 400 error</td></tr>
+<tr><td>Lost in the middle</td><td>Recall best at start/end of long context; put question last, retrieve only what's relevant</td></tr>
+<tr><td>Prefill vs decode</td><td>Prompt read in parallel (drives TTFT); output one token at a time (drives total time)</td></tr>
+<tr><td>Latency formula</td><td>&asymp; TTFT + output_tokens &divide; tokens/sec</td></tr>
+<tr><td>Long history strategies</td><td>Sliding window, token-budget trim, running summary + recent turns, retrieval memory</td></tr>
+<tr><td>Choosing a model</td><td>Eval on YOUR task; then latency, cost, context, modality, tool calling, privacy, rate limits</td></tr>
+<tr><td>Benchmarks</td><td>Shortlist only: contamination, saturation, task mismatch</td></tr>
+<tr><td>Routing / cascade</td><td>Cheap model first, escalate hard cases; also failover across providers</td></tr>
+<tr><td>Version pinning</td><td>Pin exact versions; aliases change silently; re-run evals on upgrade</td></tr>
+<tr><td>Message roles</td><td>system (app rules) / user / assistant / tool results</td></tr>
+<tr><td>Stateless API</td><td>Model remembers nothing; app stores and resends history</td></tr>
+<tr><td>Streaming</td><td>SSE deltas; lowers perceived latency; avoids timeouts; check final stop reason</td></tr>
+<tr><td>Retry these</td><td>429, 408/timeouts, connection errors, 5xx, 529 overloaded</td></tr>
+<tr><td>Don't retry these</td><td>400, 401, 403, 404, insufficient quota</td></tr>
+<tr><td>Backoff</td><td>delay = random(0, min(cap, base &times; 2<sup>n</sup>)); honor retry-after; cap attempts</td></tr>
+<tr><td>Batch API</td><td>~50% cheaper, async (within ~24 h), match results by custom_id</td></tr>
+<tr><td>Prompt caching</td><td>Static prefix first, dynamic last; cached reads heavily discounted; no timestamps in prefix</td></tr>
+<tr><td>Temperature</td><td>0-0.3 extraction/code; 0.5-0.8 chat; 0.8-1.0+ creative; some reasoning models fix it</td></tr>
+<tr><td>Top-p / top-k</td><td>Keep tokens covering p of probability / keep k most likely; tune temperature OR top_p</td></tr>
+<tr><td>T=0 non-determinism</td><td>Floating-point + batch-dependent computation + near-ties; seed is best effort</td></tr>
+<tr><td>Stop reasons</td><td>OpenAI stop / length / tool_calls / content_filter; Anthropic end_turn / max_tokens / stop_sequence / tool_use / refusal</td></tr>
+<tr><td>Logprobs</td><td>Token confidence &rarr; classification thresholds, flagging uncertain fields; not on all providers</td></tr>
+<tr><td>Reasoning effort / budget</td><td>Knob for thinking depth; thinking billed as output and counts toward max_tokens</td></tr>
+<tr><td>Prompting reasoning models</td><td>Goal + context + criteria; no step-by-step micromanagement; explicit output format</td></tr>
+<tr><td>Prompt anatomy</td><td>Role, task, context (delimited), rules, examples, output format, an "out"</td></tr>
+<tr><td>Few-shot tips</td><td>Diverse, balanced, same format as desired, tagged; models copy surface features</td></tr>
+<tr><td>Long-document prompts</td><td>Docs first in tags, question last, extract quotes then answer</td></tr>
+<tr><td>Prompts in production</td><td>Templates, versioned, logged with model version, regression evals in CI</td></tr>
+<tr><td>Prompt injection</td><td>Untrusted text carries instructions; defend with architecture (least privilege, confirmations), not just prompts</td></tr>
+<tr><td>JSON mode vs strict schema</td><td>Valid JSON only vs constrained to your schema; still validate semantics</td></tr>
+<tr><td>Validation retry</td><td>Check stop reason &rarr; parse &rarr; Pydantic validate &rarr; resend error &rarr; cap 2-3 tries</td></tr>
+<tr><td>Tool-calling flow</td><td>Define schema &rarr; model returns call &rarr; your code validates + runs &rarr; send result with call ID &rarr; loop</td></tr>
+<tr><td>tool_choice</td><td>auto / required (any) / specific tool / none; some newest models reject forced choices</td></tr>
+<tr><td>Tool security</td><td>Model proposes, code disposes: auth from session, validate args, confirm risky actions</td></tr>
+<tr><td>Prompting vs RAG vs fine-tuning</td><td>Instructions / knowledge / behavior; exhaust prompting + RAG first</td></tr>
+<tr><td>Concurrency</td><td>Async client + asyncio.gather + Semaphore; concurrency &asymp; rps &times; latency</td></tr>
+<tr><td>Log per call</td><td>IDs, model + prompt version, tokens, cost, latency (TTFT/total), stop reason, tool calls, feedback</td></tr>
+</table>
+
+</body></html>
